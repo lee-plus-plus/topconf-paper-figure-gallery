@@ -4,7 +4,8 @@
 - v1 rows live in data/figures.json with JPEGs already in images/<venue>/final/;
 - bulk rows come from data/selected.json (score_select.py), crops in images/<venue>/all/;
 - converts bulk PNGs to capped-width JPEGs in images/<venue>/final/,
-- writes the canonical data/figures.json and assets/figures.js.
+- writes the canonical data/figures.json, assets/figures.js and forge/data/figures.json
+  (single source: one run refreshes the gallery, its JS bundle and FigureForge).
 
 Usage: python assemble_gallery.py [target_per_venue=1000]
 """
@@ -70,6 +71,11 @@ if nodim:
 (DATA / "figures.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
 js = "window.FIGURES = " + json.dumps(out, ensure_ascii=False) + ";\n"
 (ROOT / "assets" / "figures.js").write_text(js, encoding="utf-8")
+# FigureForge reads its own copy; keep it compact and id-sorted, regenerated here
+# so the whole repo has one authoritative list and no copy can drift.
+forge_json = json.dumps(sorted(out, key=lambda f: f["id"]),
+                        ensure_ascii=False, separators=(",", ":"))
+(ROOT / "forge" / "data" / "figures.json").write_text(forge_json, encoding="utf-8")
 total = sum(Path(ROOT / "images" / v / "final").glob("*.jpg")).__length_hint__() if False else None
 import os
 sizes = {}

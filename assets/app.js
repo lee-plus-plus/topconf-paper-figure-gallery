@@ -24,6 +24,40 @@
   const TIERS = { best: "Best Paper", oral: "Oral", spotlight: "Spotlight" };
   const PAGE = 60;
 
+  /* ---------- i18n: dynamic labels ---------- */
+  GAL_I18N.register({
+    en: {
+      "chip.all": "All",
+      "pat.teaser": "Teaser", "pat.conceptual": "Conceptual", "pat.framework": "Framework",
+      "pat.pipeline": "Pipeline", "pat.architecture": "Architecture",
+      "pat.taxonomy": "Taxonomy / Benchmark", "pat.results": "Results", "pat.comparison": "Comparison",
+      "tier.best": "Best Paper", "tier.oral": "Oral", "tier.spotlight": "Spotlight",
+      "rib.best": "★ Best Paper", "rib.honor": "Honorable Mention",
+      "rib.oral": "● Oral", "rib.spot": "● Spotlight",
+      "card.viewImage": "View image", "card.paper": "paper ↗",
+      "card.aria": "View {t}",
+      "end": "— End · {n} figures —",
+      "count.full": "<b>{n}</b> figures · {active}",
+      "count.base": "<b>{n}</b> / {m} figures",
+    },
+    zh: {
+      "chip.all": "全部",
+      "pat.teaser": "主视觉", "pat.conceptual": "概念图", "pat.framework": "框架总览",
+      "pat.pipeline": "流程图", "pat.architecture": "架构图",
+      "pat.taxonomy": "全景 / 基准", "pat.results": "结果", "pat.comparison": "对比",
+      "tier.best": "最佳论文", "tier.oral": "口头报告", "tier.spotlight": "焦点论文",
+      "rib.best": "★ 最佳论文", "rib.honor": "荣誉提名",
+      "rib.oral": "● 口头报告", "rib.spot": "● 焦点论文",
+      "card.viewImage": "查看图片", "card.paper": "论文 ↗",
+      "card.aria": "查看 {t}",
+      "end": "— 已加载全部 · 共 {n} 张 —",
+      "count.full": "<b>{n}</b> 张 · {active}",
+      "count.base": "<b>{n}</b> / {m} 张",
+    },
+  });
+  const patLabel = (p) => GAL_I18N.t("pat." + p);
+  const tierLabel = (v) => GAL_I18N.t("tier." + v);
+
   const state = { venue: "all", year: "all", tier: "all", pattern: "all", q: "", sort: "venue" };
   const figures = (window.FIGURES || []).slice();
   let filtered = [];
@@ -44,24 +78,33 @@
   $("#total-spotlight").textContent = nSpot.toLocaleString();
 
   /* ---------- filter chips ---------- */
-  function makeChips(containerId, key, values, labels, counts) {
+  const chipBoxes = [];
+  function chipText(btn, counts) {
+    const label = btn.dataset.lk ? GAL_I18N.t(btn.dataset.lk) : btn.dataset.static;
+    return label + (counts ? ` <span class="n">${counts[btn.dataset.val] || 0}</span>` : "");
+  }
+  function makeChips(containerId, key, values, labelKeyFor, counts) {
     const box = $(containerId);
     const all = document.createElement("button");
     all.className = "chip active";
-    all.textContent = "All";
-    all.dataset[key] = "all";
+    all.dataset.lk = "chip.all";
+    all.dataset.val = "all";
     box.appendChild(all);
     values.forEach((v) => {
       const c = document.createElement("button");
       c.className = "chip";
-      c.dataset[key] = v;
-      c.innerHTML = labels(v) + (counts ? ` <span class="n">${counts[v] || 0}</span>` : "");
+      c.dataset.val = v;
+      const lk = labelKeyFor(v);
+      if (lk && lk.startsWith("static:")) c.dataset.static = lk.slice(7);
+      else if (lk) c.dataset.lk = lk;
+      else c.dataset.static = String(v);
       box.appendChild(c);
     });
+    chipBoxes.push({ box, counts });
     box.addEventListener("click", (e) => {
       const btn = e.target.closest(".chip");
       if (!btn) return;
-      state[key] = btn.dataset[key];
+      state[key] = btn.dataset.val;
       box.querySelectorAll(".chip").forEach((x) => x.classList.toggle("active", x === btn));
       render();
     });
@@ -70,14 +113,18 @@
   const years = [...new Set(figures.map((f) => f.year))].sort();
   const usedPatterns = PATTERN_ORDER.filter((p) => figures.some((f) => f.pattern === p));
 
-  makeChips("#venue-chips", "venue", Object.keys(VENUES),
-    (v) => VENUES[v].name,
+  makeChips("#venue-chips", "venue", Object.keys(VENUES), (v) => "static:" + VENUES[v].name,
     Object.fromEntries(Object.keys(VENUES).map((v) => [v, figures.filter((f) => f.venue === v).length])));
-  makeChips("#year-chips", "year", years, (v) => v);
-  makeChips("#tier-chips", "tier", ["best", "oral", "spotlight"],
-    (v) => TIERS[v],
+  makeChips("#year-chips", "year", years, () => null);
+  makeChips("#tier-chips", "tier", ["best", "oral", "spotlight"], (v) => "tier." + v,
     { best: nBest, oral: nOral, spotlight: nSpot });
-  makeChips("#pattern-chips", "pattern", usedPatterns, (v) => PATTERNS[v] || v);
+  makeChips("#pattern-chips", "pattern", usedPatterns, (v) => "pat." + v);
+
+  function relabelChips() {
+    chipBoxes.forEach(({ box, counts }) => {
+      box.querySelectorAll(".chip").forEach((btn) => { btn.innerHTML = chipText(btn, counts); });
+    });
+  }
 
   /* ---------- search ---------- */
   const searchInput = $("#search");
@@ -114,8 +161,9 @@
     else if (state.tier === "spotlight") { if (f.award || f.tier !== "spotlight") return false; }
     if (state.q) {
       const hay = [f.title, (f.authors || []).join(" "), VENUES[f.venue].name,
-                   f.year, f.pattern, PATTERNS[f.pattern] || "",
-                   f.tier ? TIERS[f.tier] : "", f.award ? "best paper award outstanding" : ""]
+                   f.year, f.pattern, PATTERNS[f.pattern] || "", patLabel(f.pattern),
+                   f.tier ? TIERS[f.tier] : "", f.tier ? tierLabel(f.tier) : "",
+                   f.award ? "best paper award outstanding 最佳论文" : ""]
         .join(" ").toLowerCase();
       if (!state.q.split(/\s+/).every((tok) => hay.includes(tok))) return false;
     }
@@ -142,22 +190,22 @@
 
   /* ---------- chunked render ---------- */
   function ribbonInfo(f) {
-    if (f.award === "best") return { className: "rb-best", text: "★ Best Paper" };
-    if (f.award === "honorable") return { className: "rb-honor", text: "Honorable Mention" };
-    if (f.tier === "oral") return { className: "rb-oral", text: "● Oral" };
-    if (f.tier === "spotlight") return { className: "rb-spotlight", text: "● Spotlight" };
+    if (f.award === "best") return { className: "rb-best", key: "rib.best" };
+    if (f.award === "honorable") return { className: "rb-honor", key: "rib.honor" };
+    if (f.tier === "oral") return { className: "rb-oral", key: "rib.oral" };
+    if (f.tier === "spotlight") return { className: "rb-spot", key: "rib.spot" };
     return null;
   }
   function ribbonHtml(f) {
     const info = ribbonInfo(f);
-    return info ? `<span class="ribbon ${info.className}">${info.text}</span>` : "";
+    return info ? `<span class="ribbon ${info.className}">${GAL_I18N.t(info.key)}</span>` : "";
   }
   function cardHtml(f, idx) {
     const ratio = (f.w && f.h) ? `aspect-ratio:${f.w} / ${f.h};` : "min-height:170px;";
     const eager = idx < 24;
     const imgAttrs = eager ? `src="${f.image}"` : `data-src="${f.image}"`;
     return `
-    <article class="card${f.award ? " is-award" : f.tier ? " is-" + f.tier : ""}" data-id="${f.id}" tabindex="0" role="button" aria-label="查看 ${escapeHtml(f.title)}">
+    <article class="card${f.award ? " is-award" : f.tier ? " is-" + f.tier : ""}" data-id="${f.id}" tabindex="0" role="button" aria-label="${GAL_I18N.t("card.aria", { t: escapeHtml(f.title) })}">
       <span class="card-close-target" aria-hidden="true"></span>
       <div class="img-slot" style="${ratio}">
         ${ribbonHtml(f)}
@@ -167,11 +215,11 @@
         <div class="card-badges">
           <span class="badge ${f.venue}">${VENUES[f.venue].name}</span>
           <span class="badge year">${f.year}</span>
-          <span class="badge pattern">${PATTERNS[f.pattern] || f.pattern}</span>
+          <span class="badge pattern">${patLabel(f.pattern)}</span>
         </div>
         <h3 class="card-title">${escapeHtml(f.title)}</h3>
         <p class="card-authors">${escapeHtml(authorsText(f))}</p>
-        <span class="card-link"><span class="card-link-image">View image</span><span class="card-link-separator">/</span><span class="card-link-paper">paper ↗</span></span>
+        <span class="card-link"><span class="card-link-image">${GAL_I18N.t("card.viewImage")}</span><span class="card-link-separator">/</span><span class="card-link-paper">${GAL_I18N.t("card.paper")}</span></span>
       </div>
     </article>`;
   }
@@ -234,7 +282,7 @@
     if (shown >= filtered.length) {
       sentinel.hidden = true;
       endHint.hidden = filtered.length <= PAGE;
-      endHint.textContent = `— End · 共 ${filtered.length.toLocaleString()} figures —`;
+      endHint.textContent = GAL_I18N.t("end", { n: filtered.length.toLocaleString() });
     } else {
       sentinel.hidden = false;
       endHint.hidden = true;
@@ -250,12 +298,12 @@
     const active = [
       state.venue !== "all" ? VENUES[state.venue].name : null,
       state.year !== "all" ? state.year : null,
-      state.tier !== "all" ? TIERS[state.tier] : null,
-      state.pattern !== "all" ? (PATTERNS[state.pattern] || state.pattern) : null,
+      state.tier !== "all" ? tierLabel(state.tier) : null,
+      state.pattern !== "all" ? patLabel(state.pattern) : null,
     ].filter(Boolean);
     countEl.innerHTML = active.length
-      ? `<b>${filtered.length.toLocaleString()}</b> figures · ${active.map(escapeHtml).join(" · ")}`
-      : `<b>${filtered.length.toLocaleString()}</b> / ${figures.length.toLocaleString()} figures`;
+      ? GAL_I18N.t("count.full", { n: filtered.length.toLocaleString(), active: active.map(escapeHtml).join(" · ") })
+      : GAL_I18N.t("count.base", { n: filtered.length.toLocaleString(), m: figures.length.toLocaleString() });
   }
 
   if ("IntersectionObserver" in window) {
@@ -339,13 +387,13 @@
     const aBadge = $("#lb-award");
     if (f.award) {
       aBadge.hidden = false;
-      aBadge.textContent = f.award === "best" ? "★ Best Paper" : "Honorable Mention";
+      aBadge.textContent = GAL_I18N.t(f.award === "best" ? "rib.best" : "rib.honor");
       aBadge.className = "badge tier-badge " + (f.award === "best" ? "rb-best" : "rb-honor");
     } else aBadge.hidden = true;
     const tBadge = $("#lb-tier");
     if (f.tier) {
       tBadge.hidden = false;
-      tBadge.textContent = TIERS[f.tier] || f.tier;
+      tBadge.textContent = tierLabel(f.tier);
       tBadge.className = "badge tier-badge " + (f.tier === "oral" ? "rb-oral" : "rb-spotlight");
     } else tBadge.hidden = true;
     const vBadge = $("#lb-venue");
@@ -353,10 +401,10 @@
     vBadge.className = "badge " + f.venue;
     $("#lb-year").textContent = f.year;
     const pBadge = $("#lb-pattern");
-    pBadge.textContent = PATTERNS[f.pattern] || f.pattern;
+    pBadge.textContent = patLabel(f.pattern);
     const ribbonTarget = $("#lb-ribbon-target");
     const ribbon = ribbonInfo(f);
-    ribbonTarget.textContent = ribbon ? ribbon.text : "";
+    ribbonTarget.textContent = ribbon ? GAL_I18N.t(ribbon.key) : "";
     ribbonTarget.className = `ribbon ribbon-target${ribbon ? " " + ribbon.className : ""}`;
     $("#lb-title").textContent = f.title;
     $("#lb-authors").textContent = (f.authors || []).join(", ");
@@ -626,5 +674,26 @@
     }
   });
 
+  /* ---------- language toggle ---------- */
+  const langToggle = $("#lang-toggle");
+  function syncToggle() {
+    langToggle.textContent = GAL_I18N.lang === "zh" ? "EN" : "中";
+    langToggle.title = GAL_I18N.t("toggle.title");
+  }
+  langToggle.addEventListener("click", () => {
+    GAL_I18N.setLang(GAL_I18N.lang === "zh" ? "en" : "zh");
+  });
+  document.addEventListener("langchange", () => {
+    syncToggle();
+    relabelChips();
+    if (!lb.hidden && currentId) {
+      const f = figures.find((x) => x.id === currentId);
+      if (f) setFigureContent(f);
+    }
+    render();
+  });
+
+  syncToggle();
+  GAL_I18N.apply();
   render();
 })();

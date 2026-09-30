@@ -152,6 +152,10 @@
   .corsnote{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:9px;
             padding:8px 11px;margin-top:10px;font-size:12.5px}
   .chkline{display:flex;align-items:center;gap:7px;font-size:12.5px;color:#4b5563;margin-top:10px}
+  .lang-toggle{font-size:12px;font-weight:700;color:#4f46e5;background:#fff;border:1px solid var(--line);
+        border-radius:999px;padding:5px 13px;margin-left:auto}
+  .lang-toggle:hover{border-color:#4f46e5}
+  @media(max-width:640px){.lang-toggle{margin-left:0}}
 
   /* ===== two-stage pipeline ===== */
   .pass-tabs{display:inline-flex;background:#f3f4f6;border-radius:11px;padding:3px;gap:2px;margin-bottom:4px}
@@ -204,179 +208,182 @@
     <div class="logo">F</div>
     <div>
       <h1>FigureForge <span style="color:var(--indigo)">Beta</span></h1>
-      <div class="sub">上传你的论文内容 → 从 3,516 张顶会主图中检索最贴合的参考 → 生成你的主图初稿</div>
+      <div class="sub" data-i18n="sub"></div>
     </div>
-    <div class="pill">浏览器本地运行 · PDF 仅在你点击模型解析时发送给步骤一配置的模型</div>
+    <button class="lang-toggle" id="langToggle" type="button">EN</button>
+    <div class="pill" data-i18n="pill"></div>
   </header>
 
-  <div id="bootBanner"><span class="spin big" style="padding:0"></span><span id="bootText">正在加载检索索引与本地 CLIP 模型（首次约需下载数十 MB）…</span></div>
+  <div id="bootBanner"><span class="spin big" style="padding:0"></span><span id="bootText" data-i18n="boot"></span></div>
 
   <div class="card" id="card1">
-    <div class="step"><span class="num">1</span>输入论文内容</div>
+    <div class="step"><span class="num">1</span><span data-i18n="s1"></span></div>
     <details class="settings" id="intentSettings" style="margin-top:0;margin-bottom:13px">
-      <summary>先选择绘图意图</summary>
+      <summary data-i18n="intent.sum"></summary>
     <div class="srow" style="margin-top:11px;margin-bottom:3px">
       <div class="sbox">
-        <span>你想生成哪张图</span>
+        <span data-i18n="target.which"></span>
         <select id="target">
-          <option value="overview">Figure 1 总览 / Teaser（默认）</option>
-          <option value="architecture">方法架构图</option>
-          <option value="pipeline">Pipeline 流程图</option>
-          <option value="results">结果展示图</option>
-          <option value="custom">自定义（手动描述）</option>
+          <option value="overview" data-i18n="target.overview"></option>
+          <option value="architecture" data-i18n="target.architecture"></option>
+          <option value="pipeline" data-i18n="target.pipeline"></option>
+          <option value="results" data-i18n="target.results"></option>
+          <option value="custom" data-i18n="target.custom"></option>
         </select>
       </div>
       <div class="sbox" id="targetDescRow" style="flex:1;min-width:260px">
-        <span>具体描述你要的图</span>
-        <input type="text" id="targetDesc" placeholder="例如：画出第 3.2 节解码器结构，包含 cross-attention 与 KV cache">
+        <span data-i18n="target.desc"></span>
+        <input type="text" id="targetDesc" data-i18n-ph="target.descPh">
       </div>
     </div>
     <div class="srow" style="margin-top:8px;margin-bottom:3px">
       <div class="sbox" style="flex:1;min-width:260px">
-        <span>论文内容来源</span>
+        <span data-i18n="src"></span>
         <select id="contentMode">
-          <option value="free">自由输入（不自动提取）</option>
-          <option value="basic">PDF 模型基础提取（标题 + 摘要 + 关键词）</option>
-          <option value="intent" selected>PDF 按绘图意图提取（推荐）</option>
-          <option value="custom">PDF 模型自定义章节 / 页码 / 关键词</option>
+          <option value="free" data-i18n="src.free"></option>
+          <option value="basic" data-i18n="src.basic"></option>
+          <option value="intent" selected data-i18n="src.intent"></option>
+          <option value="custom" data-i18n="src.custom"></option>
         </select>
       </div>
       <div class="sbox" id="contentQueryRow" style="flex:1;min-width:260px" hidden>
-        <span>要提取的章节、页码或关键词</span>
-        <input type="text" id="contentQuery" placeholder="例如：3.2 Decoder；第 5–6 页；cross-attention">
+        <span data-i18n="src.query"></span>
+        <input type="text" id="contentQuery" data-i18n-ph="src.queryPh">
       </div>
     </div>
-    <div class="parse-status" id="contentModeHint" data-state="idle" data-label="解析说明" role="status" aria-live="polite">先上传 PDF。解析模型将阅读论文，按绘图意图总结相关章节，生成可编辑的绘图提示词。</div>
-    <div class="parse-meta" id="pdfExtractionMeta">尚未上传 PDF。</div>
+    <div class="parse-status" id="contentModeHint" data-state="idle" data-i18n-title="hint.label" role="status" aria-live="polite"></div>
+    <div class="parse-meta" id="pdfExtractionMeta" data-i18n="meta.nopdf"></div>
     </details>
 
     <details class="settings" id="apiSettingsStep1" open>
-      <summary>论文解析模型与接口（步骤一；Key 仅保存在本浏览器）</summary>
+      <summary data-i18n="api.sum"></summary>
       <div class="srow">
-        <div class="sbox"><span>服务商</span><select id="provider"></select></div>
-        <div class="sbox" style="flex:1;min-width:220px"><span>API Key</span><input type="password" id="key" placeholder="粘贴你的 API Key，仅保存在本机浏览器"></div>
-        <div class="sbox"><span>&nbsp;</span><button class="btn-ghost" id="refreshModels">刷新模型列表</button></div>
+        <div class="sbox"><span data-i18n="provider"></span><select id="provider"></select></div>
+        <div class="sbox" style="flex:1;min-width:220px"><span>API Key</span><input type="password" id="key" data-i18n-ph="keyPh"></div>
+        <div class="sbox"><span>&nbsp;</span><button class="btn-ghost" id="refreshModels" data-i18n="refresh"></button></div>
       </div>
       <div class="srow">
-        <div class="sbox" style="flex:1;min-width:260px"><span>论文解析模型（对话 / 视觉模型）</span><select id="parseModel"></select></div>
+        <div class="sbox" style="flex:1;min-width:260px"><span data-i18n="parsemodel"></span><select id="parseModel"></select></div>
       </div>
-      <div class="srow" id="parseCustomModelRow" hidden><div class="sbox" style="flex:1;min-width:220px"><span>解析模型 ID（自定义 / 中转）</span><input type="text" id="parseCustomModel" placeholder="例如 gpt-4.1 或 gemini-2.5-pro"></div></div>
-      <div class="hint">PDF 会直接发送给这里选择的模型；模型负责按绘图意图定位章节、归纳段落并生成可用于出图的内容。扫描 PDF 是否可读取取决于服务商的文档 / 视觉能力。</div>
-      <div class="chkline"><input type="checkbox" id="useRelay"><label for="useRelay">使用中转 / 自定义接入地址（官方接口浏览器直连受限时勾选）</label></div>
-      <div class="srow" id="relayRow" hidden><div class="sbox" style="flex:1;min-width:260px"><span>接入 Base URL（OpenAI 兼容，如中转网关地址）</span><input type="text" id="baseOverride" placeholder="例如 https://your-relay.com/v1"></div></div>
-      <div class="srow" id="customModelRow" hidden><div class="sbox" style="flex:1;min-width:220px"><span>出图模型 ID（自定义 / 中转）</span><input type="text" id="customModel" placeholder="例如 claude-opus-5-5 或 gpt-5"></div></div>
+      <div class="srow" id="parseCustomModelRow" hidden><div class="sbox" style="flex:1;min-width:220px"><span data-i18n="parseid"></span><input type="text" id="parseCustomModel" data-i18n-ph="parseidPh"></div></div>
+      <div class="hint" data-i18n="hint.pdf"></div>
+      <div class="chkline"><input type="checkbox" id="useRelay"><label for="useRelay" data-i18n="relay.label"></label></div>
+      <div class="srow" id="relayRow" hidden><div class="sbox" style="flex:1;min-width:260px"><span data-i18n="relay.base"></span><input type="text" id="baseOverride" data-i18n-ph="relay.ph"></div></div>
+      <div class="srow" id="customModelRow" hidden><div class="sbox" style="flex:1;min-width:220px"><span data-i18n="customid"></span><input type="text" id="customModel" data-i18n-ph="customidPh"></div></div>
       <div class="hint" id="baseHint"></div><div class="corsnote" id="corsNote" hidden></div><div class="hint" id="manifestHint"></div>
     </details>
 
 
-    <textarea id="paper" placeholder="粘贴论文标题 + 摘要（或方法概述）。例如：&#10;We propose a diffusion-based video editing framework that ... 我们的方法包含三个模块 ..."></textarea>
+    <textarea id="paper" data-i18n-ph="paperPh"></textarea>
     <div class="row">
-      <button class="pdf-upload-btn" id="uploadBtn" type="button"><span class="pdf-upload-icon" aria-hidden="true">PDF</span><span class="pdf-upload-copy"><strong id="uploadLabel">上传论文 PDF</strong><small>按绘图意图提取内容</small></span><span class="pdf-upload-arrow" aria-hidden="true">↑</span></button>
+      <button class="pdf-upload-btn" id="uploadBtn" type="button"><span class="pdf-upload-icon" aria-hidden="true">PDF</span><span class="pdf-upload-copy"><strong id="uploadLabel" data-i18n="upload"></strong><small data-i18n="upload.small"></small></span><span class="pdf-upload-arrow" aria-hidden="true">↑</span></button>
       <input type="file" id="pdfFile" accept="application/pdf" hidden>
-      <span style="font-size:12.5px;color:var(--muted)">没有论文？试试示例：</span>
-      <button class="btn-mini exchip" data-ex="robot">机器人操作</button>
-      <button class="btn-mini exchip" data-ex="video">视频生成</button>
-      <button class="btn-mini exchip" data-ex="llm">LLM 推理</button>
+      <span style="font-size:12.5px;color:var(--muted)" data-i18n="ex.label"></span>
+      <button class="btn-mini exchip" data-ex="robot" data-i18n="ex.robot"></button>
+      <button class="btn-mini exchip" data-ex="video" data-i18n="ex.video"></button>
+      <button class="btn-mini exchip" data-ex="llm" data-i18n="ex.llm"></button>
     </div>
     <div class="row">
-      <div class="field f-pattern"><label>Pattern 模式</label>
+      <div class="field f-pattern"><label data-i18n="lab.pattern"></label>
         <select id="pattern">
-          <option value="all">All</option>
+          <option value="all" data-i18n="opt.all"></option>
           <option>teaser</option><option>conceptual</option><option>framework</option>
           <option>pipeline</option><option>architecture</option><option>taxonomy</option>
           <option>results</option><option>comparison</option>
         </select>
       </div>
-      <div class="field f-venue"><label>Venue 会议</label>
+      <div class="field f-venue"><label data-i18n="lab.venue"></label>
         <select id="venue">
-          <option value="all">All</option><option>iclr</option><option>icml</option>
+          <option value="all" data-i18n="opt.all"></option><option>iclr</option><option>icml</option>
           <option>neurips</option><option>cvpr</option><option>acl</option><option>aaai</option>
         </select>
       </div>
-      <div class="field f-year"><label>Year 年份</label>
+      <div class="field f-year"><label data-i18n="lab.year"></label>
         <select id="year">
-          <option value="all">All</option><option>2026</option><option>2025</option>
+          <option value="all" data-i18n="opt.all"></option><option>2026</option><option>2025</option>
           <option>2024</option><option>2023</option>
         </select>
       </div>
-      <div class="field f-tier"><label>Tier 等级</label>
+      <div class="field f-tier"><label data-i18n="lab.tier"></label>
         <select id="tier">
-          <option value="all">All</option><option value="best">Best Paper</option>
+          <option value="all" data-i18n="opt.all"></option><option value="best">Best Paper</option>
           <option value="oral">Oral</option><option value="spotlight">Spotlight</option>
         </select>
       </div>
-      <button class="btn-primary" id="searchBtn">检索参考图</button>
+      <button class="btn-primary" id="searchBtn" data-i18n="searchBtn"></button>
     </div>
-    <div class="hint">检索同时使用语义向量（CLIP，理解论文主题与图面）和关键词匹配（BM25）；不输入内容时可仅用筛选浏览。</div>
+    <div class="hint" data-i18n="hint.search"></div>
   </div>
 
   <div class="card" id="card2">
-    <div class="step"><span class="num">2</span>挑选参考用例
+    <div class="step"><span class="num">2</span><span data-i18n="s2"></span>
       <span class="hint" style="margin:0" id="countHint"></span>
-      <button class="btn-tiny" id="clearBtn" hidden>清空选择</button>
+      <button class="btn-tiny" id="clearBtn" hidden data-i18n="clear"></button>
     </div>
-    <div class="flow-note" id="pickNote">两阶段模式：勾选 <b>8–10 张同类型</b>图（如都选 framework）；直接生成模式：精选 <b>2–3 张</b>即可。</div>
+    <div class="flow-note" id="pickNote" data-i18n-html="picknote"></div>
     <div class="grid" id="grid"></div>
   </div>
 
   <div class="card" id="card3">
-    <div class="step"><span class="num">3</span>生成你的主图初稿</div>
-    <div class="refs-strip" id="refsStrip"><span class="hint" style="margin:0">尚未选择参考图，请在上方勾选参考图。</span></div>
+    <div class="step"><span class="num">3</span><span data-i18n="s3"></span></div>
+    <div class="refs-strip" id="refsStrip"><span class="hint" style="margin:0" data-i18n="refs.initial"></span></div>
 
     <div class="pass-tabs" id="passTabs">
-      <button data-pass="direct">直接生成<span class="subtag">精选 2–3 张 · 一步出图</span></button>
-      <button data-pass="two" class="on">两阶段归纳<span class="subtag">多选 8–10 张 · 先提炼共性再生成</span></button>
+      <button data-pass="direct" data-i18n="pass.direct"><span class="subtag" data-i18n="pass.direct.sub"></span></button>
+      <button data-pass="two" class="on" data-i18n="pass.two"><span class="subtag" data-i18n="pass.two.sub"></span></button>
     </div>
     <div class="stepper" id="stepper" hidden>
-      <div class="stp" id="stp1"><div class="ball">1</div><div class="lbl">分析参考图</div></div>
+      <div class="stp" id="stp1"><div class="ball">1</div><div class="lbl" data-i18n="stp1"></div></div>
       <div class="stline" id="stline1"><div class="fill"></div></div>
-      <div class="stp" id="stp2"><div class="ball">2</div><div class="lbl">生成主图</div></div>
+      <div class="stp" id="stp2"><div class="ball">2</div><div class="lbl" data-i18n="stp2"></div></div>
     </div>
     <div id="analyzeBox"></div>
 
     <details class="settings" id="settingsBox" open>
-      <summary>出图模型（复用步骤一的服务商与 Key）</summary>
-      <div class="srow"><div class="tabs" id="modeTabs"><button data-mode="svg" class="on">SVG 可编辑初稿（推荐，文字准确）</button><button data-mode="image">AI 位图初稿（需要图像模型）</button></div></div>
-      <div class="srow" id="modelRow"><div class="sbox" style="flex:1;min-width:260px"><span id="modelLabel">最终出图模型（对话 / 视觉模型）</span><select id="model"></select></div></div>
-      <div class="hint" id="pdfModelHint">API Key 与服务商在步骤一配置；这里仅选择最终出图模型。SVG 使用对话 / 视觉模型，位图使用图像生成模型。</div>
-      <div class="srow" id="analyzeModelRow" hidden><div class="sbox" style="flex:1;min-width:260px"><span>归纳用视觉理解模型（两阶段第一步，需能看图）</span><select id="analyzeModel"></select></div></div>
+      <summary data-i18n="settings.sum"></summary>
+      <div class="srow"><div class="tabs" id="modeTabs"><button data-mode="svg" class="on" data-i18n="mode.svg"></button><button data-mode="image" data-i18n="mode.image"></button></div></div>
+      <div class="srow" id="modelRow"><div class="sbox" style="flex:1;min-width:260px"><span id="modelLabel" data-i18n="modelLabel"></span><select id="model"></select></div></div>
+      <div class="hint" id="pdfModelHint" data-i18n="hint.model"></div>
+      <div class="srow" id="analyzeModelRow" hidden><div class="sbox" style="flex:1;min-width:260px"><span data-i18n="analyzemodel"></span><select id="analyzeModel"></select></div></div>
     </details>
 
     <div id="genErr" class="errlist" hidden></div>
-    <button class="btn-primary" id="genBtn">生成初稿</button>
+    <button class="btn-primary" id="genBtn" data-i18n="genBtn"></button>
     <div id="out"></div>
   </div>
 
   <div class="card">
-    <div class="step">怎么用好参考图</div>
+    <div class="step" data-i18n="guide.t"></div>
     <ul class="guide">
-      <li><b>学布局，不抄内容</b>：看参考图把画布切成几个面板（问题 / 方法 / 结果）、视觉重心放在哪，面板里换成你自己的模块。</li>
-      <li><b>学配色</b>：主色 1 个 + 强调色 1 个，方法模块用同色系深浅区分；顶会主图普遍留白充足、饱和度克制。</li>
-      <li><b>两阶段归纳，多选更稳</b>：想画 framework 就勾选 8–10 张带 framework 标签的图，视觉模型先归纳该类版式共性、自动挑出 2–3 张代表图再生成——既满足多选，又避免多张版式互相打架。</li>
-      <li><b>学表达</b>：每个面板一个信息点，箭头表示数据流，标签用短语而非句子；Figure 1 讲清楚“输入→我们的方法→输出/效果”即可。</li>
-      <li>初稿生成后建议在 <b>PPT / Figma / draw.io</b> 里精修文字与对齐，再导出投稿所需格式。</li>
+      <li data-i18n-html="g1"></li>
+      <li data-i18n-html="g2"></li>
+      <li data-i18n-html="g3"></li>
+      <li data-i18n-html="g4"></li>
+      <li data-i18n-html="g5"></li>
     </ul>
     <div style="margin-top:16px">
-      <div class="step" style="margin-bottom:8px">① 勾选 8–10 张同类参考图（结果按评分降序）</div>
-      <img src="tutorial/02_pick_refs.png" alt="勾选8-10张同类参考图" style="width:100%;border:1px solid var(--line);border-radius:11px;margin-bottom:16px">
-      <div class="step" style="margin-bottom:8px">② 同一个 prompt，FigureForge vs 通用文生图</div>
-      <img src="tutorial/compare.png" alt="同一个prompt两种结果" style="width:100%;border:1px solid var(--line);border-radius:11px">
+      <div class="step" style="margin-bottom:8px" data-i18n="tut1"></div>
+      <img src="tutorial/02_pick_refs.png" data-i18n-aria="tut1" style="width:100%;border:1px solid var(--line);border-radius:11px;margin-bottom:16px">
+      <div class="step" style="margin-bottom:8px" data-i18n="tut2"></div>
+      <img src="tutorial/compare.png" data-i18n-aria="tut2" style="width:100%;border:1px solid var(--line);border-radius:11px">
     </div>
   </div>
 </div>
 
 <div id="forgeLightbox" class="forge-lightbox" hidden>
-  <div class="forge-lb-dialog" role="dialog" aria-modal="true" aria-label="参考图大图">
-    <button class="forge-lb-close" id="forgeLbClose" aria-label="关闭">×</button>
+  <div class="forge-lb-dialog" role="dialog" aria-modal="true" data-i18n-aria="lb.dialog">
+    <button class="forge-lb-close" id="forgeLbClose" data-i18n-aria="lb.close">×</button>
     <img id="forgeLbImg" src="" alt="">
     <div class="forge-lb-meta"><h2 id="forgeLbTitle"></h2><p id="forgeLbMeta"></p>
-      <div class="forge-lb-links"><a id="forgeLbImage" target="_blank" rel="noopener">查看原图 ↗</a><a id="forgeLbPaper" target="_blank" rel="noopener">打开原文 ↗</a></div>
+      <div class="forge-lb-links"><a id="forgeLbImage" target="_blank" rel="noopener" data-i18n="lb.image"></a><a id="forgeLbPaper" target="_blank" rel="noopener" data-i18n="lb.paper"></a></div>
     </div>
   </div>
-  <button class="forge-lb-nav prev" id="forgeLbPrev" aria-label="上一张">‹</button>
-  <button class="forge-lb-nav next" id="forgeLbNext" aria-label="下一张">›</button>
+  <button class="forge-lb-nav prev" id="forgeLbPrev" data-i18n-aria="lb.prev">‹</button>
+  <button class="forge-lb-nav next" id="forgeLbNext" data-i18n-aria="lb.next">›</button>
 </div>
 
+<script src="./i18n.js"></script>
+<script src="./i18n_forge.js"></script>
 <script type="module">
 import * as T from './vendor/transformers.min.js';
 
@@ -388,6 +395,7 @@ if('serviceWorker' in navigator){
 }
 
 const $ = s => document.querySelector(s);
+const tt = (...a) => GAL_I18N.t(...a);
 const cleanKey = s => (s||'').replace(/\s+/g,'');
 const esc = s => (s+'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let refs = new Set(), results = [], mode = 'svg';
@@ -401,15 +409,15 @@ const IMGRE = /(image|seedream|flux|kolors|dall-e|gpt-image|cogview|sd-|stable-d
 const kindOf = id => SKIP.test(id) ? 'skip' : IMGRE.test(id) ? 'image' : 'chat';
 
 const TARGETS = {
- overview:{label:'Figure 1 总览 / Teaser', img:'Design a publication-quality Figure 1 teaser/overview figure',
+ overview:{label:tt('tg.overview'), img:'Design a publication-quality Figure 1 teaser/overview figure',
    instr:'一张论文 Figure 1 总览（teaser）图：左侧或顶部为输入示例，中间为我们方法的核心模块（2-4 个方块+箭头表示数据流），右侧或底部为输出/效果。横向布局，每个面板一个信息点。'},
- architecture:{label:'方法架构图', img:'Design a publication-quality method architecture figure',
+ architecture:{label:tt('tg.architecture'), img:'Design a publication-quality method architecture figure',
    instr:'一张方法架构图：展示模型内部组件与层次结构（编码器、模块、解码器等），用方块表示组件、箭头表示数据流，标注关键组件名称与维度；体现组件之间的连接关系。'},
- pipeline:{label:'Pipeline 流程图', img:'Design a publication-quality pipeline/process figure',
+ pipeline:{label:tt('tg.pipeline'), img:'Design a publication-quality pipeline/process figure',
    instr:'一张 pipeline 流程图：按顺序展示从输入到输出的若干阶段（阶段用横向或纵向排列的圆角方块，箭头连接），每个阶段下方用小字标注该阶段。'},
- results:{label:'结果展示图', img:'Design a publication-quality results figure',
+ results:{label:tt('tg.results'), img:'Design a publication-quality results figure',
    instr:'一张结果展示图：以多面板网格对比不同方法/设置的结果，每列一种方法、每行一个样本，面板下方标注方法名与关键指标，坐标轴与图例清晰。'},
- custom:{label:'自定义', img:'Design a publication-quality scientific figure', instr:''},
+ custom:{label:tt('tg.custom'), img:'Design a publication-quality scientific figure', instr:''},
 };
 
 /* FALLBACK：manifest 拉取失败（离线）时使用，与 forge/data/manifest.json 同口径 */
@@ -433,7 +441,7 @@ const BOOT_TIMEOUT = 180000;
 let bootPromise = null;
 const withTimeout = (promise, ms, label) => Promise.race([
   promise,
-  new Promise((_, reject) => setTimeout(() => reject(new Error(label+' 超时（'+Math.round(ms/1000)+' 秒）。请检查网络或刷新重试。')), ms))
+  new Promise((_, reject) => setTimeout(() => reject(new Error(tt('timeout',{l:label,s:Math.round(ms/1000)}))), ms))
 ]);
 async function cacheSummary(){
   if(!('caches' in window)) return '';
@@ -445,7 +453,7 @@ async function cacheSummary(){
     for(const name of namesToCheck) keys = keys.concat(await caches.open(name).then(c => c.keys()));
     const hasModel = keys.some(r => /text_model_quantized\.onnx$/.test(new URL(r.url).pathname));
     const hasIndex = keys.some(r => /(?:image_emb|text_emb)\.bin(?:\?.*)?$/.test(new URL(r.url).pathname + new URL(r.url).search));
-    return hasModel && hasIndex ? '已命中浏览器缓存' : '将继续缓存本地索引与模型';
+    return hasModel && hasIndex ? tt('cache.hit') : tt('cache.will');
   }catch(e){ return ''; }
 }
 async function boot(){
@@ -457,7 +465,7 @@ async function boot(){
   const cacheHint = await cacheSummary();
   const show = m => { bt.textContent = m + '（已用 '+Math.round((performance.now()-started)/1000)+' 秒）'; };
   try{
-    show(cacheHint ? '正在读取'+cacheHint+'…' : '正在加载模型清单与检索索引…'); L('start');
+    show(cacheHint ? tt('boot.cache') : tt('boot.manifest')); L('start');
     await withTimeout(loadManifest(), 30000, '模型清单加载'); L('manifest');
     const DV = MAN.dataVersion || '0';
     const [figs, ids, bm, IE, TE] = await withTimeout(Promise.all([
@@ -468,7 +476,7 @@ async function boot(){
     ]), BOOT_TIMEOUT, '检索索引加载');
     L('data done');
     data = { ids, figs, bm, IE, TE, N: ids.length };
-    show('正在加载本地 CLIP（① tokenizer）…');
+    show(tt('boot.clip1'));
     T.env.allowLocalModels = true;
     T.env.allowRemoteModels = false;
     T.env.localModelPath = new URL('./models/', import.meta.url).href;
@@ -476,13 +484,13 @@ async function boot(){
     const MP = 'clip-vit-base-patch32';
     clip.tokenizer = await withTimeout(T.AutoTokenizer.from_pretrained(MP), BOOT_TIMEOUT, 'CLIP tokenizer 加载');
     L('tokenizer done');
-    show('正在加载本地 CLIP（② 模型本体约 63 MB）…');
+    show(tt('boot.clip2'));
     clip.model = await withTimeout(T.CLIPTextModelWithProjection.from_pretrained(MP, {dtype:'q8'}), BOOT_TIMEOUT, 'CLIP 模型加载');
     L('model done');
     $('#bootBanner').hidden = true;
   }catch(e){
     L('ERR '+e.message);
-    bt.innerHTML = '<span style="color:#991b1b">初始化失败：'+esc(e.message)+'。刷新页面重试；若反复失败请检查网络。</span>';
+    bt.innerHTML = '<span style="color:#991b1b">'+tt('boot.fail',{m:esc(e.message)})+'</span>';
   }
   })();
   return bootPromise;
@@ -560,7 +568,7 @@ async function search(){
   results = scored.slice(0,30).map(x=>{const f=data.figs[x.i];
     f.matchScore = hasQ ? Math.max(0,Math.min(100,Math.round(x.s*100))) : null; return f;});
   renderGrid(results);
-  if(!results.length) $('#grid').innerHTML='<div class="empty-note">没有符合条件的图片，试试放宽筛选。</div>';
+  if(!results.length) $('#grid').innerHTML='<div class="empty-note">'+tt('grid.empty')+'</div>';
 }
 
 /* ---------------- render cards ---------------- */
@@ -574,9 +582,9 @@ function tierChip(f){
 function renderGrid(list){
   $('#grid').innerHTML = list.map(f=>{
     const sel = refs.has(f.id);
-    return `<div class="rc ${sel?'sel':''}" data-id="${esc(f.id)}" role="button" tabindex="0" aria-pressed="${sel}" aria-label="${sel?'取消选择':'选择'}参考图：${esc(f.title)}">
+    return `<div class="rc ${sel?'sel':''}" data-id="${esc(f.id)}" role="button" tabindex="0" aria-pressed="${sel}" aria-label="${tt(sel?'card.ariaSel':'card.aria',{t:esc(f.title)})}">
       <img class="thumb" loading="lazy" src="../${esc(f.image)}" alt="${esc(f.title)}">
-      <div class="pick">${sel?'✓ 已选':'+ 选为参考'}</div>
+      <div class="pick">${sel?tt('pick.sel'):tt('pick.add')}</div>
       <div class="score">${f.matchScore!=null?f.matchScore:''}</div>
       <div class="body">
         <h3>${esc(f.title)}</h3>
@@ -587,14 +595,14 @@ function renderGrid(list){
           ${tierChip(f)}
         </div>
         <div class="rc-actions">
-          <button class="rc-action rc-preview" type="button" data-id="${esc(f.id)}">查看大图</button>
-          ${f.paper ? `<a class="rc-action" href="${esc(f.paper)}" target="_blank" rel="noopener" data-paper-link>原文 ↗</a>` : ''}
+          <button class="rc-action rc-preview" type="button" data-id="${esc(f.id)}">${tt('act.preview')}</button>
+          ${f.paper ? `<a class="rc-action" href="${esc(f.paper)}" target="_blank" rel="noopener" data-paper-link>${tt('act.paper')}</a>` : ''}
         </div>
       </div></div>`;
   }).join('');
 }
 function updateCount(){
-  $('#countHint').textContent = refs.size ? `已选 ${refs.size}/${MAX_REFS}` : '';
+  $('#countHint').textContent = refs.size ? tt('countHint',{n:refs.size,m:MAX_REFS}) : '';
   $('#clearBtn').hidden = refs.size===0;
 }
 $('#grid').addEventListener('click', e=>{
@@ -605,7 +613,7 @@ $('#grid').addEventListener('click', e=>{
   const card = e.target.closest('.rc'); if(!card) return;
   const id = card.dataset.id;
   if(refs.has(id)) refs.delete(id);
-  else { if(refs.size>=MAX_REFS){ showErr('最多选 '+MAX_REFS+' 张参考图（两阶段建议 8–10 张同类型，直接生成 2–3 张）'); return;} refs.add(id); }
+  else { if(refs.size>=MAX_REFS){ showErr(tt('err.maxrefs',{m:MAX_REFS})); return;} refs.add(id); }
   renderGrid(results); updateCount(); renderRefsStrip();
 });
 $('#grid').addEventListener('keydown', e=>{
@@ -616,7 +624,7 @@ $('#grid').addEventListener('keydown', e=>{
 });
 $('#clearBtn').onclick = ()=>{ refs.clear(); renderGrid(results); updateCount(); renderRefsStrip(); };
 function renderRefsStrip(){
-  if(!refs.size){ $('#refsStrip').innerHTML='<span class="hint" style="margin:0">尚未选择参考图，请在上方勾选（两阶段 8–10 张 / 直接 2–3 张）。</span>'; return; }
+  if(!refs.size){ $('#refsStrip').innerHTML='<span class="hint" style="margin:0">'+tt('refs.strip2')+'</span>'; return; }
   $('#refsStrip').innerHTML = [...refs].map(id=>{
     const f = data.figs.find(x=>x.id===id);
     return `<div class="refmini"><img src="../${esc(f.image)}"><div><b>${esc(f.title)}</b>
@@ -749,32 +757,32 @@ function renderPdfSummary(data){
 }
 function setParseStatus(state){
   const el=$('#contentModeHint'); el.dataset.state=state;
-  el.dataset.label={idle:'解析说明',loading:'正在解析 · 请稍候',success:'解析完成',error:'解析未完成'}[state];
+  el.dataset.label={idle:tt('hint.label'),loading:tt('ps.loading'),success:tt('ps.success'),error:tt('ps.error')}[state];
 }
 async function selectPdfContext(){
   if(!pdfContext || $('#contentMode').value==='free') return;
   const seq=++pdfIntentSeq, mode=$('#contentMode').value;
   setParseStatus('loading');
-  $('#contentModeHint').textContent='正在发送 PDF，模型将按绘图意图提取相关章节并总结…';
-  $('#pdfExtractionMeta').textContent=`解析模型：${parserModel()||'未选择'} · 使用步骤一的 API 配置`;
+  $('#contentModeHint').textContent=tt('ps.sending');
+  $('#pdfExtractionMeta').textContent=tt('ps.meta1',{m:parserModel()||'–'});
   try{
     const result=await callPdfParser(); if(seq!==pdfIntentSeq) return;
     renderPdfSummary(result);
     setParseStatus('success');
-    $('#contentModeHint').textContent='已提取相关章节并组合绘图提示词。你可以在下方继续编辑。';
-    $('#pdfExtractionMeta').textContent=`${pdfContext.fileName} · 已由 ${parserModel()} 完成模型解析，共返回 ${result.selectedSections.length} 个相关段落。`;
+    $('#contentModeHint').textContent=tt('ps.done');
+    $('#pdfExtractionMeta').textContent=tt('ps.meta2',{f:pdfContext.fileName,m:parserModel(),n:result.selectedSections.length});
   }catch(err){
     if(seq!==pdfIntentSeq) return;
     setParseStatus('error');
-    $('#contentModeHint').textContent='模型解析失败；请更换支持 PDF / 文档输入的模型，或改用自由输入。';
-    $('#pdfExtractionMeta').textContent='未生成本地兜底文本，避免把低质量抽取误当成模型结果。';
-    showErr('PDF 模型解析失败：'+err.message);
+    $('#contentModeHint').textContent=tt('ps.fail');
+    $('#pdfExtractionMeta').textContent=tt('ps.meta3');
+    showErr(tt('err.pdfparse',{m:err.message}));
   }
 }
 function syncContentMode(){
   const mode=$('#contentMode').value; $('#contentQueryRow').hidden=mode!=='custom';
   setParseStatus('idle');
-  $('#contentModeHint').textContent=mode==='free'?'自由输入模式：不会自动调用解析模型。':mode==='basic'?'由步骤一解析模型提取标题、摘要和关键词，适合总览图。':mode==='intent'?'由步骤一解析模型按绘图意图选择相关章节并总结，再与摘要组合提示词。':'解析模型按你提供的章节、页码或关键词定位并总结相关段落。';
+  $('#contentModeHint').textContent=mode==='free'?tt('cm.free'):mode==='basic'?tt('cm.basic'):mode==='intent'?tt('cm.intent'):tt('cm.custom');
   if(pdfContext && mode!=='free') selectPdfContext();
 }
 $('#contentMode').onchange=syncContentMode;
@@ -784,15 +792,15 @@ $('#targetDesc').addEventListener('input',()=>{ if(pdfContext && $('#contentMode
 $('#uploadBtn').onclick=()=>$('#pdfFile').click();
 $('#pdfFile').onchange=async e=>{
   const file=e.target.files[0]; if(!file)return;
-  const btn=$('#uploadBtn'); btn.disabled=true; btn.setAttribute('aria-busy','true'); $('#uploadLabel').textContent='读取与解析中…';
+  const btn=$('#uploadBtn'); btn.disabled=true; btn.setAttribute('aria-busy','true'); $('#uploadLabel').textContent=tt('up.reading');
   try{
-    if(file.size>25*1024*1024) throw new Error('PDF 超过 25 MB，请压缩文件或粘贴需要解析的章节文本');
+    if(file.size>25*1024*1024) throw new Error(tt('up.size'));
     const dataUri=await fileToDataURI(file);
     pdfContext={fileName:file.name,mime:file.type||'application/pdf',dataUri,size:file.size};
-    $('#pdfExtractionMeta').textContent=`已读取 ${file.name}（${Math.round(file.size/1024)} KB）；等待解析模型处理。`;
+    $('#pdfExtractionMeta').textContent=tt('up.meta',{f:file.name,s:Math.round(file.size/1024)});
     if($('#contentMode').value!=='free') await selectPdfContext();
-  }catch(err){ showErr('PDF 读取失败：'+err.message); }
-  finally{ btn.disabled=false; btn.removeAttribute('aria-busy'); $('#uploadLabel').textContent='上传论文 PDF'; e.target.value=''; }
+  }catch(err){ showErr(tt('up.fail',{m:err.message})); }
+  finally{ btn.disabled=false; btn.removeAttribute('aria-busy'); $('#uploadLabel').textContent=tt('upload'); e.target.value=''; }
 };
 
 /* ---------------- reference images -> data URI ---------------- */
@@ -821,7 +829,7 @@ async function refDataURIs(refIds){
   for(const id of (refIds||[...refs])){
     const f = data.figs.find(x=>x.id===id);
     const r = await fetch('../'+f.image);
-    if(!r.ok) throw new Error('读取参考图失败：'+f.image);
+    if(!r.ok) throw new Error(tt('ref.fail',{f:f.image}));
     out.push(await blobToShrunkURI(await r.blob()));
   }
   return out;
@@ -856,23 +864,23 @@ async function populateModels(){
   const p = $('#provider').value, c = cfg();
   const s = $('#model'); s.innerHTML='';
   if(p==='custom'){
-    s.appendChild(optgroup('自定义：请在下方填写模型 ID'));
+    s.appendChild(optgroup(tt('og.custom')));
   }else if(mode==='svg'){
-    if(c.chat.length){ const g=optgroup('推荐对话模型'); c.chat.forEach(m=>g.appendChild(option(m))); s.appendChild(g); }
-    if(c.vision.length){ const g=optgroup('支持视觉理解（可直接读参考图）'); c.vision.forEach(m=>g.appendChild(option(m))); s.appendChild(g); }
+    if(c.chat.length){ const g=optgroup(tt('og.chat')); c.chat.forEach(m=>g.appendChild(option(m))); s.appendChild(g); }
+    if(c.vision.length){ const g=optgroup(tt('og.vision')); c.vision.forEach(m=>g.appendChild(option(m))); s.appendChild(g); }
   }else{
-    if(c.image.length){ const g=optgroup('推荐图像模型'); c.image.forEach(m=>g.appendChild(option(m))); s.appendChild(g); }
+    if(c.image.length){ const g=optgroup(tt('og.image')); c.image.forEach(m=>g.appendChild(option(m))); s.appendChild(g); }
   }
   const wanted = mode==='svg' ? 'chat' : 'image';
   const res = await fetchOnlineModels();
   const online = res.list;
   const yours = online.filter(m=>kindOf(m)===wanted);
   if(yours.length){
-    const g=optgroup('你的账号已开通（实时拉取 '+new Date().toLocaleDateString()+'）');
+    const g=optgroup(tt('og.yours',{d:new Date().toLocaleDateString()}));
     [...new Set(yours)].forEach(m=>g.appendChild(option(m))); s.appendChild(g);
   }else if(key_present() && !res.ok){
-    const g=optgroup('该服务商未开放浏览器查询 · 已用托管清单');
-    const o=option('（托管清单随仓库更新，新模型打开即见）'); o.disabled=true; g.appendChild(o); s.appendChild(g);
+    const g=optgroup(tt('og.nolive'));
+    const o=option(tt('og.hosted')); o.disabled=true; g.appendChild(o); s.appendChild(g);
   }
   const saved = localStorage.getItem('ff_model_'+p);
   if(saved && [...s.options].some(o=>o.value===saved)) s.value=saved;
@@ -881,28 +889,28 @@ async function populateModels(){
 async function populateParserModels(){
   const p=$('#provider').value, c=cfg(), s=$('#parseModel'); s.innerHTML='';
   if(p==='custom'){
-    s.appendChild(option('请在下方填写解析模型 ID')); s.options[0].disabled=true;
+    s.appendChild(option(tt('og.fillid'))); s.options[0].disabled=true;
     $('#parseCustomModelRow').hidden=false;
     return;
   }
   $('#parseCustomModelRow').hidden=true;
   const models=[...(c.chat||[]),...(c.vision||[])];
-  if(models.length){ const g=optgroup('对话 / 视觉解析模型'); [...new Set(models)].forEach(m=>g.appendChild(option(m))); s.appendChild(g); }
+  if(models.length){ const g=optgroup(tt('og.parser')); [...new Set(models)].forEach(m=>g.appendChild(option(m))); s.appendChild(g); }
   const res=await fetchOnlineModels();
   const online=res.list.filter(m=>kindOf(m)!=='image');
-  if(online.length){ const g=optgroup('账号已开通（实时拉取）'); [...new Set(online)].forEach(m=>g.appendChild(option(m))); s.appendChild(g); }
+  if(online.length){ const g=optgroup(tt('og.live')); [...new Set(online)].forEach(m=>g.appendChild(option(m))); s.appendChild(g); }
   const saved=localStorage.getItem('ff_parse_model_'+p);
   if(saved && [...s.options].some(o=>o.value===saved)) s.value=saved;
 }
 async function populateAnalyzeModels(){
   const c=cfg(), s=$('#analyzeModel'); s.innerHTML='';
-  if(c.vision.length){ const g=optgroup('视觉理解模型（可看图归纳）'); c.vision.forEach(m=>g.appendChild(option(m))); s.appendChild(g); }
+  if(c.vision.length){ const g=optgroup(tt('og.amodel')); c.vision.forEach(m=>g.appendChild(option(m))); s.appendChild(g); }
   const res = await fetchOnlineModels();
   const vis = res.list.filter(m=>kindOf(m)==='chat' && /(vision|vl|visual|multimodal|seed-1-6|seed-2|gpt-5|kimi-k|sonnet|opus)/i.test(m));
-  if(vis.length){ const g=optgroup('账号已开通（实时）'); [...new Set(vis)].forEach(m=>g.appendChild(option(m))); s.appendChild(g); }
+  if(vis.length){ const g=optgroup(tt('og.live')); [...new Set(vis)].forEach(m=>g.appendChild(option(m))); s.appendChild(g); }
   else if(key_present() && !res.ok && !c.vision.length){
-    const g=optgroup('未开放浏览器查询 · 已用托管清单');
-    const o=option('（托管清单随仓库更新）'); o.disabled=true; g.appendChild(o); s.appendChild(g);
+    const g=optgroup(tt('og.nolive'));
+    const o=option(tt('og.hosted')); o.disabled=true; g.appendChild(o); s.appendChild(g);
   }
   const saved = localStorage.getItem('ff_amodel_'+$('#provider').value);
   if(saved && [...s.options].some(o=>o.value===saved)) s.value=saved;
@@ -926,8 +934,8 @@ function restoreProviderState(p){
   $('#relayRow').hidden = !$('#useRelay').checked;
   $('#customModelRow').hidden = p!=='custom';
   $('#corsNote').hidden = !needRelay;
-  if(needRelay) $('#corsNote').innerHTML = '⚠ 该服务商官方接口未开放浏览器跨域直连（实测）。两种用法：① 勾选上方中转并填入 OpenAI 兼容中转地址；② 也可直接改用支持 CORS 的服务商（火山方舟 / 硅基流动 / 智谱 / Kimi / Qwen / DeepSeek）。';
-  $('#baseHint').textContent = '接口地址：'+(baseURL()||'（待填写）');
+  if(needRelay) $('#corsNote').innerHTML = tt('cors.note');
+  $('#baseHint').textContent = tt('base.hint',{b:baseURL()||'–'});
   populateParserModels();
 }
 $('#provider').onchange = async e=>{
@@ -936,7 +944,7 @@ $('#provider').onchange = async e=>{
   await Promise.all([populateModels(),populateParserModels()]);
 };
 $('#key').oninput = e=>{ e.target.value=cleanKey(e.target.value); localStorage.setItem('ff_key_'+$('#provider').value, e.target.value); };
-$('#baseOverride').oninput = e=>{ localStorage.setItem('ff_base_'+$('#provider').value, e.target.value); $('#baseHint').textContent='接口地址：'+(baseURL()||'（待填写）'); };
+  $('#baseOverride').oninput = e=>{ localStorage.setItem('ff_base_'+$('#provider').value, e.target.value); $('#baseHint').textContent=tt('base.hint',{b:baseURL()||'–'}); };
 $('#customModel').oninput = e=>localStorage.setItem('ff_cmodel_'+$('#provider').value, e.target.value);
 $('#parseModel').onchange = e=>localStorage.setItem('ff_parse_model_'+$('#provider').value,e.target.value);
 $('#parseCustomModel').oninput = e=>localStorage.setItem('ff_parse_cmodel_'+$('#provider').value,e.target.value);
@@ -948,7 +956,7 @@ $('#refreshModels').onclick = ()=>Promise.all([populateModels(),populateParserMo
 document.querySelectorAll('#modeTabs button').forEach(b=>b.onclick=async ()=>{
   document.querySelectorAll('#modeTabs button').forEach(x=>x.classList.remove('on'));
   b.classList.add('on'); mode=b.dataset.mode;
-  $('#modelLabel').textContent = mode==='svg' ? '模型（对话 / 视觉模型）' : '模型（图像模型）';
+  $('#modelLabel').textContent = mode==='svg' ? tt('modelLabel.svg') : tt('modelLabel.image');
   await populateModels();
   syncPassUI();
 });
@@ -960,8 +968,8 @@ document.querySelectorAll('#passTabs button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('#passTabs button').forEach(x=>x.classList.remove('on'));
   b.classList.add('on'); passMode=b.dataset.pass;
   syncPassUI();
-  if(passMode==='two' && refs.size && refs.size<4) showErr('两阶段建议勾选 8–10 张同类型参考图。');
-  if(passMode==='direct' && refs.size>4) showErr('直接生成建议精选 2–3 张；当前选了 '+refs.size+' 张，版式可能互相干扰。');
+  if(passMode==='two' && refs.size && refs.size<4) showErr(tt('pass.warn1'));
+  if(passMode==='direct' && refs.size>4) showErr(tt('pass.warn2',{n:refs.size}));
 });
 $('#model').onchange = e=>localStorage.setItem('ff_model_'+$('#provider').value, e.target.value);
 
@@ -980,8 +988,8 @@ Rules: output JSON only, no markdown or commentary. representative must hold 2-3
 }
 function extractJSON(txt){
   const m = txt.match(/\{[\s\S]*\}/);
-  if(!m) throw new Error('归纳模型未返回有效结果，可重试或更换视觉理解模型。');
-  try{ return JSON.parse(m[0]); }catch(e){ throw new Error('归纳结果解析失败，可重试。'); }
+  if(!m) throw new Error(tt('err.analyze1'));
+  try{ return JSON.parse(m[0]); }catch(e){ throw new Error(tt('err.analyze2')); }
 }
 async function analyzeReferences(){
   const ordered=[...refs];
@@ -998,7 +1006,7 @@ async function analyzeReferences(){
     const d=JSON.parse(txt); txt=(d.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
   }else{
     const am = (mode==='image'&&passMode==='two') ? $('#analyzeModel').value : $('#model').value;
-    if(!am) throw new Error('请选择归纳用的视觉理解模型（位图两阶段需在下方"归纳模型"中选择）。');
+    if(!am) throw new Error(tt('analyze.needmodel'));
     const parts=uris.map(u=>({type:'image_url',image_url:{url:u}}));
     parts.push({type:'text',text:buildAnalyzePrompt(ordered.length)});
     const body={model:am,temperature:0.2,messages:[{role:'system',content:ANALYZE_SYS},{role:'user',content:parts}]};
@@ -1006,9 +1014,9 @@ async function analyzeReferences(){
     let r;
     try{ r=await postJSON(baseURL(),'/chat/completions',body,cleanKey($('#key').value)); }
     catch(e){
-      if(e.name==='TimeoutError') throw new Error('归纳超时（已等待 5 分钟），请稍后重试或换用更快的视觉模型。');
+      if(e.name==='TimeoutError') throw new Error(tt('analyze.timeout'));
       const diag=await diagnoseConnection(baseURL(),cleanKey($('#key').value),am);
-      throw new Error(diag || '归纳请求被网络或浏览器拦截，可重试，或勾选“使用中转”填入中转地址。');
+      throw new Error(diag || tt('analyze.blocked'));
     }
     txt=await r.text(); if(!r.ok) throw new Error(friendlyHttp(r.status,txt));
     const d=JSON.parse(txt); txt=d.choices?.[0]?.message?.content||'';
@@ -1023,16 +1031,16 @@ async function analyzeReferences(){
 }
 function renderAnalyze(ordered){
   const j=analysis.j;
-  const repHtml=analysis.repIds.map(id=>{const f=data.figs.find(x=>x.id===id);return `<span class="rep-chip"><img src="../${esc(f.image)}">代表图</span>`;}).join('');
+  const repHtml=analysis.repIds.map(id=>{const f=data.figs.find(x=>x.id===id);return `<span class="rep-chip"><img src="../${esc(f.image)}">${tt('rep.fig')}</span>`;}).join('');
   $('#analyzeBox').innerHTML=`<div class="analyze-box">
-    <h4>✓ 第一步完成：已从 ${ordered.length} 张图提炼共性版式</h4>
+    <h4>${tt('analyze.done',{n:ordered.length})}</h4>
     <div class="analyze-grid">
       <div class="az"><b>Layout 布局</b><span>${esc(j.layout||'–')}</span></div>
       <div class="az"><b>Elements 元素</b><span>${esc(j.elements||'–')}</span></div>
       <div class="az"><b>Palette 配色</b><span>${esc(j.palette||'–')}</span></div>
       <div class="az"><b>Hierarchy 层级</b><span>${esc(j.hierarchy||'–')}</span></div>
     </div>
-    <div class="rep-strip"><b>自动选定代表图：</b>${repHtml}</div>
+    <div class="rep-strip"><b>${tt('rep.selected')}</b>${repHtml}</div>
   </div>`;
 }
 
@@ -1072,13 +1080,13 @@ function showErr(msg){
 function friendlyHttp(status, txt){
   let code='';
   try{ code=JSON.parse(txt).error?.code||''; }catch{}
-  if(code==='AccountOverdueError') return '该服务商账号余额不足或已欠费（无法出图），请前往控制台充值后再试。';
-  if(status===401) return 'API Key 无效或已过期，请检查 Key 是否正确、是否有该模型权限。';
-  if(status===404) return '未找到该模型，请确认服务商处已开通此模型，或在列表中重选。';
-  if(status===429) return '请求过于频繁或额度不足，请稍后重试或检查账户余额。';
-  if(status===403) return '服务商拒绝了请求（HTTP 403）：'+txt.slice(0,200);
-  if(status===400) return '请求被服务商拒绝：'+txt.slice(0,200);
-  return '服务商返回错误（HTTP '+status+'）：'+txt.slice(0,200);
+  if(code==='AccountOverdueError') return tt('err.overdue');
+  if(status===401) return tt('err.401');
+  if(status===404) return tt('err.404');
+  if(status===429) return tt('err.429');
+  if(status===403) return tt('err.403',{t:txt.slice(0,200)});
+  if(status===400) return tt('err.400',{t:txt.slice(0,200)});
+  return tt('err.http',{s:status,t:txt.slice(0,200)});
 }
 function postJSON(base, path, body, key, extraHeaders, timeoutMs=300000){
   return fetchWithTimeout(base+path,{method:'POST',
@@ -1101,11 +1109,11 @@ async function diagnoseConnection(base, key, modelId, kind='chat'){
       let list=[];
       try{ const d=await r.json(); list=(d.data||d.models||[]).map(x=>x.id||x.model||x.name); }catch{}
       if(modelId && list.length && !list.includes(modelId))
-        return '你的账号未开通模型「'+modelId+'」。请在下拉框“你的账号已开通”分组里选择，或到服务商控制台开通该模型。';
+        return tt('diag.notenabled',{m:modelId});
       return '';
     }
-    if(r.status===401) return 'API Key 无效或已过期，请重新到模型服务商控制台复制 Key 后粘贴。';
-    if(r.status===403) return '服务器拒绝了该 Key（HTTP 403），请确认 Key 权限与账号状态。';
+    if(r.status===401) return tt('err.401');
+    if(r.status===403) return tt('diag.403');
   }catch(e){ /* /models unreachable from this browser (e.g. Ark) -> probe below */ }
   // 2) Ark-style fallback: a minimal chat call against the same model
   if(kind==='chat' && modelId){
@@ -1115,14 +1123,14 @@ async function diagnoseConnection(base, key, modelId, kind='chat'){
       const r=await postJSON(base,'/chat/completions',probe,key);
       if(r.ok) return '';  // key + model fine; original failure was payload/transient
       let txt=''; try{ txt=await r.text(); }catch{}
-      if(r.status===401) return 'API Key 无效或已过期，请重新到模型服务商控制台复制 Key 后粘贴。';
-      if(r.status===404) return '你的账号未开通模型「'+modelId+'」（方舟需在控制台“开通”该模型后才能调用）。请到控制台开通，或改选你已开通的模型——例如你已开通 Seedream 5 pro，可切到“AI 位图初稿”模式并选择它直接出图。';
+      if(r.status===401) return tt('err.401');
+      if(r.status===404) return tt('diag.notenabledArk',{m:modelId});
       return friendlyHttp(r.status,txt);
     }catch(e){
-      return '无法连接模型服务器，且浏览器读不到错误详情（常见原因：Key 错误或过期、账号欠费、网络/代理拦截）。请重新复制 Key、确认账号有余额后再试。';
+      return tt('diag.unreachable');
     }
   }
-  return '无法连接模型服务器。若你用的是方舟，请确认已在控制台开通该模型；Key 错误、账号欠费或网络拦截也会出现此提示。';
+  return tt('diag.generic');
 }
 
 /* ---------------- generation ---------------- */
@@ -1134,22 +1142,22 @@ function setStep(n,state){
 $('#genBtn').onclick = async ()=>{
   $('#genErr').hidden=true; $('#out').style.display='none';
   const content = $('#paper').value.trim();
-  if(!content){ showErr('请先输入论文内容（粘贴摘要或上传 PDF）。'); return; }
-  if(!refs.size){ showErr('请先在第 2 步勾选参考图。'); return; }
+  if(!content){ showErr(tt('gen.content')); return; }
+  if(!refs.size){ showErr(tt('gen.refs')); return; }
   const p = $('#provider').value, c = cfg();
   const key = cleanKey($('#key').value);
-  if(p!=='custom' && !/^[A-Za-z0-9\-_.=]+$/.test(key)){ showErr('API Key 格式不正确（应只含字母、数字与 - _ . =），请重新粘贴。'); return; }
+  if(p!=='custom' && !/^[A-Za-z0-9\-_.=]+$/.test(key)){ showErr(tt('gen.keyfmt')); return; }
   const t = $('#target').value;
-  if(t==='custom' && !$('#targetDesc').value.trim()){ showErr('自定义模式请填写"具体描述你要的图"。'); return; }
+  if(t==='custom' && !$('#targetDesc').value.trim()){ showErr(tt('gen.custom')); return; }
   let base, model;
   if(p==='custom'){
     base = $('#baseOverride').value.replace(/\/+$/,''); model=$('#customModel').value.trim();
-    if(!base||!model){ showErr('请填写自定义 Base URL 与模型 ID。'); return; }
+    if(!base||!model){ showErr(tt('gen.base')); return; }
   }else{
     base = baseURL();
     model = $('#model').value;
-    if(!model){ showErr('请选择模型（若列表为空请粘贴 Key 后点刷新）。'); return; }
-    if(mode==='image' && kindOf(model)!=='image'){ showErr('位图模式需要图像模型，请在列表中选择图像模型。'); return; }
+    if(!model){ showErr(tt('gen.nomodel')); return; }
+    if(mode==='image' && kindOf(model)!=='image'){ showErr(tt('gen.needimage')); return; }
   }
   const btn=$('#genBtn'); btn.disabled=true;
   let refIds=[...refs], layoutGuide='';
@@ -1157,25 +1165,25 @@ $('#genBtn').onclick = async ()=>{
     const relay = $('#baseOverride').value.trim();
     const useAnthropic = c.proto==='anthropic' && !relay;
     if(passMode==='two'){
-      if(refs.size<4){ showErr('两阶段建议勾选 8–10 张同类型参考图（当前 '+refs.size+' 张）。'); return; }
+      if(refs.size<4){ showErr(tt('gen.twofew',{n:refs.size})); return; }
       $('#stepper').hidden=false; $('#analyzeBox').innerHTML='';
-      setStep(1,'active'); btn.textContent='① 正在分析 '+refs.size+' 张参考图…';
+      setStep(1,'active'); btn.textContent=tt('gen.analyzing',{n:refs.size});
       const a = await analyzeReferences();
       refIds=a.repIds; layoutGuide=a.refinedPrompt;
-      setStep(1,'done'); setStep(2,'active'); btn.textContent='② 正在生成主图…';
+      setStep(1,'done'); setStep(2,'active'); btn.textContent=tt('gen.generating');
     }else{
-      $('#stepper').hidden=true; btn.textContent='生成中…';
+      $('#stepper').hidden=true; btn.textContent=tt('gen.working');
     }
     if(mode==='svg'){
       if(useAnthropic) await genAnthropicSVG(base,model,key,content,refIds,layoutGuide);
       else await genOaiSVG(base,model,key,content,p,refIds,layoutGuide);
     }else{
-      if(useAnthropic) throw new Error('Claude 为对话模型，不提供图像生成；请切回 SVG 模式或选择图像模型服务商。');
+      if(useAnthropic) throw new Error(tt('gen.claudeImage'));
       await genOaiImage(base,model,key,content,p,refIds,layoutGuide);
     }
     if(passMode==='two') setStep(2,'done');
   }catch(err){ showErr(err.message); }
-  finally{ btn.disabled=false; btn.textContent='生成初稿'; }
+  finally{ btn.disabled=false; btn.textContent=tt('genBtn'); }
 };
 
 async function genOaiSVG(base,model,key,content,p,refIds,layoutGuide){
@@ -1195,9 +1203,9 @@ async function genOaiSVG(base,model,key,content,p,refIds,layoutGuide){
   let r;
   try{ r = await postJSON(base,'/chat/completions',body,key); }
   catch(e){
-    if(e.name==='TimeoutError') throw new Error('生成超时（已等待 5 分钟），模型可能繁忙，请稍后重试或换更快的模型。');
+    if(e.name==='TimeoutError') throw new Error(tt('svg.timeout'));
     const diag=await diagnoseConnection(base,key,model);
-    throw new Error(diag || '请求被网络或浏览器拦截，可重试，或勾选“使用中转”填入中转地址。');
+    throw new Error(diag || tt('svg.blocked'));
   }
   let txt = await r.text();
   if(!r.ok && usedVision){
@@ -1213,7 +1221,7 @@ async function genOaiSVG(base,model,key,content,p,refIds,layoutGuide){
     const s2 = svg.match(/<svg[\s\S]*$/);
     if(s2){ code = s2[0].replace(/```[\s\S]*$/,'').trim()+'</svg>'; truncated=true; }
   }
-  if(!code) throw new Error('模型没有返回可用的 SVG，可重试一次或换用更强的模型。');
+  if(!code) throw new Error(tt('svg.none'));
   renderSVG(code, usedVision, useIds, truncated);
 }
 
@@ -1236,7 +1244,7 @@ async function genAnthropicSVG(base,model,key,content,refIds,layoutGuide){
     r = await fetch(base.replace(/\/+$/,'')+'/v1/messages',{method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01'},
       body:JSON.stringify(body)});
-  }catch(e){ throw new Error('无法连接 Claude 接口（官方不支持浏览器跨域，请勾选中转并填入 OpenAI 兼容中转地址）。'); }
+  }catch(e){ throw new Error(tt('svg.claudeConn')); }
   let txt = await r.text();
   if(!r.ok && usedVision){
     body.messages=[{role:'user',content:prompt}]; usedVision=false;
@@ -1256,7 +1264,7 @@ async function genAnthropicSVG(base,model,key,content,refIds,layoutGuide){
     const s2 = out.match(/<svg[\s\S]*$/);
     if(s2){ code = s2[0].replace(/```[\s\S]*$/,'').trim()+'</svg>'; truncated=true; }
   }
-  if(!code) throw new Error('Claude 没有返回可用的 SVG，可重试一次。');
+  if(!code) throw new Error(tt('svg.claudeNone'));
   renderSVG(code, usedVision, useIds, truncated);
 }
 function renderSVG(svg, usedVision, useIds, truncated){
@@ -1265,8 +1273,8 @@ function renderSVG(svg, usedVision, useIds, truncated){
   const n = (useIds||[...refs]).length;
   $('#out').style.display='block';
   $('#out').innerHTML = `<iframe sandbox src="${url}"></iframe>
-    <div class="dl"><a class="btn-primary" href="${url}" download="figure-forge-draft.svg">下载 SVG</a>
-    <span class="hint">SVG 可用 Figma / draw.io / Illustrator 打开精修；${usedVision?`代表图（${n} 张）已作为图像输入。`:'参考图以文字方式注入。'}${truncated?' ⚠ 本次输出过长被截断、已自动补全闭合，请检查末尾或精简需求后重试。':''}</span></div>`;
+    <div class="dl"><a class="btn-primary" href="${url}" download="figure-forge-draft.svg">${tt('svg.download')}</a>
+    <span class="hint">${usedVision?tt('svg.hint1',{n:n}):tt('svg.hint2')}${truncated?tt('svg.trunc'):''}</span></div>`;
 }
 
 async function genOaiImage(base,model,key,content,p,refIds,layoutGuide){
@@ -1290,9 +1298,9 @@ async function genOaiImage(base,model,key,content,p,refIds,layoutGuide){
   let r;
   try{ r = await postJSON(base,'/images/generations',body,key,undefined,300000); }
   catch(e){
-    if(e.name==='TimeoutError') throw new Error('生成超时（已等待 5 分钟），模型可能繁忙，请稍后重试；也可换更快的模型（如硅基流动 FLUX schnell）。');
+    if(e.name==='TimeoutError') throw new Error(tt('img.timeout'));
     const diag=await diagnoseConnection(base,key,model,'image');
-    throw new Error(diag || '请求被网络或浏览器拦截，可重试，或勾选“使用中转”填入中转地址。');
+    throw new Error(diag || tt('svg.blocked'));
   }
   let txt = await r.text();
   if(!r.ok && usedRefs){
@@ -1307,19 +1315,19 @@ async function genOaiImage(base,model,key,content,p,refIds,layoutGuide){
       // concrete recovery path instead of the generic 404 message.
       let diag='';
       try{ diag=await diagnoseConnection(base,key,model,'image'); }catch{}
-      if(diag && !diag.startsWith('无法连接模型服务器')) throw new Error(diag);
-      throw new Error('图像模型「'+model+'」无法调用：当前账号可能未开通该模型，或模型 ID 已更新。请点击“刷新模型列表”，从“你的账号已开通”中选择；如果列表无法读取，请到服务商控制台确认 Seedream 权限。');
+      if(diag && !diag.startsWith(tt('diag.generic'))) throw new Error(diag);
+      throw new Error(tt('img.notfound',{m:model}));
     }
     throw new Error(friendlyHttp(r.status,txt));
   }
   const d = JSON.parse(txt);
   const item = d.data?.[0] || d.images?.[0];
-  if(!item) throw new Error('图像接口返回格式异常：'+txt.slice(0,200));
+  if(!item) throw new Error(tt('img.abnormal',{t:txt.slice(0,200)}));
   const imgSrc = item.url || ('data:image/png;base64,'+item.b64_json);
   $('#out').style.display='block';
   $('#out').innerHTML = `<img src="${esc(imgSrc)}" alt="draft">
-    <div class="dl"><button class="btn-primary" id="dlImg">下载图片</button>
-    <span class="hint">位图为 AI 初稿${usedRefs?'，'+useIds.length+' 张代表图已作为多图参考输入':''}；文字与数字请在 PPT / Figma 中核对修正。</span></div>`;
+    <div class="dl"><button class="btn-primary" id="dlImg">${tt('img.download')}</button>
+    <span class="hint">${usedRefs?tt('img.hintRef',{n:useIds.length}):tt('img.hint')}</span></div>`;
   $('#dlImg').onclick = async ()=>{
     try{
       const rr = await fetch(imgSrc); const blob = await rr.blob();
@@ -1332,17 +1340,37 @@ async function genOaiImage(base,model,key,content,p,refIds,layoutGuide){
 }
 
 $('#searchBtn').onclick = async ()=>{
-  const btn=$('#searchBtn'); btn.disabled=true; btn.textContent='检索中…';
+  const btn=$('#searchBtn'); btn.disabled=true; btn.textContent=tt('search.working');
   try{ await search(); $('#card2').scrollIntoView({behavior:'smooth'}); }
   catch(e){ showErr(e.message); }
-  finally{ btn.disabled=false; btn.textContent='检索参考图'; }
+  finally{ btn.disabled=false; btn.textContent=tt('searchBtn'); }
 };
+
+/* ---------- language toggle ---------- */
+const langBtn=$('#langToggle');
+function syncLangBtn(){
+  langBtn.textContent = GAL_I18N.lang==='zh'?'EN':'中';
+  document.title = GAL_I18N.lang==='zh'
+    ? 'FigureForge · 画廊检索画自己的主图'
+    : 'FigureForge · Search the gallery to draft your figure';
+}
+langBtn.onclick=()=>GAL_I18N.setLang(GAL_I18N.lang==='zh'?'en':'zh');
+document.addEventListener('langchange',()=>{
+  syncLangBtn();
+  if(results.length) renderGrid(results);
+  updateCount(); renderRefsStrip();
+  $('#baseHint').textContent=tt('base.hint',{b:baseURL()||'–'});
+  $('#manifestHint').textContent=tt('manifest.hint',{d:MAN.updated});
+});
+syncLangBtn();
+GAL_I18N.apply();
+syncContentMode();
 
 /* ---------------- go ---------------- */
 await boot();
 initProviders();
 await Promise.all([populateModels(), populateParserModels()]);
-$('#manifestHint').textContent = '模型清单更新于 '+MAN.updated+'：每次打开自动检查清单更新；填入 Key 后实时拉取账号已开通模型，新模型发布即自动出现，无需更新页面。';
+$('#manifestHint').textContent = tt('manifest.hint',{d:MAN.updated});
 </script>
 </body>
 </html>
