@@ -511,7 +511,7 @@
 </div>
 
 <script src="./i18n.js"></script>
-<script src="./i18n_forge.js?v=20261001d"></script>
+<script src="./i18n_forge.js?v=20261001e"></script>
 <script type="module">
 import * as T from './vendor/transformers.min.js';
 
@@ -571,7 +571,7 @@ const TARGETS = {
 };
 
 /* FALLBACK：manifest 拉取失败（离线）时使用，与 forge/data/manifest.json 同口径 */
-const FALLBACK = {"updated":"2026-09-30","providers":{"ark":{"label":"火山方舟 Ark","base":"https://ark.cn-beijing.volces.com/api/v3","proto":"oai","cors":true,"chat":["doubao-seed-2-1-pro-260915","doubao-seed-2-1-lite-260915","doubao-seed-2-1-pro-260628","doubao-seed-2-1-turbo-260628","doubao-seed-evolving","doubao-seed-2-0-pro-260215","doubao-seed-2-0-lite-260428","doubao-seed-2-0-mini-260428","doubao-seed-character-260628"],"vision":["doubao-seed-2-1-pro-260915","doubao-seed-2-1-lite-260915","doubao-seed-2-1-pro-260628","doubao-seed-2-1-turbo-260628","doubao-seed-evolving","doubao-seed-2-0-pro-260215","doubao-seed-2-0-lite-260428"],"image":["doubao-seedream-5-0-pro-260628","doubao-seedream-5-0-flash-260915","doubao-seedream-5-0-260128","doubao-seedream-4-5-251128","doubao-seedream-4-0-250828"]},"sf":{"label":"硅基流动 SiliconFlow","base":"https://api.siliconflow.cn/v1","proto":"oai","cors":true,"chat":["deepseek-ai/DeepSeek-V3","Qwen/Qwen3-235B-A22B"],"vision":["Qwen/Qwen2.5-VL-72B-Instruct"],"image":["black-forest-labs/FLUX.1-schnell","Kwai-Kolors/Kolors"]},"glm":{"label":"智谱 GLM","base":"https://open.bigmodel.cn/api/paas/v4","proto":"oai","cors":true,"chat":["glm-4.5","glm-4.5-air"],"vision":["glm-4v-plus"],"image":["cogview-4"]},"ds":{"label":"DeepSeek","base":"https://api.deepseek.com","proto":"oai","cors":true,"chat":["deepseek-v4-pro","deepseek-flash"],"vision":[],"image":[]},"oai":{"label":"OpenAI","base":"https://api.openai.com/v1","proto":"oai","cors":true,"chat":["gpt-6.1-sol","gpt-6-sol","gpt-6-luna","gpt-6-astra","gpt-5.5","gpt-5.4"],"vision":["gpt-6.1-sol","gpt-6-sol","gpt-6-luna","gpt-6-astra","gpt-5.5","gpt-5.4"],"image":["gpt-image-2.5-sunburst","gpt-image-2.5-flare","gpt-image-2","gpt-image-1"]},"kimi":{"label":"Kimi 月之暗面","base":"https://api.moonshot.cn/v1","proto":"oai","cors":true,"chat":["kimi-k3","kimi-k2.6"],"vision":["kimi-k2.6"],"image":[]},"qwen":{"label":"通义千问 Qwen","base":"https://dashscope.aliyuncs.com/compatible-mode/v1","proto":"oai","cors":true,"chat":["qwen-max","qwen-plus"],"vision":["qwen-vl-max"],"image":["qwen-image"]},"hy":{"label":"腾讯混元 Hunyuan","base":"https://api.hunyuan.cloud.tencent.com/v1","proto":"oai","cors":false,"chat":["hunyuan-turbos-latest"],"vision":["hunyuan-vision"],"image":["hy-image-v3.5-preview"]},"claude":{"label":"Anthropic Claude","base":"https://api.anthropic.com","proto":"anthropic","cors":false,"chat":["claude-opus-5-5","claude-sonnet-5","claude-sonnet-4-6"],"vision":["claude-opus-5-5","claude-sonnet-5"],"image":[]},"custom":{"label":"自定义 OpenAI 兼容","base":"","proto":"oai","cors":true,"chat":[],"vision":[],"image":[]}}};
+const FALLBACK = {"updated":"2026-09-30","providers":{"ark":{"label":"火山方舟 Ark","base":"https://ark.cn-beijing.volces.com/api/v3","proto":"oai","cors":true,"chat":["doubao-seed-2-1-pro-260915","doubao-seed-2-1-lite-260915","doubao-seed-2-1-pro-260628","doubao-seed-2-1-turbo-260628","doubao-seed-evolving","doubao-seed-2-0-pro-260215","doubao-seed-2-0-lite-260428","doubao-seed-2-0-mini-260428","doubao-seed-character-260628"],"vision":["doubao-seed-2-1-pro-260915","doubao-seed-2-1-lite-260915","doubao-seed-2-1-pro-260628","doubao-seed-2-1-turbo-260628","doubao-seed-evolving","doubao-seed-2-0-pro-260215","doubao-seed-2-0-lite-260428"],"image":["doubao-seedream-5-0-pro-260628","doubao-seedream-5-0-flash-260915","doubao-seedream-5-0-260128","doubao-seedream-4-5-251128","doubao-seedream-4-0-250828"]},"sf":{"label":"硅基流动 SiliconFlow","base":"https://api.siliconflow.cn/v1","proto":"oai","cors":true,"chat":["deepseek-ai/DeepSeek-V3","Qwen/Qwen3-235B-A22B"],"vision":["Qwen/Qwen2.5-VL-72B-Instruct"],"image":["black-forest-labs/FLUX.1-schnell","Kwai-Kolors/Kolors"]},"glm":{"label":"智谱 GLM","base":"https://open.bigmodel.cn/api/paas/v4","proto":"oai","cors":true,"chat":["glm-4.5","glm-4.5-air"],"vision":["glm-4v-plus"],"image":["cogview-4"]},"ds":{"label":"DeepSeek","base":"https://api.deepseek.com","proto":"oai","cors":true,"chat":["deepseek-v4-pro","deepseek-flash"],"vision":[],"image":[]},"oai":{"label":"OpenAI","base":"https://api.openai.com/v1","proto":"oai","cors":true,"chat":["gpt-6.1-sol","gpt-6-sol","gpt-6-luna","gpt-6-astra","gpt-5.5","gpt-5.4"],"vision":["gpt-6.1-sol","gpt-6-sol","gpt-6-luna","gpt-6-astra","gpt-5.5","gpt-5.4"],"image":["gpt-image-2.5-sunburst","gpt-image-2.5-flare","gpt-image-2","gpt-image-1"]},"kimi":{"label":"Kimi 月之暗面","base":"https://api.moonshot.cn/v1","proto":"oai","cors":true,"chat":["kimi-k3","kimi-k2.6"],"vision":["kimi-k2.6"],"image":[]},"qwen":{"label":"通义千问 Qwen","base":"https://dashscope.aliyuncs.com/compatible-mode/v1","proto":"oai","cors":true,"chat":["qwen-max","qwen-plus"],"vision":["qwen-vl-max"],"image":["qwen-image"]},"hy":{"label":"腾讯混元 Hunyuan","base":"https://api.hunyuan.cloud.tencent.com/v1","proto":"oai","cors":true,"chat":["hunyuan-turbos-latest"],"vision":["hunyuan-vision"],"image":["hy-image-v3.5-preview"]},"claude":{"label":"Anthropic Claude","base":"https://api.anthropic.com","proto":"anthropic","cors":true,"chat":["claude-opus-5-5","claude-sonnet-5","claude-sonnet-4-6"],"vision":["claude-opus-5-5","claude-sonnet-5"],"image":[]},"custom":{"label":"自定义 OpenAI 兼容","base":"","proto":"oai","cors":true,"chat":[],"vision":[],"image":[]}}};
 
 /* ---------------- boot: manifest + data + local CLIP ---------------- */
 async function loadManifest(){
@@ -938,6 +938,7 @@ function pdfDataPart(){ return dataURIToParts(pdfContext.dataUri); }
 /* ---- local PDF text extraction (transport only: the model still picks and
    summarises the sections; used when a provider refuses a document part) ---- */
 const MAX_PDF_CHARS = 60000;
+const MAX_PDF_IMAGES = 8;
 let pdfjsPromise = null;
 function loadPdfjs(){
   if(window.pdfjsLib) return Promise.resolve(window.pdfjsLib);
@@ -955,18 +956,21 @@ function loadPdfjs(){
   });
   return pdfjsPromise;
 }
-let pdfText = null;
+let pdfText = null, pdfImgs = null;
+function pdfBytes(){
+  // pdf.js takes ownership of the buffer it is given (it transfers it to the
+  // worker), so every call has to hand over an independent copy — otherwise a
+  // second extraction (text, then page images) fails on a detached buffer.
+  if(pdfContext.buf) return new Uint8Array(pdfContext.buf.slice(0));
+  const part = pdfDataPart(); if(!part) throw new Error(tt('ps.nodata'));
+  const bin = atob(part.data); const bytes = new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+  return bytes;
+}
 async function extractPdfText(){
   if(pdfText && pdfText.name===pdfContext.fileName) return pdfText;
   const lib = await loadPdfjs();
-  let bytes;
-  if(pdfContext.buf) bytes = new Uint8Array(pdfContext.buf);
-  else{
-    const part = pdfDataPart(); if(!part) throw new Error(tt('ps.nodata'));
-    const bin = atob(part.data); bytes = new Uint8Array(bin.length);
-    for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
-  }
-  const doc = await lib.getDocument({data: bytes, isEvalSupported:false}).promise;
+  const doc = await lib.getDocument({data: pdfBytes(), isEvalSupported:false}).promise;
   const pages = [];
   for(let p=1;p<=doc.numPages;p++){
     const page = await doc.getPage(p);
@@ -977,6 +981,27 @@ async function extractPdfText(){
   pdfText = {name:pdfContext.fileName, text, chars:text.length, pages:doc.numPages};
   return pdfText;
 }
+/* Page images: the universal channel for vision models — works for scanned
+   papers and keeps layout, figures and tables readable. */
+async function extractPdfImages(){
+  if(pdfImgs && pdfImgs.name===pdfContext.fileName) return pdfImgs;
+  const lib = await loadPdfjs();
+  const doc = await lib.getDocument({data: pdfBytes(), isEvalSupported:false}).promise;
+  const n = Math.min(doc.numPages, MAX_PDF_IMAGES);
+  const imgs = [];
+  for(let p=1;p<=n;p++){
+    const page = await doc.getPage(p);
+    const base = page.getViewport({scale:1});
+    const scale = Math.max(1, Math.min(1.6, 1400/Math.max(base.width, base.height)));
+    const vp = page.getViewport({scale});
+    const cv = document.createElement('canvas');
+    cv.width = Math.round(vp.width); cv.height = Math.round(vp.height);
+    await page.render({canvasContext: cv.getContext('2d'), viewport: vp}).promise;
+    imgs.push(cv.toDataURL('image/jpeg', 0.72));
+  }
+  pdfImgs = {name:pdfContext.fileName, imgs, pages:n, total:doc.numPages};
+  return pdfImgs;
+}
 function showParseErr(msg){ const el=$('#parseErr'); if(!el) return; el.innerHTML=esc(tt('ps.errline',{m:msg})); el.hidden=false; }
 function clearParseErr(){ const el=$('#parseErr'); if(el) el.hidden=true; }
 function extractJsonObject(txt){
@@ -984,37 +1009,82 @@ function extractJsonObject(txt){
   const m=clean.match(/\{[\s\S]*\}/); if(!m) throw new Error('解析模型未返回 JSON');
   try{return JSON.parse(m[0]);}catch(e){throw new Error('解析模型返回的 JSON 无法读取');}
 }
-/* asText=true -> send locally extracted text as a normal chat message, which
-   every chat model accepts (Ark / Kimi / Qwen / GLM / DeepSeek / relays). */
-async function callPdfParser(asText, extracted){
+/* Which document channel does the selected provider/base URL really accept?
+   Only these three shapes are documented; everything else goes text/images. */
+function docMode(){
+  const c=cfg(), base=baseURL();
+  if($('#baseOverride').value.trim() || $('#provider').value==='custom') return 'oai_file';
+  if(c.proto==='anthropic') return 'anthropic';
+  if(c.proto==='oai' && /openai\.com/i.test(base)) return 'openai_responses';
+  return 'none';
+}
+/* Conservative capability check: the manifest lists text-only models in chat,
+   vision-capable ones in vision. Unknown ids are given the benefit of the doubt. */
+function modelSeesImages(){
+  const m=parserModel()||'', c=cfg();
+  if((c.vision||[]).includes(m)) return true;
+  if((c.chat||[]).includes(m)) return false;
+  return /vl|vision|visual|gpt-|claude|gemini|seed|qwen|glm|hunyuan|kimi|image/i.test(m);
+}
+function anthropicHeaders(key){
+  return {'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01',
+          'anthropic-dangerous-direct-browser-access':'true'};
+}
+/* mode: 'doc' native document part · 'text' locally extracted text ·
+   'img' locally rendered page images (vision models) */
+async function callPdfParser(mode, payload){
   const c=cfg(), base=baseURL(), key=cleanKey($('#key').value), model=parserModel();
   if(!base||!key||!model) throw new Error(tt('ps.nocfg'));
   const instruction=parserInstruction($('#target').value,$('#contentQuery').value.trim());
-  const part=pdfDataPart();
-  if(!asText && !part) throw new Error(tt('ps.nodata'));
-  const textBody = ()=> instruction+'\n\n'+tt('ps.texthdr',{f:pdfContext.fileName,p:extracted.pages})+'\n'+
-    extracted.text.slice(0, MAX_PDF_CHARS);
   let r, body;
-  if(asText && c.proto==='anthropic'){
-    body={model,max_tokens:5000,system:'只输出严格 JSON。',messages:[{role:'user',content:[{type:'text',text:textBody()}]}]};
-    r=await fetchWithTimeout(base+'/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01'},body:JSON.stringify(body)},120000);
-  }else if(asText && /openai\.com/i.test(base)){
-    body={model,input:[{role:'user',content:[{type:'input_text',text:textBody()}]}],max_output_tokens:5000};
-    r=await fetchWithTimeout(base+'/responses',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+key},body:JSON.stringify(body)},120000);
-  }else if(asText){
-    body={model,temperature:0.1,max_tokens:5000,messages:[{role:'system',content:'只输出严格 JSON。'},{role:'user',content:textBody()}]};
-    if($('#provider').value==='ark') body.thinking={type:'disabled'};
-    r=await postJSON(base,'/chat/completions',body,key);
-  }else if(c.proto==='anthropic'){
-    body={model,max_tokens:5000,system:'只输出严格 JSON。',messages:[{role:'user',content:[{type:'document',source:{type:'base64',media_type:part.media||'application/pdf',data:part.data}},{type:'text',text:instruction}]}]};
-    r=await fetchWithTimeout(base+'/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01'},body:JSON.stringify(body)},120000);
-  }else if(c.proto==='oai' && /openai\.com/i.test(base)){
-    body={model,input:[{role:'user',content:[{type:'input_file',filename:pdfContext.fileName,file_data:pdfContext.dataUri},{type:'input_text',text:instruction}]}],max_output_tokens:5000};
-    r=await fetchWithTimeout(base+'/responses',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+key},body:JSON.stringify(body)},120000);
+  if(mode==='text'){
+    const ex=payload;
+    const text = instruction+'\n\n'+tt('ps.texthdr',{f:pdfContext.fileName,p:ex.pages})+'\n'+ex.text.slice(0, MAX_PDF_CHARS);
+    if(c.proto==='anthropic'){
+      body={model,max_tokens:5000,system:'只输出严格 JSON。',messages:[{role:'user',content:[{type:'text',text}]}]};
+      r=await fetchWithTimeout(base+'/v1/messages',{method:'POST',headers:anthropicHeaders(key),body:JSON.stringify(body)},180000);
+    }else if(/openai\.com/i.test(base)){
+      body={model,input:[{role:'user',content:[{type:'input_text',text}]}],max_output_tokens:5000};
+      r=await fetchWithTimeout(base+'/responses',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+key},body:JSON.stringify(body)},180000);
+    }else{
+      body={model,temperature:0.1,max_tokens:5000,messages:[{role:'system',content:'只输出严格 JSON。'},{role:'user',content:text}]};
+      if($('#provider').value==='ark') body.thinking={type:'disabled'};
+      r=await postJSON(base,'/chat/completions',body,key);
+    }
+  }else if(mode==='img'){
+    const ex=payload;
+    const note = instruction+'\n\n'+tt('ps.imgthdr',{f:pdfContext.fileName,p:ex.pages,t:ex.total});
+    if(c.proto==='anthropic'){
+      const blocks=ex.imgs.map(u=>({type:'image',source:{type:'base64',media_type:'image/jpeg',data:dataURIToParts(u).data}}));
+      blocks.push({type:'text',text:note});
+      body={model,max_tokens:5000,system:'只输出严格 JSON。',messages:[{role:'user',content:blocks}]};
+      r=await fetchWithTimeout(base+'/v1/messages',{method:'POST',headers:anthropicHeaders(key),body:JSON.stringify(body)},180000);
+    }else if(/openai\.com/i.test(base)){
+      const content=ex.imgs.map(u=>({type:'input_image',image_url:u}));
+      content.push({type:'input_text',text:note});
+      body={model,input:[{role:'user',content}],max_output_tokens:5000};
+      r=await fetchWithTimeout(base+'/responses',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+key},body:JSON.stringify(body)},180000);
+    }else{
+      const content=ex.imgs.map(u=>({type:'image_url',image_url:{url:u}}));
+      content.push({type:'text',text:note});
+      body={model,temperature:0.1,max_tokens:5000,messages:[{role:'system',content:'只输出严格 JSON。'},{role:'user',content}]};
+      if($('#provider').value==='ark') body.thinking={type:'disabled'};
+      r=await postJSON(base,'/chat/completions',body,key);
+    }
   }else{
-    body={model,temperature:0.1,max_tokens:5000,messages:[{role:'system',content:'只输出严格 JSON。'},{role:'user',content:[{type:'file',file:{filename:pdfContext.fileName,file_data:pdfContext.dataUri}},{type:'text',text:instruction}]}]};
-    if($('#provider').value==='ark') body.thinking={type:'disabled'};
-    r=await postJSON(base,'/chat/completions',body,key);
+    const part=pdfDataPart(); if(!part) throw new Error(tt('ps.nodata'));
+    if(c.proto==='anthropic'){
+      const blocks=[{type:'document',source:{type:'base64',media_type:part.media||'application/pdf',data:part.data}},
+                    {type:'text',text:instruction}];
+      body={model,max_tokens:5000,system:'只输出严格 JSON。',messages:[{role:'user',content:blocks}]};
+      r=await fetchWithTimeout(base+'/v1/messages',{method:'POST',headers:anthropicHeaders(key),body:JSON.stringify(body)},180000);
+    }else if(/openai\.com/i.test(base)){
+      body={model,input:[{role:'user',content:[{type:'input_file',filename:pdfContext.fileName,file_data:pdfContext.dataUri},{type:'input_text',text:instruction}]}],max_output_tokens:5000};
+      r=await fetchWithTimeout(base+'/responses',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+key},body:JSON.stringify(body)},180000);
+    }else{
+      body={model,temperature:0.1,max_tokens:5000,messages:[{role:'system',content:'只输出严格 JSON。'},{role:'user',content:[{type:'file',file:{filename:pdfContext.fileName,file_data:pdfContext.dataUri}},{type:'text',text:instruction}]}]};
+      r=await postJSON(base,'/chat/completions',body,key);
+    }
   }
   const raw=await r.text(); if(!r.ok) throw new Error(friendlyHttp(r.status,raw));
   return extractJsonObject(parseResponseText(JSON.parse(raw)));
@@ -1032,38 +1102,53 @@ function setParseStatus(state){
 async function selectPdfContext(){
   if(!pdfContext || $('#contentMode').value==='free') return;
   const seq=++pdfIntentSeq;
-  setParseStatus('loading');
+  const setHint = (key,vars)=>{ setParseStatus('loading'); $('#contentModeHint').textContent=tt(key,vars||{}); };
   clearParseErr();
-  $('#contentModeHint').textContent=tt('ps.sending');
+  setHint('ps.sending');
   setExtractMetaKey('ps.meta1', {m:parserModel()||'–'}, false);
+  // Channel order: the provider's own document part when it has one, then the
+  // locally extracted text, then rendered page images (vision models).
+  const order=[];
+  if(docMode()!=='none') order.push('doc');
+  order.push('text');
+  if(modelSeesImages()) order.push('img');
+  const failures=[];
   try{
-    let result, mode='file';
-    try{
-      result = await callPdfParser(false);
-    }catch(eDoc){
+    let result=null, used=null;
+    for(const ch of order){
       if(seq!==pdfIntentSeq) return;
-      // Most providers other than OpenAI/Anthropic/relay gateways reject a
-      // document content part. Transport the text instead and let the very
-      // same model do the section picking.
-      setParseStatus('loading');
-      $('#contentModeHint').textContent=tt('ps.extracting');
-      setExtractMetaKey('ps.meta1b', {m:parserModel()||'–'}, false);
-      let ex;
-      try{ ex = await extractPdfText(); }
-      catch(eTxt){ throw new Error(tt('ps.nofallback',{a:eDoc.message,b:eTxt.message})); }
-      if(ex.chars < 200) throw new Error(tt('ps.scanned',{m:eDoc.message}));
-      result = await callPdfParser(true, ex);
-      mode='text';
+      try{
+        let payload=null;
+        if(ch==='text'){
+          setHint('ps.extracting');
+          setExtractMetaKey('ps.meta1b', {m:parserModel()||'–'}, false);
+          payload = await extractPdfText();
+          if(payload.chars < 200){                       // scanned / image-only PDF
+            failures.push(tt('ps.scanned',{m:failures[0]||'–'}));
+            continue;
+          }
+        }else if(ch==='img'){
+          setHint('ps.rendering');
+          setExtractMetaKey('ps.meta1c', {m:parserModel()||'–'}, false);
+          payload = await extractPdfImages();
+        }
+        result = await callPdfParser(ch, payload);
+        used = ch;
+        break;
+      }catch(e){
+        if(seq!==pdfIntentSeq) return;
+        failures.push((ch==='img'?tt('ps.modeImg'):ch==='text'?tt('ps.modeText'):tt('ps.modeDoc'))+': '+e.message);
+      }
     }
+    if(!result) throw new Error(tt('ps.allfailed',{m:parserModel()||'–',e:failures.join('；')}));
     if(seq!==pdfIntentSeq) return;
     renderPdfSummary(result);
     setParseStatus('success');
     $('#contentModeHint').textContent=tt('ps.done');
-    if(mode==='text'){
-      setExtractMetaKey('ps.meta2t', {f:pdfContext.fileName,m:parserModel(),n:result.selectedSections.length,c:(pdfText?pdfText.chars:0).toLocaleString()}, false);
-    }else{
-      setExtractMetaKey('ps.meta2', {f:pdfContext.fileName,m:parserModel(),n:result.selectedSections.length}, false);
-    }
+    const n=result.selectedSections.length, f=pdfContext.fileName, m=parserModel();
+    if(used==='text')      setExtractMetaKey('ps.meta2t', {f,m,n,c:(pdfText?pdfText.chars:0).toLocaleString()}, false);
+    else if(used==='img')  setExtractMetaKey('ps.meta2i', {f,m,n,p:(pdfImgs?pdfImgs.pages:0)}, false);
+    else                   setExtractMetaKey('ps.meta2',  {f,m,n}, false);
   }catch(err){
     if(seq!==pdfIntentSeq) return;
     setParseStatus('error');
@@ -1298,7 +1383,7 @@ async function analyzeReferences(){
     const blocks=uris.map(u=>{const p=dataURIToParts(u);return {type:'image',source:{type:'base64',media_type:p.media,data:p.data}};});
     blocks.push({type:'text',text:buildAnalyzePrompt(ordered.length)});
     const body={model:$('#analyzeModel').value||$('#model').value,max_tokens:3000,system:ANALYZE_SYS,messages:[{role:'user',content:blocks}]};
-    const r=await fetch(baseURL()+'/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cleanKey($('#key').value),'anthropic-version':'2023-06-01'},body:JSON.stringify(body)});
+    const r=await fetch(baseURL()+'/v1/messages',{method:'POST',headers:anthropicHeaders(cleanKey($('#key').value)),body:JSON.stringify(body)});
     txt=await r.text(); if(!r.ok) throw new Error(friendlyHttp(r.status,txt));
     const d=JSON.parse(txt); txt=(d.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
   }else{
@@ -1539,7 +1624,7 @@ async function genAnthropicSVG(base,model,key,content,refIds,layoutGuide){
   let r;
   try{
     r = await fetch(base.replace(/\/+$/,'')+'/v1/messages',{method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01'},
+      headers:anthropicHeaders(key),
       body:JSON.stringify(body)});
   }catch(e){ throw new Error(tt('svg.claudeConn')); }
   let txt = await r.text();
@@ -1547,7 +1632,7 @@ async function genAnthropicSVG(base,model,key,content,refIds,layoutGuide){
     body.messages=[{role:'user',content:prompt}]; usedVision=false;
     try{
       r = await fetch(base.replace(/\/+$/,'')+'/v1/messages',{method:'POST',
-        headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01'},
+        headers:anthropicHeaders(key),
         body:JSON.stringify(body)});
       txt=await r.text();
     }catch(e){}

@@ -1,7 +1,7 @@
 {
   "updated": "2026-09-30",
   "dataVersion": "2026-09-25-3",
-  "note": "FigureForge 模型清单：页面每次打开自动拉取本文件（cache-bust，推荐名单），并尝试实时调用服务商 /models（你的账号已开通模型）。模型 ID 已按各服务商官方文档核实（2026-09）。注意：火山方舟 /models 查询端点未开放浏览器跨域（OPTIONS 404），方舟以本托管清单为准，新模型发布后更新本文件用户打开即见；生成端点（chat/images）浏览器可直连。Anthropic 无模型列表接口，混元 / Anthropic 官方接口不开放浏览器跨域，这两家请勾选中转并填入 OpenAI 兼容中转地址。",
+  "note": "FigureForge 模型清单：页面每次打开自动拉取本文件（cache-bust，推荐名单），并尝试实时调用服务商 /models（你的账号已开通模型）。模型 ID 已按各服务商官方文档核实（2026-09）。注意：火山方舟 /models 查询端点未开放浏览器跨域（OPTIONS 404），方舟以本托管清单为准，新模型发布后更新本文件用户打开即见；生成端点（chat/images）浏览器可直连，但错误响应不带 CORS 头，页面用一次最小请求做诊断。Anthropic 已在页面请求中带上 anthropic-dangerous-direct-browser-access 头，官方接口浏览器可直连（实测 401 可读）；混元 /v1/chat/completions 的 CORS 预检与响应头均正常（实测 401 可读）。若你的网络或账号仍被拦截，勾选“使用中转”填入 OpenAI 兼容中转地址即可。",
   "providers": {
     "ark": {
       "label": "火山方舟 Ark", "base": "https://ark.cn-beijing.volces.com/api/v3",
@@ -53,14 +53,14 @@
     },
     "hy": {
       "label": "腾讯混元 Hunyuan", "base": "https://api.hunyuan.cloud.tencent.com/v1",
-      "proto": "oai", "cors": false,
+      "proto": "oai", "cors": true,
       "chat": ["hunyuan-turbos-latest", "hunyuan-turbo", "hunyuan-pro", "hunyuan-standard"],
       "vision": ["hunyuan-vision"],
       "image": ["hy-image-v3", "hy-image-v3.5-preview"]
     },
     "claude": {
       "label": "Anthropic Claude", "base": "https://api.anthropic.com",
-      "proto": "anthropic", "cors": false,
+      "proto": "anthropic", "cors": true,
       "chat": ["claude-opus-5-5", "claude-fable-5-1", "claude-sonnet-5", "claude-haiku-4-5-20251001"],
       "vision": ["claude-opus-5-5", "claude-fable-5-1", "claude-sonnet-5", "claude-haiku-4-5-20251001"],
       "image": []
