@@ -81,7 +81,10 @@
   const chipBoxes = [];
   function chipText(btn, counts) {
     const label = btn.dataset.lk ? GAL_I18N.t(btn.dataset.lk) : btn.dataset.static;
-    return label + (counts ? ` <span class="n">${counts[btn.dataset.val] || 0}</span>` : "");
+    // No count on the “All” chip: counts["all"] is undefined and used to render
+    // a bogus “0” next to it.
+    const n = counts ? counts[btn.dataset.val] : null;
+    return label + (n ? ` <span class="n">${n}</span>` : "");
   }
   function makeChips(containerId, key, values, labelKeyFor, counts) {
     const box = $(containerId);
@@ -125,6 +128,9 @@
       box.querySelectorAll(".chip").forEach((btn) => { btn.innerHTML = chipText(btn, counts); });
     });
   }
+  // Chips are built empty above; without this first pass they stay blank until
+  // the visitor happens to switch language (langchange calls relabelChips).
+  relabelChips();
 
   /* ---------- search ---------- */
   const searchInput = $("#search");
@@ -146,7 +152,7 @@
     state.venue = state.year = state.tier = state.pattern = "all"; state.q = "";
     searchInput.value = ""; clearBtn.hidden = true;
     document.querySelectorAll(".chips").forEach((b) => {
-      b.querySelectorAll(".chip").forEach((c) => c.classList.toggle("active", Object.values(c.dataset)[0] === "all"));
+      b.querySelectorAll(".chip").forEach((c) => c.classList.toggle("active", c.dataset.val === "all"));
     });
     render();
   });
