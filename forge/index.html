@@ -203,6 +203,8 @@
   /* ===== steps 2 & 3 share the step-1 box language ===== */
   #gridBox{padding:13px}
   #gridBox .empty-note{padding:26px 0}
+  .grid-more{display:flex;align-items:center;justify-content:center;gap:8px;padding:15px 0 4px;font-size:12.5px;color:var(--muted)}
+  .grid-end{text-align:center;padding:13px 0 3px;font-size:12px;color:#9ca3af}
   .box .refs-strip{margin-bottom:0}
   .box .pass-tabs{background:#fff;border:1px solid #dfe3ff}
   .box .pass-tabs button.on{background:var(--indigo);color:#fff;box-shadow:0 3px 8px rgba(79,70,229,.22)}
@@ -422,6 +424,7 @@
 
   <div class="card" id="card2">
     <div class="step"><span class="num">2</span><span data-i18n="s2"></span>
+      <span class="step-note" id="gridTotal"></span>
       <span class="step-note" data-i18n="s2.note"></span>
       <span class="hint" style="margin:0" id="countHint"></span>
       <button class="btn-tiny" id="clearBtn" hidden data-i18n="clear"></button>
@@ -429,6 +432,8 @@
     <div class="flow-note" id="pickNote" data-i18n-html="picknote"></div>
     <div class="box b-slate" id="gridBox">
       <div class="grid" id="grid"><div class="empty-note" data-i18n="grid.idle"></div></div>
+      <div class="grid-more" id="gridMore" hidden><span class="spin big" style="padding:0"></span><span data-i18n="grid.loading"></span></div>
+      <div class="grid-end" id="gridEnd" hidden></div>
     </div>
   </div>
 
@@ -483,7 +488,7 @@
     <section class="box b-indigo" style="margin-top:13px">
       <h4><span class="bi" aria-hidden="true">📐</span><span data-i18n="box.demo"></span></h4>
       <div class="step" style="margin-bottom:8px;font-size:13px" data-i18n="tut1"></div>
-      <img src="tutorial/02_pick_refs.png" data-i18n-aria="tut1" style="width:100%;border:1px solid var(--line);border-radius:11px">
+      <img src="tutorial/02_pick_refs.png?v=20261001c" data-i18n-aria="tut1" style="width:100%;border:1px solid var(--line);border-radius:11px">
       <div class="step" style="margin:16px 0 8px;font-size:13px" data-i18n="tut2"></div>
       <img src="tutorial/compare.png" data-i18n-aria="tut2" style="width:100%;border:1px solid var(--line);border-radius:11px">
     </section>
@@ -503,7 +508,7 @@
 </div>
 
 <script src="./i18n.js"></script>
-<script src="./i18n_forge.js?v=20261001b"></script>
+<script src="./i18n_forge.js?v=20261001c"></script>
 <script type="module">
 import * as T from './vendor/transformers.min.js';
 
@@ -683,7 +688,7 @@ function matchTier(f, t){
 }
 async function search(){
   const q = $('#paper').value.trim();
-  const pv=$('#venue').value, yr=$('#year').value, tt=$('#tier').value, pt=$('#pattern').value;
+  const pv=$('#venue').value, yr=$('#year').value, tv=$('#tier').value, pt=$('#pattern').value;
   let clipScores = null;
   if(q){
     const qv = await queryVec(q);
@@ -705,15 +710,21 @@ async function search(){
     else s = bms;
     scored.push({i, s});
   }
-  scored.sort((a,b)=>b.s-a.s);
+  if(q) scored.sort((a,b)=>b.s-a.s);
+  else scored.sort((a,b)=>{                       // no query: browse like the gallery home page
+    const fa=data.figs[a.i], fb=data.figs[b.i];
+    return (VENUE_RANK[fa.venue]??9)-(VENUE_RANK[fb.venue]??9) || fa.year-fb.year || String(fa.id).localeCompare(String(fb.id));
+  });
   const hasQ = !!clipScores;
-  results = scored.slice(0,30).map(x=>{const f=data.figs[x.i];
+  results = scored.map(x=>{const f=data.figs[x.i];
     f.matchScore = hasQ ? Math.max(0,Math.min(100,Math.round(x.s*100))) : null; return f;});
   renderGrid(results);
-  if(!results.length) $('#grid').innerHTML='<div class="empty-note">'+tt('grid.empty')+'</div>';
 }
 
-/* ---------------- render cards ---------------- */
+/* ---------------- render cards (incremental: browse the whole gallery) ---------------- */
+const PAGE_SIZE = 60;
+const VENUE_RANK = {iclr:0, icml:1, neurips:2, cvpr:3, acl:4, aaai:5};
+let shown = 0;
 function tierChip(f){
   if(f.award==='best') return '<span class="chip c-best">Best Paper</span>';
   if(f.award==='honorable') return '<span class="chip c-hm">Honorable Mention</span>';
@@ -721,10 +732,9 @@ function tierChip(f){
   if(f.tier==='spotlight') return '<span class="chip c-spot">Spotlight</span>';
   return '';
 }
-function renderGrid(list){
-  $('#grid').innerHTML = list.map(f=>{
-    const sel = refs.has(f.id);
-    return `<div class="rc ${sel?'sel':''}" data-id="${esc(f.id)}" role="button" tabindex="0" aria-pressed="${sel}" aria-label="${tt(sel?'card.ariaSel':'card.aria',{t:esc(f.title)})}">
+function cardHtml(f){
+  const sel = refs.has(f.id);
+  return `<div class="rc ${sel?'sel':''}" data-id="${esc(f.id)}" role="button" tabindex="0" aria-pressed="${sel}" aria-label="${tt(sel?'card.ariaSel':'card.aria',{t:esc(f.title)})}">
       <img class="thumb" loading="lazy" src="../${esc(f.image)}" alt="${esc(f.title)}">
       <div class="pick">${sel?tt('pick.sel'):tt('pick.add')}</div>
       <div class="score">${f.matchScore!=null?f.matchScore:''}</div>
@@ -741,7 +751,60 @@ function renderGrid(list){
           ${f.paper ? `<a class="rc-action" href="${esc(f.paper)}" target="_blank" rel="noopener" data-paper-link>${tt('act.paper')}</a>` : ''}
         </div>
       </div></div>`;
-  }).join('');
+}
+function updateGridHints(){
+  const more = shown < results.length;
+  $('#gridMore').hidden = !more;
+  $('#gridEnd').hidden = more || results.length <= PAGE_SIZE;
+  if(!more && results.length > PAGE_SIZE) $('#gridEnd').textContent = tt('grid.end',{n: results.length.toLocaleString()});
+  $('#gridTotal').textContent = results.length ? tt('grid.total',{n: results.length.toLocaleString()}) : '';
+}
+function appendChunk(){
+  const slice = results.slice(shown, shown+PAGE_SIZE);
+  if(!slice.length) return;
+  $('#grid').insertAdjacentHTML('beforeend', slice.map(cardHtml).join(''));
+  shown += slice.length;
+  updateGridHints();
+}
+function renderGrid(list){
+  results = list;
+  shown = 0;
+  if(!list.length){
+    $('#grid').innerHTML = '<div class="empty-note">'+tt('grid.empty')+'</div>';
+    updateGridHints();
+    return;
+  }
+  $('#grid').innerHTML = '';
+  appendChunk();
+  // Fill the first screen right away; further chunks come from scroll / observer.
+  requestAnimationFrame(()=>{ try{ maybeFill(); }catch(e){} });
+}
+/* Selection changes patch the single card, so a long loaded list is never re-rendered. */
+function patchCard(card, id){
+  const sel = refs.has(id);
+  card.classList.toggle('sel', sel);
+  card.setAttribute('aria-pressed', String(sel));
+  const pick = card.querySelector('.pick'); if(pick) pick.textContent = sel?tt('pick.sel'):tt('pick.add');
+  card.setAttribute('aria-label', tt(sel?'card.ariaSel':'card.aria',{t:card.querySelector('h3')?.textContent||''}));
+}
+function patchAllCards(){
+  $('#grid').querySelectorAll('.rc').forEach(el=>patchCard(el, el.dataset.id));
+  updateGridHints();
+}
+/* Keep appending while the “load more” sentinel sits near the viewport. */
+function moreInRange(){
+  const el = $('#gridMore'); if(!el || el.hidden) return false;
+  return el.getBoundingClientRect().top < window.innerHeight + 1200;
+}
+function maybeFill(){
+  let guard = 0;
+  while(moreInRange() && guard++ < 200) appendChunk();
+}
+window.addEventListener('scroll', ()=>{ maybeFill(); }, {passive:true});
+window.addEventListener('resize', ()=>{ maybeFill(); }, {passive:true});
+if('IntersectionObserver' in window){
+  const io = new IntersectionObserver(es=>{ if(es.some(e=>e.isIntersecting)) maybeFill(); }, {rootMargin:'1200px'});
+  io.observe($('#gridMore'));
 }
 function updateCount(){
   $('#countHint').textContent = refs.size ? tt('countHint',{n:refs.size,m:MAX_REFS}) : '';
@@ -756,7 +819,7 @@ $('#grid').addEventListener('click', e=>{
   const id = card.dataset.id;
   if(refs.has(id)) refs.delete(id);
   else { if(refs.size>=MAX_REFS){ showErr(tt('err.maxrefs',{m:MAX_REFS})); return;} refs.add(id); }
-  renderGrid(results); updateCount(); renderRefsStrip();
+  patchCard(card, id); updateCount(); renderRefsStrip();
 });
 $('#grid').addEventListener('keydown', e=>{
   if(e.key!=='Enter' && e.key!==' ') return;
@@ -764,7 +827,7 @@ $('#grid').addEventListener('keydown', e=>{
   if(e.target.closest('.rc-preview')){ e.preventDefault(); openForgeLightbox(card.dataset.id); return; }
   e.preventDefault(); card.click();
 });
-$('#clearBtn').onclick = ()=>{ refs.clear(); renderGrid(results); updateCount(); renderRefsStrip(); };
+$('#clearBtn').onclick = ()=>{ refs.clear(); patchAllCards(); updateCount(); renderRefsStrip(); };
 function renderRefsStrip(){
   if(!refs.size){ $('#refsStrip').innerHTML='<span class="hint" style="margin:0">'+tt('refs.strip2')+'</span>'; return; }
   $('#refsStrip').innerHTML = [...refs].map(id=>{
@@ -776,7 +839,10 @@ function renderRefsStrip(){
 }
 $('#refsStrip').addEventListener('click', e=>{
   const x = e.target.closest('.x'); if(!x) return;
-  refs.delete(x.dataset.id); renderGrid(results); updateCount(); renderRefsStrip();
+  const id = x.dataset.id; refs.delete(id);
+  const card = [...$('#grid').querySelectorAll('.rc')].find(el=>el.dataset.id===id);
+  if(card) patchCard(card, id);
+  updateCount(); renderRefsStrip();
 });
 
 /* ---------------- reference lightbox ---------------- */
@@ -1500,7 +1566,7 @@ function syncLangBtn(){
 langBtn.onclick=()=>GAL_I18N.setLang(GAL_I18N.lang==='zh'?'en':'zh');
 document.addEventListener('langchange',()=>{
   syncLangBtn();
-  if(results.length) renderGrid(results);
+  if(results.length) patchAllCards();
   updateCount(); renderRefsStrip();
   syncBaseHint();
   refreshStepOneText();
