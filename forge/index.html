@@ -137,8 +137,8 @@
   .tabs{display:inline-flex;background:#f3f4f6;border-radius:10px;padding:3px;gap:2px}
   .tabs button{padding:7px 15px;font-size:13px;font-weight:650;color:#4b5563;background:transparent}
   .tabs button.on{background:#fff;color:var(--indigo);box-shadow:0 1px 3px rgba(0,0,0,.1)}
-  #out{margin-top:14px;border:1px solid var(--line);border-radius:12px;padding:14px;min-height:80px;
-       background:#fcfcfd;display:none}
+  #out{margin-top:15px;border:1px solid var(--line);border-radius:13px;padding:14px;min-height:80px;
+       background:#fbfbfd;display:none}
   #out iframe{width:100%;min-height:560px;border:0;border-radius:8px;background:#fff}
   #out img{max-width:100%;border-radius:8px;display:block;margin:0 auto}
   .dl{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
@@ -200,6 +200,32 @@
   .ex-row > span:first-child{font-size:12.5px;color:var(--muted)}
   @media(max-width:720px){.filters .btn-primary{margin-left:0;width:100%}}
 
+  /* ===== steps 2 & 3 share the step-1 box language ===== */
+  #gridBox{padding:13px}
+  #gridBox .empty-note{padding:26px 0}
+  .box .refs-strip{margin-bottom:0}
+  .box .pass-tabs{background:#fff;border:1px solid #dfe3ff}
+  .box .pass-tabs button.on{background:var(--indigo);color:#fff;box-shadow:0 3px 8px rgba(79,70,229,.22)}
+  .box .pass-tabs button.on .subtag{color:#dfe3ff}
+  .box .tabs{background:#fff;border:1px solid #e2dbff}
+  .box .tabs button.on{background:var(--indigo);color:#fff;box-shadow:0 3px 8px rgba(79,70,229,.22)}
+  .box .stepper{margin:12px 0 4px}
+  .box .analyze-box{margin-bottom:0}
+  .box .srow{margin-top:0}
+  .gen-row{display:flex;justify-content:center;margin-top:15px}
+  .gen-row .btn-primary{padding:11px 32px;font-size:14px}
+  .guide{padding:2px 0}
+  .box .guide li{margin:7px 0 7px 18px}
+  @media(max-width:640px){
+    .box .tabs,.box .pass-tabs{display:flex;flex-wrap:wrap;width:100%}
+    .box .tabs button,.box .pass-tabs button{flex:1 1 46%;min-width:0}
+    .bfield{flex-wrap:wrap}
+    .blab{min-width:0}
+    .bfield select,.bfield input[type=text],.bfield input[type=password],#key{flex:1 1 100%}
+    .filters{width:100%}
+    .field{flex:1 1 auto;justify-content:space-between}
+  }
+
   /* ===== two-stage pipeline ===== */
   .pass-tabs{display:inline-flex;background:#f3f4f6;border-radius:11px;padding:3px;gap:2px;margin-bottom:4px}
   .pass-tabs button{padding:8px 17px;font-size:13px;font-weight:650;color:#4b5563;background:transparent;border-radius:9px;transition:all .18s}
@@ -237,7 +263,10 @@
   @keyframes pop{0%{transform:scale(.85)}55%{transform:scale(1.08)}100%{transform:scale(1)}}
   .rc.sel .pick{animation:pop .22s ease}
   .refmini{animation:fadeIn .25s ease}
-  .flow-note{font-size:12px;color:var(--muted);background:#f9fafb;border-left:3px solid var(--indigo);padding:7px 11px;border-radius:0 8px 8px 0;margin-bottom:12px}
+  .flow-note{display:flex;gap:8px;font-size:12px;line-height:1.6;color:#3730a3;background:#f5f6ff;
+    border:1px solid #dfe3ff;border-radius:13px;padding:10px 13px;margin-bottom:13px}
+  .flow-note::before{content:"💡";font-size:13px;line-height:1.5}
+  .flow-note b{color:#312e81}
   #analyzeProgress{margin-top:6px}
   @media (max-width:640px){
     .pill{margin-left:0;width:100%;text-align:center}
@@ -393,56 +422,71 @@
 
   <div class="card" id="card2">
     <div class="step"><span class="num">2</span><span data-i18n="s2"></span>
+      <span class="step-note" data-i18n="s2.note"></span>
       <span class="hint" style="margin:0" id="countHint"></span>
       <button class="btn-tiny" id="clearBtn" hidden data-i18n="clear"></button>
     </div>
     <div class="flow-note" id="pickNote" data-i18n-html="picknote"></div>
-    <div class="grid" id="grid"></div>
+    <div class="box b-slate" id="gridBox">
+      <div class="grid" id="grid"><div class="empty-note" data-i18n="grid.idle"></div></div>
+    </div>
   </div>
 
   <div class="card" id="card3">
-    <div class="step"><span class="num">3</span><span data-i18n="s3"></span></div>
-    <div class="refs-strip" id="refsStrip"><span class="hint" style="margin:0" data-i18n="refs.initial"></span></div>
-
-    <div class="pass-tabs" id="passTabs">
-      <button data-pass="direct" data-i18n="pass.direct"><span class="subtag" data-i18n="pass.direct.sub"></span></button>
-      <button data-pass="two" class="on" data-i18n="pass.two"><span class="subtag" data-i18n="pass.two.sub"></span></button>
+    <div class="step"><span class="num">3</span><span data-i18n="s3"></span>
+      <span class="step-note" data-i18n="s3.note"></span>
     </div>
-    <div class="stepper" id="stepper" hidden>
-      <div class="stp" id="stp1"><div class="ball">1</div><div class="lbl" data-i18n="stp1"></div></div>
-      <div class="stline" id="stline1"><div class="fill"></div></div>
-      <div class="stp" id="stp2"><div class="ball">2</div><div class="lbl" data-i18n="stp2"></div></div>
-    </div>
-    <div id="analyzeBox"></div>
 
-    <details class="settings" id="settingsBox" open>
-      <summary data-i18n="settings.sum"></summary>
-      <div class="srow"><div class="tabs" id="modeTabs"><button data-mode="svg" class="on" data-i18n="mode.svg"></button><button data-mode="image" data-i18n="mode.image"></button></div></div>
-      <div class="srow" id="modelRow"><div class="sbox" style="flex:1;min-width:260px"><span id="modelLabel" data-i18n="modelLabel"></span><select id="model"></select></div></div>
-      <div class="hint" id="pdfModelHint" data-i18n="hint.model"></div>
-      <div class="srow" id="analyzeModelRow" hidden><div class="sbox" style="flex:1;min-width:260px"><span data-i18n="analyzemodel"></span><select id="analyzeModel"></select></div></div>
-    </details>
+    <section class="box b-green">
+      <h4><span class="bi" aria-hidden="true">🖼️</span><span data-i18n="box.refs"></span></h4>
+      <div class="refs-strip" id="refsStrip"><span class="hint" style="margin:0" data-i18n="refs.initial"></span></div>
+    </section>
+
+    <section class="box b-indigo" style="margin-top:13px">
+      <h4><span class="bi" aria-hidden="true">🧭</span><span data-i18n="box.pass"></span></h4>
+      <div class="pass-tabs" id="passTabs">
+        <button data-pass="direct" data-i18n="pass.direct"><span class="subtag" data-i18n="pass.direct.sub"></span></button>
+        <button data-pass="two" class="on" data-i18n="pass.two"><span class="subtag" data-i18n="pass.two.sub"></span></button>
+      </div>
+      <div class="stepper" id="stepper" hidden>
+        <div class="stp" id="stp1"><div class="ball">1</div><div class="lbl" data-i18n="stp1"></div></div>
+        <div class="stline" id="stline1"><div class="fill"></div></div>
+        <div class="stp" id="stp2"><div class="ball">2</div><div class="lbl" data-i18n="stp2"></div></div>
+      </div>
+      <div id="analyzeBox"></div>
+    </section>
+
+    <section class="box b-purple" style="margin-top:13px">
+      <h4><span class="bi" aria-hidden="true">🎨</span><span data-i18n="box.model"></span><small data-i18n="settings.badge"></small></h4>
+      <div class="srow" style="margin-top:0"><div class="tabs" id="modeTabs"><button data-mode="svg" class="on" data-i18n="mode.svg"></button><button data-mode="image" data-i18n="mode.image"></button></div></div>
+      <div class="bfield" id="modelRow" style="margin-top:11px"><span class="blab" id="modelLabel" data-i18n="modelLabel"></span><select id="model"></select></div>
+      <p class="bnote" id="pdfModelHint" data-i18n="hint.model"></p>
+      <div class="bfield" id="analyzeModelRow" hidden style="margin-top:9px"><span class="blab" data-i18n="analyzemodel"></span><select id="analyzeModel"></select></div>
+    </section>
 
     <div id="genErr" class="errlist" hidden></div>
-    <button class="btn-primary" id="genBtn" data-i18n="genBtn"></button>
+    <div class="gen-row"><button class="btn-primary" id="genBtn" data-i18n="genBtn"></button></div>
     <div id="out"></div>
   </div>
 
   <div class="card">
-    <div class="step" data-i18n="guide.t"></div>
-    <ul class="guide">
-      <li data-i18n-html="g1"></li>
-      <li data-i18n-html="g2"></li>
-      <li data-i18n-html="g3"></li>
-      <li data-i18n-html="g4"></li>
-      <li data-i18n-html="g5"></li>
-    </ul>
-    <div style="margin-top:16px">
-      <div class="step" style="margin-bottom:8px" data-i18n="tut1"></div>
-      <img src="tutorial/02_pick_refs.png" data-i18n-aria="tut1" style="width:100%;border:1px solid var(--line);border-radius:11px;margin-bottom:16px">
-      <div class="step" style="margin-bottom:8px" data-i18n="tut2"></div>
+    <div class="step"><span data-i18n="guide.t"></span><span class="step-note" data-i18n="guide.note"></span></div>
+    <section class="box b-slate">
+      <ul class="guide">
+        <li data-i18n-html="g1"></li>
+        <li data-i18n-html="g2"></li>
+        <li data-i18n-html="g3"></li>
+        <li data-i18n-html="g4"></li>
+        <li data-i18n-html="g5"></li>
+      </ul>
+    </section>
+    <section class="box b-indigo" style="margin-top:13px">
+      <h4><span class="bi" aria-hidden="true">📐</span><span data-i18n="box.demo"></span></h4>
+      <div class="step" style="margin-bottom:8px;font-size:13px" data-i18n="tut1"></div>
+      <img src="tutorial/02_pick_refs.png" data-i18n-aria="tut1" style="width:100%;border:1px solid var(--line);border-radius:11px">
+      <div class="step" style="margin:16px 0 8px;font-size:13px" data-i18n="tut2"></div>
       <img src="tutorial/compare.png" data-i18n-aria="tut2" style="width:100%;border:1px solid var(--line);border-radius:11px">
-    </div>
+    </section>
   </div>
 </div>
 
@@ -459,7 +503,7 @@
 </div>
 
 <script src="./i18n.js"></script>
-<script src="./i18n_forge.js?v=20261001"></script>
+<script src="./i18n_forge.js?v=20261001b"></script>
 <script type="module">
 import * as T from './vendor/transformers.min.js';
 
