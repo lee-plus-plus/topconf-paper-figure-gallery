@@ -1124,7 +1124,7 @@ async function selectPdfContext(){
           setExtractMetaKey('ps.meta1b', {m:parserModel()||'–'}, false);
           payload = await extractPdfText();
           if(payload.chars < 200){                       // scanned / image-only PDF
-            failures.push(tt('ps.scanned',{m:failures[0]||'–'}));
+            failures.push(tt('ps.scanned',{m:failures[0]||'–'}).replace(/[。．.\s]+$/,''));
             continue;
           }
         }else if(ch==='img'){
@@ -1137,7 +1137,8 @@ async function selectPdfContext(){
         break;
       }catch(e){
         if(seq!==pdfIntentSeq) return;
-        failures.push((ch==='img'?tt('ps.modeImg'):ch==='text'?tt('ps.modeText'):tt('ps.modeDoc'))+': '+e.message);
+        const label = ch==='img'?tt('ps.modeImg'):ch==='text'?tt('ps.modeText'):tt('ps.modeDoc');
+        failures.push(label+': '+String(e.message||e).replace(/[。．.；;\s]+$/,''));
       }
     }
     if(!result) throw new Error(tt('ps.allfailed',{m:parserModel()||'–',e:failures.join('；')}));
