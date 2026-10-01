@@ -44,14 +44,18 @@
   .btn-mini{background:#eef2ff;color:#4338ca;font-weight:700;padding:6px 12px;font-size:12.5px}
   .btn-tiny{background:transparent;color:var(--muted);font-weight:600;font-size:12px;padding:4px 8px;text-decoration:underline}
   .hint{color:var(--muted);font-size:12.5px;margin-top:10px}
-  .parse-status{margin-top:12px;padding:12px 14px;border:1px solid #fecdd3;border-left:4px solid #f43f5e;border-radius:12px;
-    background:#fff1f2;color:#9f1239;font-size:13px;font-weight:650;line-height:1.65}
-  .parse-status::before{content:attr(data-label);display:block;font-size:11px;font-weight:800;letter-spacing:.5px;margin-bottom:3px;color:#be123c}
-  .parse-status[data-state="success"]{background:#ecfdf5;border-color:#a7f3d0;border-left-color:#10b981;color:#065f46}
-  .parse-status[data-state="success"]::before{color:#047857}
-  .parse-status[data-state="error"]{background:#fef2f2;border-color:#fecaca;border-left-color:#dc2626;color:#991b1b}
-  .parse-status[data-state="loading"]::before{animation:parsePulse 1.6s ease-in-out infinite}
-  .parse-meta{margin:7px 2px 0;font-size:12px;font-weight:400;color:#64748b;overflow-wrap:anywhere}
+  /* compact parse status + meta line (step 1) */
+  .status-line{display:flex;align-items:flex-start;gap:8px;font-size:12px;line-height:1.5;color:#475569;
+    background:#fff;border:1px solid var(--line);border-radius:9px;padding:7px 10px;overflow-wrap:anywhere}
+  .status-line::before{content:"";flex:0 0 7px;width:7px;height:7px;border-radius:50%;background:#94a3b8;margin-top:5px}
+  .status-line[data-state="loading"]{color:#3730a3;background:#f5f6ff;border-color:#dfe3ff}
+  .status-line[data-state="loading"]::before{background:var(--indigo);animation:parsePulse 1.4s ease-in-out infinite}
+  .status-line[data-state="success"]{color:#065f46;background:#f0fdf7;border-color:#bbf7d0}
+  .status-line[data-state="success"]::before{background:#10b981}
+  .status-line[data-state="error"]{color:#991b1b;background:#fef2f2;border-color:#fecaca}
+  .status-line[data-state="error"]::before{background:#dc2626}
+  .meta-line{margin:7px 1px 0;font-size:11.5px;color:#64748b;overflow-wrap:anywhere}
+  .meta-line.warn{color:#dc2626;font-weight:800}
   .pdf-upload-btn{display:inline-flex;align-items:center;gap:11px;padding:11px 19px 11px 12px;max-width:100%;
     border:1px solid #c4b5fd;border-radius:22px;background:linear-gradient(145deg,#8b5cf6,#4f46e5);color:#fff;
     box-shadow:0 6px 0 #3730a3,0 10px 22px #6366f133,inset 0 2px 0 #ffffff66;
@@ -66,7 +70,7 @@
   .pdf-upload-btn:focus-visible{outline:3px solid #a78bfa;outline-offset:6px}
   .pdf-upload-btn:disabled{cursor:wait;background:linear-gradient(145deg,#7c6bb7,#6359a0);box-shadow:0 3px 0 #4c4381,inset 0 2px 0 #ffffff44}
   @keyframes parsePulse{50%{opacity:.5}}
-  @media(prefers-reduced-motion:reduce){.pdf-upload-btn{transition:none}.pdf-upload-btn:hover:not(:disabled),.pdf-upload-btn:active:not(:disabled){transform:none}.parse-status[data-state="loading"]::before{animation:none}}
+  @media(prefers-reduced-motion:reduce){.pdf-upload-btn{transition:none}.pdf-upload-btn:hover:not(:disabled),.pdf-upload-btn:active:not(:disabled){transform:none}.status-line[data-state="loading"]::before{animation:none}}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(226px,1fr));gap:14px}
   .rc{border:1px solid var(--line);border-radius:13px;overflow:hidden;background:#fff;position:relative;
       transition:transform .12s, box-shadow .12s, border-color .12s;cursor:pointer}
@@ -124,8 +128,11 @@
         font:inherit;font-size:13px;outline:none;background:#fff;min-width:0}
   input:focus{border-color:#a5b4fc;box-shadow:0 0 0 3px rgba(99,102,241,.1)}
   #provider{border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:13px;background:#fff;max-width:none}
-  #target{border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:13px;background:#fff;max-width:300px}
+  #target{border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:13px;background:#fff;max-width:none;flex:1;min-width:0}
   #model{border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:13px;background:#fff;max-width:none;flex:1;min-width:260px}
+  #parseModel,#parseCustomModel,#contentMode,#baseOverride,#customModel{border:1px solid var(--line);border-radius:9px;padding:8px 10px;font:inherit;font-size:13px;background:#fff;color:#1f2937;max-width:none;flex:1;min-width:0;outline:none}
+  #contentQuery{border:1px solid var(--line);border-radius:9px;padding:8px 10px;font:inherit;font-size:13px;background:#fff;max-width:none;flex:1;min-width:0;outline:none}
+  #parseModel:focus,#parseCustomModel:focus,#contentMode:focus,#contentQuery:focus,#baseOverride:focus,#customModel:focus{border-color:#a5b4fc;box-shadow:0 0 0 3px rgba(99,102,241,.1)}
   #model optgroup{font-weight:700;color:#374151}
   .tabs{display:inline-flex;background:#f3f4f6;border-radius:10px;padding:3px;gap:2px}
   .tabs button{padding:7px 15px;font-size:13px;font-weight:650;color:#4b5563;background:transparent}
@@ -156,6 +163,42 @@
         border-radius:999px;padding:5px 13px;margin-left:auto}
   .lang-toggle:hover{border-color:#4f46e5}
   @media(max-width:640px){.lang-toggle{margin-left:0}}
+
+  /* ===== step 1: boxed two-column layout ===== */
+  .step-note{font-size:11.5px;font-weight:500;color:var(--muted);margin-left:2px}
+  .s1-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:13px;align-items:start}
+  .s1-col{display:grid;gap:13px;min-width:0}
+  @media(max-width:960px){.s1-grid{grid-template-columns:minmax(0,1fr)}}
+  .box{border:1px solid var(--line);border-radius:13px;padding:13px 14px;background:#fbfbfd;min-width:0}
+  .box h4{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:800;color:#1f2937;margin-bottom:11px}
+  .box h4 .bi{font-size:14px;line-height:1}
+  .box h4 small{font-weight:600;font-size:11px;color:var(--muted)}
+  .box h4 small:not(:first-child){margin-left:auto;font-weight:600}
+  .b-indigo{background:#f7f8ff;border-color:#dde2ff}
+  .b-indigo h4{color:#4338ca}
+  .b-green{background:#f5fdf9;border-color:#cdeee1}
+  .b-green h4{color:#047857}
+  .b-purple{background:#faf8ff;border-color:#e2dbff}
+  .b-purple h4{color:#6d28d9}
+  .b-amber{background:#fffcf5;border-color:#f4e4ca}
+  .b-amber h4{color:#b45309}
+  .b-slate{background:#f7f9fc;border-color:#dfe6ef}
+  .b-slate h4{color:#334155}
+  .bfield{display:flex;align-items:center;gap:9px;margin-bottom:9px;min-width:0}
+  .bfield:last-child{margin-bottom:0}
+  .blab{font-size:12px;font-weight:700;color:#4b5563;white-space:nowrap;min-width:86px}
+  .bfield input[type=text],.bfield input[type=password]{flex:1;min-width:0;padding:8px 10px;border-radius:9px}
+  .bnote{font-size:11.5px;line-height:1.55;color:#6b7280;margin-top:6px;overflow-wrap:anywhere}
+  .bnote.tiny{font-size:11px;color:#9ca3af;margin-top:7px}
+  .bnote .warn-txt{color:#dc2626;font-weight:700}
+  .box .chkline{margin-top:9px}
+  .box .corsnote{margin-top:9px}
+  .btn-sm{padding:7px 12px;font-size:12.5px;white-space:nowrap}
+  .filters{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+  .filters .btn-primary{margin-left:auto}
+  .ex-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-left:auto}
+  .ex-row > span:first-child{font-size:12.5px;color:var(--muted)}
+  @media(max-width:720px){.filters .btn-primary{margin-left:0;width:100%}}
 
   /* ===== two-stage pipeline ===== */
   .pass-tabs{display:inline-flex;background:#f3f4f6;border-radius:11px;padding:3px;gap:2px;margin-bottom:4px}
@@ -217,102 +260,135 @@
   <div id="bootBanner"><span class="spin big" style="padding:0"></span><span id="bootText" data-i18n="boot"></span></div>
 
   <div class="card" id="card1">
-    <div class="step"><span class="num">1</span><span data-i18n="s1"></span></div>
-    <details class="settings" id="intentSettings" style="margin-top:0;margin-bottom:13px">
-      <summary data-i18n="intent.sum"></summary>
-    <div class="srow" style="margin-top:11px;margin-bottom:3px">
-      <div class="sbox">
-        <span data-i18n="target.which"></span>
-        <select id="target">
-          <option value="overview" data-i18n="target.overview"></option>
-          <option value="architecture" data-i18n="target.architecture"></option>
-          <option value="pipeline" data-i18n="target.pipeline"></option>
-          <option value="results" data-i18n="target.results"></option>
-          <option value="custom" data-i18n="target.custom"></option>
-        </select>
-      </div>
-      <div class="sbox" id="targetDescRow" style="flex:1;min-width:260px">
-        <span data-i18n="target.desc"></span>
-        <input type="text" id="targetDesc" data-i18n-ph="target.descPh">
-      </div>
+    <div class="step"><span class="num">1</span><span data-i18n="s1"></span>
+      <span class="step-note" data-i18n="s1.note"></span>
     </div>
-    <div class="srow" style="margin-top:8px;margin-bottom:3px">
-      <div class="sbox" style="flex:1;min-width:260px">
-        <span data-i18n="src"></span>
-        <select id="contentMode">
-          <option value="free" data-i18n="src.free"></option>
-          <option value="basic" data-i18n="src.basic"></option>
-          <option value="intent" selected data-i18n="src.intent"></option>
-          <option value="custom" data-i18n="src.custom"></option>
-        </select>
-      </div>
-      <div class="sbox" id="contentQueryRow" style="flex:1;min-width:260px" hidden>
-        <span data-i18n="src.query"></span>
-        <input type="text" id="contentQuery" data-i18n-ph="src.queryPh">
-      </div>
-    </div>
-    <div class="parse-status" id="contentModeHint" data-state="idle" data-i18n-title="hint.label" role="status" aria-live="polite"></div>
-    <div class="parse-meta" id="pdfExtractionMeta" data-i18n="meta.nopdf"></div>
-    </details>
 
-    <details class="settings" id="apiSettingsStep1" open>
-      <summary data-i18n="api.sum"></summary>
-      <div class="srow">
-        <div class="sbox"><span data-i18n="provider"></span><select id="provider"></select></div>
-        <div class="sbox" style="flex:1;min-width:220px"><span>API Key</span><input type="password" id="key" data-i18n-ph="keyPh"></div>
-        <div class="sbox"><span>&nbsp;</span><button class="btn-ghost" id="refreshModels" data-i18n="refresh"></button></div>
-      </div>
-      <div class="srow">
-        <div class="sbox" style="flex:1;min-width:260px"><span data-i18n="parsemodel"></span><select id="parseModel"></select></div>
-      </div>
-      <div class="srow" id="parseCustomModelRow" hidden><div class="sbox" style="flex:1;min-width:220px"><span data-i18n="parseid"></span><input type="text" id="parseCustomModel" data-i18n-ph="parseidPh"></div></div>
-      <div class="hint" data-i18n="hint.pdf"></div>
-      <div class="chkline"><input type="checkbox" id="useRelay"><label for="useRelay" data-i18n="relay.label"></label></div>
-      <div class="srow" id="relayRow" hidden><div class="sbox" style="flex:1;min-width:260px"><span data-i18n="relay.base"></span><input type="text" id="baseOverride" data-i18n-ph="relay.ph"></div></div>
-      <div class="srow" id="customModelRow" hidden><div class="sbox" style="flex:1;min-width:220px"><span data-i18n="customid"></span><input type="text" id="customModel" data-i18n-ph="customidPh"></div></div>
-      <div class="hint" id="baseHint"></div><div class="corsnote" id="corsNote" hidden></div><div class="hint" id="manifestHint"></div>
-    </details>
+    <div class="s1-grid">
+      <div class="s1-col">
+        <section class="box b-indigo">
+          <h4><span class="bi" aria-hidden="true">🎯</span><span data-i18n="box.intent"></span></h4>
+          <div class="bfield">
+            <span class="blab" data-i18n="target.which"></span>
+            <select id="target">
+              <option value="overview" data-i18n="target.overview"></option>
+              <option value="architecture" data-i18n="target.architecture"></option>
+              <option value="pipeline" data-i18n="target.pipeline"></option>
+              <option value="results" data-i18n="target.results"></option>
+              <option value="custom" data-i18n="target.custom"></option>
+            </select>
+          </div>
+          <div class="bfield" id="targetDescRow" hidden>
+            <span class="blab" data-i18n="target.desc"></span>
+            <input type="text" id="targetDesc" data-i18n-ph="target.descPh">
+          </div>
+        </section>
 
+        <section class="box b-green">
+          <h4><span class="bi" aria-hidden="true">📄</span><span data-i18n="box.source"></span></h4>
+          <div class="bfield">
+            <span class="blab" data-i18n="src"></span>
+            <select id="contentMode">
+              <option value="free" data-i18n="src.free"></option>
+              <option value="basic" data-i18n="src.basic"></option>
+              <option value="intent" selected data-i18n="src.intent"></option>
+              <option value="custom" data-i18n="src.custom"></option>
+            </select>
+          </div>
+          <div class="bfield" id="contentQueryRow" hidden>
+            <span class="blab" data-i18n="src.query"></span>
+            <input type="text" id="contentQuery" data-i18n-ph="src.queryPh">
+          </div>
+          <div class="status-line" id="contentModeHint" data-state="idle" data-i18n-title="hint.label" role="status" aria-live="polite"></div>
+          <div class="meta-line warn" id="pdfExtractionMeta" data-i18n="meta.nopdf"></div>
+        </section>
+      </div>
 
-    <textarea id="paper" data-i18n-ph="paperPh"></textarea>
-    <div class="row">
-      <button class="pdf-upload-btn" id="uploadBtn" type="button"><span class="pdf-upload-icon" aria-hidden="true">PDF</span><span class="pdf-upload-copy"><strong id="uploadLabel" data-i18n="upload"></strong><small data-i18n="upload.small"></small></span><span class="pdf-upload-arrow" aria-hidden="true">↑</span></button>
-      <input type="file" id="pdfFile" accept="application/pdf" hidden>
-      <span style="font-size:12.5px;color:var(--muted)" data-i18n="ex.label"></span>
-      <button class="btn-mini exchip" data-ex="robot" data-i18n="ex.robot"></button>
-      <button class="btn-mini exchip" data-ex="video" data-i18n="ex.video"></button>
-      <button class="btn-mini exchip" data-ex="llm" data-i18n="ex.llm"></button>
+      <div class="s1-col">
+        <section class="box b-purple">
+          <h4><span class="bi" aria-hidden="true">🔑</span><span data-i18n="api.sum"></span><small data-i18n="api.badge"></small></h4>
+          <div class="bfield">
+            <span class="blab" data-i18n="provider"></span>
+            <select id="provider"></select>
+          </div>
+          <div class="bfield">
+            <span class="blab">API Key</span>
+            <input type="password" id="key" data-i18n-ph="keyPh">
+            <button class="btn-ghost btn-sm" id="refreshModels" data-i18n="refresh"></button>
+          </div>
+          <div class="bfield">
+            <span class="blab" data-i18n="parsemodel"></span>
+            <select id="parseModel"></select>
+          </div>
+          <div class="bfield" id="parseCustomModelRow" hidden>
+            <span class="blab" data-i18n="parseid"></span>
+            <input type="text" id="parseCustomModel" data-i18n-ph="parseidPh">
+          </div>
+          <p class="bnote" data-i18n="hint.pdf"></p>
+          <label class="chkline"><input type="checkbox" id="useRelay"><span data-i18n="relay.label"></span></label>
+          <div class="bfield" id="relayRow" hidden style="margin-top:9px">
+            <span class="blab" data-i18n="relay.base"></span>
+            <input type="text" id="baseOverride" data-i18n-ph="relay.ph">
+          </div>
+          <div class="bfield" id="customModelRow" hidden style="margin-top:9px">
+            <span class="blab" data-i18n="customid"></span>
+            <input type="text" id="customModel" data-i18n-ph="customidPh">
+          </div>
+          <div class="corsnote" id="corsNote" hidden></div>
+          <p class="bnote tiny" id="baseHint" hidden></p>
+          <p class="bnote tiny" id="manifestHint"></p>
+        </section>
+      </div>
     </div>
-    <div class="row">
-      <div class="field f-pattern"><label data-i18n="lab.pattern"></label>
-        <select id="pattern">
-          <option value="all" data-i18n="opt.all"></option>
-          <option>teaser</option><option>conceptual</option><option>framework</option>
-          <option>pipeline</option><option>architecture</option><option>taxonomy</option>
-          <option>results</option><option>comparison</option>
-        </select>
+
+    <section class="box b-amber" style="margin-top:13px">
+      <h4><span class="bi" aria-hidden="true">✍️</span><span data-i18n="box.paper"></span><small data-i18n="box.paper.tip"></small></h4>
+      <textarea id="paper" data-i18n-ph="paperPh"></textarea>
+      <div class="row">
+        <button class="pdf-upload-btn" id="uploadBtn" type="button"><span class="pdf-upload-icon" aria-hidden="true">PDF</span><span class="pdf-upload-copy"><strong id="uploadLabel" data-i18n="upload"></strong><small data-i18n="upload.small"></small></span><span class="pdf-upload-arrow" aria-hidden="true">↑</span></button>
+        <input type="file" id="pdfFile" accept="application/pdf" hidden>
+        <div class="ex-row">
+          <span data-i18n="ex.label"></span>
+          <button class="btn-mini exchip" data-ex="robot" data-i18n="ex.robot"></button>
+          <button class="btn-mini exchip" data-ex="video" data-i18n="ex.video"></button>
+          <button class="btn-mini exchip" data-ex="llm" data-i18n="ex.llm"></button>
+        </div>
       </div>
-      <div class="field f-venue"><label data-i18n="lab.venue"></label>
-        <select id="venue">
-          <option value="all" data-i18n="opt.all"></option><option>iclr</option><option>icml</option>
-          <option>neurips</option><option>cvpr</option><option>acl</option><option>aaai</option>
-        </select>
+    </section>
+
+    <section class="box b-slate" style="margin-top:13px">
+      <h4><span class="bi" aria-hidden="true">🔎</span><span data-i18n="box.search"></span></h4>
+      <div class="filters">
+        <div class="field f-pattern"><label data-i18n="lab.pattern"></label>
+          <select id="pattern">
+            <option value="all" data-i18n="opt.all"></option>
+            <option>teaser</option><option>conceptual</option><option>framework</option>
+            <option>pipeline</option><option>architecture</option><option>taxonomy</option>
+            <option>results</option><option>comparison</option>
+          </select>
+        </div>
+        <div class="field f-venue"><label data-i18n="lab.venue"></label>
+          <select id="venue">
+            <option value="all" data-i18n="opt.all"></option><option>iclr</option><option>icml</option>
+            <option>neurips</option><option>cvpr</option><option>acl</option><option>aaai</option>
+          </select>
+        </div>
+        <div class="field f-year"><label data-i18n="lab.year"></label>
+          <select id="year">
+            <option value="all" data-i18n="opt.all"></option><option>2026</option><option>2025</option>
+            <option>2024</option><option>2023</option>
+          </select>
+        </div>
+        <div class="field f-tier"><label data-i18n="lab.tier"></label>
+          <select id="tier">
+            <option value="all" data-i18n="opt.all"></option><option value="best">Best Paper</option>
+            <option value="oral">Oral</option><option value="spotlight">Spotlight</option>
+          </select>
+        </div>
+        <button class="btn-primary" id="searchBtn" data-i18n="searchBtn"></button>
       </div>
-      <div class="field f-year"><label data-i18n="lab.year"></label>
-        <select id="year">
-          <option value="all" data-i18n="opt.all"></option><option>2026</option><option>2025</option>
-          <option>2024</option><option>2023</option>
-        </select>
-      </div>
-      <div class="field f-tier"><label data-i18n="lab.tier"></label>
-        <select id="tier">
-          <option value="all" data-i18n="opt.all"></option><option value="best">Best Paper</option>
-          <option value="oral">Oral</option><option value="spotlight">Spotlight</option>
-        </select>
-      </div>
-      <button class="btn-primary" id="searchBtn" data-i18n="searchBtn"></button>
-    </div>
-    <div class="hint" data-i18n="hint.search"></div>
+      <p class="bnote" data-i18n="hint.search"></p>
+    </section>
   </div>
 
   <div class="card" id="card2">
@@ -383,7 +459,7 @@
 </div>
 
 <script src="./i18n.js"></script>
-<script src="./i18n_forge.js"></script>
+<script src="./i18n_forge.js?v=20261001"></script>
 <script type="module">
 import * as T from './vendor/transformers.min.js';
 
@@ -403,6 +479,28 @@ let passMode = 'two'; const MAX_REFS = 10; let analysis = null;
 let data = { ids:[], figs:[], bm:null, IE:null, TE:null, N:0 };
 let clip = { tokenizer:null, model:null };
 let MAN = null;
+
+/* Step-1 helper: the “no PDF yet” line is shown in red/bold, other notes stay quiet. */
+let lastMeta = { k:'meta.nopdf', v:null, warn:true };
+function setExtractMeta(text, warn){
+  const el = $('#pdfExtractionMeta'); if(!el) return;
+  el.textContent = text; el.classList.toggle('warn', !!warn);
+}
+function setExtractMetaKey(k, v, warn){ lastMeta = {k, v, warn}; setExtractMeta(tt(k, v||{}), warn); }
+function contentModeText(mode){
+  return mode==='free'?tt('cm.free'):mode==='basic'?tt('cm.basic'):mode==='intent'?tt('cm.intent'):tt('cm.custom');
+}
+/* Re-render the two step-1 note lines in the current language (no API call). */
+function refreshStepOneText(){
+  if($('#contentModeHint').dataset.state!=='loading') $('#contentModeHint').textContent = contentModeText($('#contentMode').value);
+  setExtractMeta(tt(lastMeta.k, lastMeta.v||{}), lastMeta.warn);
+}
+/* Step-1 helper: the endpoint line only matters for a relay / custom base URL. */
+function syncBaseHint(){
+  const el = $('#baseHint'); if(!el) return;
+  el.textContent = tt('base.hint',{b:baseURL()||'–'});
+  el.hidden = !($('#useRelay').checked || $('#provider').value==='custom');
+}
 
 const SKIP = /(embed|rerank|tts|speech|asx|transcri|whisper|ocr)/i;
 const IMGRE = /(image|seedream|flux|kolors|dall-e|gpt-image|cogview|sd-|stable-diffusion|imagen|hy-image|wanx|qwen-image)/i;
@@ -764,28 +862,28 @@ async function selectPdfContext(){
   const seq=++pdfIntentSeq, mode=$('#contentMode').value;
   setParseStatus('loading');
   $('#contentModeHint').textContent=tt('ps.sending');
-  $('#pdfExtractionMeta').textContent=tt('ps.meta1',{m:parserModel()||'–'});
+  setExtractMetaKey('ps.meta1', {m:parserModel()||'–'}, false);
   try{
     const result=await callPdfParser(); if(seq!==pdfIntentSeq) return;
     renderPdfSummary(result);
     setParseStatus('success');
     $('#contentModeHint').textContent=tt('ps.done');
-    $('#pdfExtractionMeta').textContent=tt('ps.meta2',{f:pdfContext.fileName,m:parserModel(),n:result.selectedSections.length});
+    setExtractMetaKey('ps.meta2', {f:pdfContext.fileName,m:parserModel(),n:result.selectedSections.length}, false);
   }catch(err){
     if(seq!==pdfIntentSeq) return;
     setParseStatus('error');
     $('#contentModeHint').textContent=tt('ps.fail');
-    $('#pdfExtractionMeta').textContent=tt('ps.meta3');
+    setExtractMetaKey('ps.meta3', null, true);
     showErr(tt('err.pdfparse',{m:err.message}));
   }
 }
-function syncContentMode(){
+function syncContentMode(reparse=true){
   const mode=$('#contentMode').value; $('#contentQueryRow').hidden=mode!=='custom';
   setParseStatus('idle');
-  $('#contentModeHint').textContent=mode==='free'?tt('cm.free'):mode==='basic'?tt('cm.basic'):mode==='intent'?tt('cm.intent'):tt('cm.custom');
-  if(pdfContext && mode!=='free') selectPdfContext();
+  $('#contentModeHint').textContent=contentModeText(mode);
+  if(reparse && pdfContext && mode!=='free') selectPdfContext();
 }
-$('#contentMode').onchange=syncContentMode;
+$('#contentMode').onchange=()=>syncContentMode();
 $('#contentQuery').oninput=()=>{ if($('#contentMode').value==='custom'&&pdfContext) selectPdfContext(); };
 $('#target').addEventListener('change',()=>{ if(pdfContext && $('#contentMode').value!=='free') selectPdfContext(); });
 $('#targetDesc').addEventListener('input',()=>{ if(pdfContext && $('#contentMode').value!=='free') selectPdfContext(); });
@@ -797,7 +895,7 @@ $('#pdfFile').onchange=async e=>{
     if(file.size>25*1024*1024) throw new Error(tt('up.size'));
     const dataUri=await fileToDataURI(file);
     pdfContext={fileName:file.name,mime:file.type||'application/pdf',dataUri,size:file.size};
-    $('#pdfExtractionMeta').textContent=tt('up.meta',{f:file.name,s:Math.round(file.size/1024)});
+    setExtractMetaKey('up.meta', {f:file.name,s:Math.round(file.size/1024)}, false);
     if($('#contentMode').value!=='free') await selectPdfContext();
   }catch(err){ showErr(tt('up.fail',{m:err.message})); }
   finally{ btn.disabled=false; btn.removeAttribute('aria-busy'); $('#uploadLabel').textContent=tt('upload'); e.target.value=''; }
@@ -935,7 +1033,7 @@ function restoreProviderState(p){
   $('#customModelRow').hidden = p!=='custom';
   $('#corsNote').hidden = !needRelay;
   if(needRelay) $('#corsNote').innerHTML = tt('cors.note');
-  $('#baseHint').textContent = tt('base.hint',{b:baseURL()||'–'});
+  syncBaseHint();
   populateParserModels();
 }
 $('#provider').onchange = async e=>{
@@ -944,13 +1042,14 @@ $('#provider').onchange = async e=>{
   await Promise.all([populateModels(),populateParserModels()]);
 };
 $('#key').oninput = e=>{ e.target.value=cleanKey(e.target.value); localStorage.setItem('ff_key_'+$('#provider').value, e.target.value); };
-  $('#baseOverride').oninput = e=>{ localStorage.setItem('ff_base_'+$('#provider').value, e.target.value); $('#baseHint').textContent=tt('base.hint',{b:baseURL()||'–'}); };
+  $('#baseOverride').oninput = e=>{ localStorage.setItem('ff_base_'+$('#provider').value, e.target.value); syncBaseHint(); };
 $('#customModel').oninput = e=>localStorage.setItem('ff_cmodel_'+$('#provider').value, e.target.value);
 $('#parseModel').onchange = e=>localStorage.setItem('ff_parse_model_'+$('#provider').value,e.target.value);
 $('#parseCustomModel').oninput = e=>localStorage.setItem('ff_parse_cmodel_'+$('#provider').value,e.target.value);
 $('#useRelay').onchange = e=>{
   $('#relayRow').hidden = !e.target.checked;
   localStorage.setItem('ff_relay_'+$('#provider').value, e.target.checked?'1':'0');
+  syncBaseHint();
 };
 $('#refreshModels').onclick = ()=>Promise.all([populateModels(),populateParserModels()]);
 document.querySelectorAll('#modeTabs button').forEach(b=>b.onclick=async ()=>{
@@ -1359,8 +1458,9 @@ document.addEventListener('langchange',()=>{
   syncLangBtn();
   if(results.length) renderGrid(results);
   updateCount(); renderRefsStrip();
-  $('#baseHint').textContent=tt('base.hint',{b:baseURL()||'–'});
-  $('#manifestHint').textContent=tt('manifest.hint',{d:MAN.updated});
+  syncBaseHint();
+  refreshStepOneText();
+  if(MAN) $('#manifestHint').textContent=tt('manifest.hint',{d:MAN.updated});
 });
 syncLangBtn();
 GAL_I18N.apply();
