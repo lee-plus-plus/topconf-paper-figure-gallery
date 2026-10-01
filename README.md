@@ -50,7 +50,7 @@ A searchable, filterable gallery of Figure 1 / teaser figures. Static HTML/CSS/J
 FigureForge drafts your Figure 1 from the gallery: describe your paper, and 3,516 top-conference figures provide the layout reference. No sign-up, no server; it runs in your browser. **[Try FigureForge →](forge/index.html)**
 
 <p align="center">
-  <img src="forge/demo-forge.gif" alt="FigureForge walkthrough: describe paper, retrieve references, generate bitmap draft" width="560">
+  <img src="forge/demo-forge.gif?v=20261001" alt="FigureForge walkthrough: describe paper, retrieve references, generate bitmap draft" width="560">
 </p>
 
 **[▶ Full demo video, 1:58 with audio](https://qwdwqfwq.github.io/topconf-paper-figure-gallery/docs/demo.html)**
@@ -69,9 +69,9 @@ FigureForge drafts your Figure 1 from the gallery: describe your paper, and 3,51
 
 5. **Choose a mode, add your key, download.** SVG mode gives accurate, editable text (Figma / draw.io / Illustrator); bitmap mode gives a publication-style layout to check in PPT / Figma. The key is stored only in your browser.
 
-> A bare prompt in a general chatbot returns a generic flowchart. FigureForge grounds the draft in top-conference figures, so it keeps the panel grid, comparative narrative and restrained palette of a paper figure. Honest comparison below:
+> A bare prompt in a general chatbot returns a generic flowchart. FigureForge grounds the draft in top-conference figures, so it keeps the panel grid, comparative narrative and restrained palette of a paper figure.
 
-> ![Comparison](forge/tutorial/compare.png)
+> ![Comparison](forge/tutorial/compare.png?v=20261001)
 
 - Runs entirely in your browser: the CLIP model and gallery index are bundled locally; paper content and keys stay on your device and the key goes only to the provider you choose.
 - Bring your own key. Presets: Volcengine Ark, SiliconFlow, Zhipu, DeepSeek, OpenAI, Moonshot, Qwen, Tencent Hunyuan, Anthropic, and any OpenAI-compatible relay.
@@ -103,7 +103,7 @@ Images belong to their authors and publishers; see [IMAGES_POLICY.md](IMAGES_POL
 FigureForge 基于画廊生成你的 Figure 1 初稿：描述论文，3,516 张顶会主图作为版式参考。免注册、无服务器，全部在浏览器本地运行。**[立即试用 →](forge/index.html)**
 
 <p align="center">
-  <img src="forge/demo-forge.gif" alt="FigureForge 流程演示：输入论文、检索参考图、生成位图初稿" width="560">
+  <img src="forge/demo-forge.gif?v=20261001" alt="FigureForge 流程演示：输入论文、检索参考图、生成位图初稿" width="560">
 </p>
 
 **[▶ 完整演示视频，1 分 58 秒，有声音](https://qwdwqfwq.github.io/topconf-paper-figure-gallery/docs/demo.html)**
@@ -122,9 +122,9 @@ FigureForge 基于画廊生成你的 Figure 1 初稿：描述论文，3,516 张�
 
 5. **选模式、填 Key、下载**：SVG 模式文字准确、可用 Figma / draw.io / Illustrator 编辑；位图模式版式地道，在 PPT / Figma 核对即可。Key 只存在本机浏览器。
 
-> 直接在通用对话框写 prompt，得到的是通用流程图。FigureForge 以顶会图为版式参考，初稿保留论文图的面板网格、对比叙事和克制配色。客观对比如下：
+> 直接在通用对话框写 prompt，得到的是通用流程图。FigureForge 以顶会图为版式参考，初稿保留论文图的面板网格、对比叙事和克制配色。
 
-> ![效果对比](forge/tutorial/compare.png)
+> ![效果对比](forge/tutorial/compare.png?v=20261001)
 
 - 全流程浏览器本地运行：CLIP 模型和画廊索引随仓库打包；论文内容和 Key 不离开设备，Key 只发往所选服务商。
 - 自带 Key：预置火山方舟、硅基流动、智谱、DeepSeek、OpenAI、月之暗面、通义千问、腾讯混元、Anthropic，以及任意 OpenAI 兼容中转。
