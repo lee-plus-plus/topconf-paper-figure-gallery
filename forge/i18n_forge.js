@@ -1,7 +1,7 @@
 /* ===== FigureForge UI dictionary ===== */
 GAL_I18N.register({
 en:{
- "sub":"Upload your paper → retrieve the best-matching references from 3,516 top-conference figures → draft your Figure 1",
+ "sub":"Upload your paper → retrieve the best-matching references from {n} top-conference figures → draft your Figure 1",
  "pill":"Runs locally in your browser · the PDF is sent only to the Step 1 model when you click parse",
  "boot":"Loading the search index and local CLIP model (first run downloads tens of MB)…",
  "s1":"Enter your paper",
@@ -200,7 +200,7 @@ en:{
  "modelLabel.svg":"Model (chat / vision)", "modelLabel.image":"Model (image)",
 },
 zh:{
- "sub":"上传你的论文内容 → 从 3,516 张顶会主图中检索最贴合的参考 → 生成你的主图初稿",
+ "sub":"上传你的论文内容 → 从 {n} 张顶会主图中检索最贴合的参考 → 生成你的主图初稿",
  "pill":"浏览器本地运行 · PDF 仅在你点击模型解析时发送给步骤一配置的模型",
  "boot":"正在加载检索索引与本地 CLIP 模型（首次约需下载数十 MB）…",
  "s1":"输入论文内容",

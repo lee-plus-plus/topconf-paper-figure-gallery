@@ -111,6 +111,30 @@ v0.3 定稿为 **2,238 张管线选图 + 60 张 v1 人工底 = 2,298 张**
 v0.4 在此基础上扩至 2,730 张（见 §5b），v0.5 扩至 3,528 张（见 §5c）。
 `data/exclude.txt` 累计排除约 1,400 张低质量裁剪。
 
+## 5a. 纯图表清洗 / Dropping plain plots
+
+画廊要的是**需要手搓的 Figure 1**（teaser / framework / architecture）。主图本身就是一张
+折线图、柱状图、散点图或热力图时，它对版式参考没有价值，这类条目按下面的规则清洗：
+
+```bash
+python scripts/filter_charts.py                    # 统计 + 候选清单
+python scripts/filter_charts.py --sheet 40 s.png   # 生成联系表人工复核
+python scripts/filter_charts.py --band 0.030 0.045 # 列出需要人工确认的区间
+```
+
+1. **语义信号（主）**：每张已收录图都有 CLIP ViT-B/32 图像嵌入（`forge/data/image_emb.bin`），
+   `scripts/chart_prompts.json` 固化了 5 条「纯图表」与 4 条「手绘主图」提示词的文本向量，
+   计算 `margin = max(sim_chart) − max(sim_figure)`，全程本地、无需浏览器。
+2. **视觉信号（辅）**：图表通常大留白、细笔画，且存在一条贯穿画布的长直轴线；手绘主图由
+   实心方块、箭头、照片与图标组成，长直线比例明显更低。
+3. **判定分带**：`margin ≥ 0.045` 进复核队列，`0.030–0.045` 逐张看联系表，以下保留。
+   **带内不等于自动删除**——「流程图 / 示意图里嵌一张小图」的主图会落在这个带里，必须人眼确认。
+4. 确认删除的 id 从 `data/figures.json` 移除后，需重建全部派生索引：
+   `assets/figures.js`（必须与 `data/figures.json` 完全一致）、`forge/data/figures.json`、
+   `ids.json`、`bm25.json`（按新语料重算 idf / avgdl）、`image_emb.bin`、`text_emb.bin`
+   （两者行序与 `ids.json` 对齐），提升 `forge/data/manifest.json` 的 `dataVersion`，
+   删除对应图片文件，最后跑 `python scripts/validate_gallery.py` 验证。
+
 ## 5b. v0.4：高等级论文索引 / Oral · Spotlight · Best tier index
 
 v0.4 对 ICLR / ICML / NeurIPS 2023–2025 的高等级论文做了完整索引，而不是只按视觉分排序：
@@ -263,7 +287,6 @@ python scripts/extract_new.py cvpr,acl,aaai 12      # 12 workers，可断点续�
 
 # 六会议统一打分、配额选图
 python scripts/score_select.py 980
-
 # 装配网页 JPEG（images/<venue>/final/）与 assets/figures.js
 python scripts/assemble_gallery.py 1000
 python scripts/clean_stale.py
@@ -272,6 +295,11 @@ python scripts/clean_stale.py
 # data/exclude.txt 后重跑 score_select + assemble
 python scripts/enum_sheets.py iclr
 python scripts/sheet_qa.py 31
+
+# 纯图表筛查（见 §5a）：先出统计与候选清单，再逐张看联系表确认，最后重建索引
+python scripts/filter_charts.py
+python scripts/filter_charts.py --sheet 40 /tmp/charts.png
+python scripts/validate_gallery.py
 
 # 文档与发布素材
 python scripts/build_readme3.py     # 双语 README

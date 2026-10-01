@@ -13397,34 +13397,6 @@
   "h": 561
  },
  {
-  "id": "acl2026-2026.acl-long.195",
-  "venue": "acl",
-  "year": 2026,
-  "title": "Are We Using the Right Benchmark: An Evaluation Framework for Visual Token Compression Methods",
-  "authors": [
-   "Chenfei Liao",
-   "Wensong Wang",
-   "Zichen Wen",
-   "Xu Zheng",
-   "Yiyu Wang",
-   "Haocong He",
-   "Yuanhuiyi Lyu",
-   "Lutao Jiang",
-   "Xin Zou",
-   "Yuqian Fu",
-   "Bin Ren",
-   "Linfeng Zhang",
-   "Xuming Hu"
-  ],
-  "pattern": "taxonomy",
-  "image": "images/acl/final/acl2026-2026.acl-long.195.jpg",
-  "paper": "https://aclanthology.org/2026.acl-long.195/",
-  "pdf_source": "https://aclanthology.org/2026.acl-long.195.pdf",
-  "score": 73.93,
-  "w": 1125,
-  "h": 570
- },
- {
   "id": "acl2026-2026.acl-long.2062",
   "venue": "acl",
   "year": 2026,
@@ -33311,26 +33283,6 @@
   "tier": "spotlight"
  },
  {
-  "id": "iclr2025-2442",
-  "venue": "iclr",
-  "year": 2025,
-  "title": "Brain Bandit: A Biologically Grounded Neural Network for Efficient Control of Exploration",
-  "authors": [
-   "Chen Jiang",
-   "Jiahui An",
-   "Yating Liu",
-   "Ni Ji"
-  ],
-  "pattern": "architecture",
-  "image": "images/iclr/final/iclr2025-2442.jpg",
-  "paper": "https://openreview.net/forum?id=RWJX5F5I9g",
-  "pdf_source": "https://openreview.net/pdf?id=RWJX5F5I9g",
-  "score": 26.69,
-  "w": 1010,
-  "h": 307,
-  "tier": "oral"
- },
- {
   "id": "iclr2025-2506",
   "venue": "iclr",
   "year": 2025,
@@ -34227,28 +34179,6 @@
   "tier": "oral"
  },
  {
-  "id": "iclr2026-0028",
-  "venue": "iclr",
-  "year": 2026,
-  "title": "DCFold: Efficient Protein Structure Generation with Single Forward Pass",
-  "authors": [
-   "Zhe Zhang",
-   "Yuanning Feng",
-   "Yuxuan Song",
-   "Keyue Qiu",
-   "Hao Zhou",
-   "Wei-Ying Ma"
-  ],
-  "pattern": "pipeline",
-  "image": "images/iclr/final/iclr2026-0028.jpg",
-  "paper": "https://openreview.net/forum?id=LMsdys7t1L",
-  "pdf_source": "https://openreview.net/pdf/1f5d2fc83806997019ffade7f60affb5c0af9a4b.pdf",
-  "score": 34.93,
-  "w": 596,
-  "h": 427,
-  "tier": "oral"
- },
- {
   "id": "iclr2026-0029",
   "venue": "iclr",
   "year": 2026,
@@ -34546,26 +34476,6 @@
   "tier": "oral"
  },
  {
-  "id": "iclr2026-0054",
-  "venue": "iclr",
-  "year": 2026,
-  "title": "Fast Escape, Slow Convergence: Learning Dynamics of Phase Retrieval under Power-Law Data",
-  "authors": [
-   "Guillaume Braun",
-   "Bruno Loureiro",
-   "Minh Ha Quang",
-   "Masaaki Imaizumi"
-  ],
-  "pattern": "pipeline",
-  "image": "images/iclr/final/iclr2026-0054.jpg",
-  "paper": "https://openreview.net/forum?id=Ae4eZpkXBX",
-  "pdf_source": "https://openreview.net/pdf/f28ddf0722b69b4c50a550d35cc7848984ce84a3.pdf",
-  "score": 12.92,
-  "w": 764,
-  "h": 443,
-  "tier": "oral"
- },
- {
   "id": "iclr2026-0055",
   "venue": "iclr",
   "year": 2026,
@@ -34658,29 +34568,6 @@
   "tier": "oral"
  },
  {
-  "id": "iclr2026-0060",
-  "venue": "iclr",
-  "year": 2026,
-  "title": "From Markov to Laplace: How Mamba In-Context Learns Markov Chains",
-  "authors": [
-   "Marco Bondaschi",
-   "Nived Rajaraman",
-   "Xiuying Wei",
-   "Razvan Pascanu",
-   "Caglar Gulcehre",
-   "Michael Gastpar",
-   "Ashok Vardhan Makkuva"
-  ],
-  "pattern": "architecture",
-  "image": "images/iclr/final/iclr2026-0060.jpg",
-  "paper": "https://openreview.net/forum?id=kmK3WSCOCT",
-  "pdf_source": "https://openreview.net/pdf/7c5974f3688d2ba6f4817747b376897b745b3197.pdf",
-  "score": 52.33,
-  "w": 1394,
-  "h": 387,
-  "tier": "oral"
- },
- {
   "id": "iclr2026-0061",
   "venue": "iclr",
   "year": 2026,
@@ -34748,39 +34635,6 @@
   "score": 58.05,
   "w": 1011,
   "h": 1140,
-  "tier": "oral"
- },
- {
-  "id": "iclr2026-0067",
-  "venue": "iclr",
-  "year": 2026,
-  "title": "GEPA: Reflective Prompt Evolution Can Outperform Reinforcement Learning",
-  "authors": [
-   "Lakshya A Agrawal",
-   "Shangyin Tan",
-   "Dilara Soylu",
-   "Noah Ziems",
-   "Rishi Khare",
-   "Krista Opsahl-Ong",
-   "Arnav Singhvi",
-   "Herumb Shandilya",
-   "Michael J Ryan",
-   "Meng Jiang",
-   "Christopher Potts",
-   "Koushik Sen",
-   "Alex Dimakis",
-   "Ion Stoica",
-   "Dan Klein",
-   "Matei Zaharia",
-   "Omar Khattab"
-  ],
-  "pattern": "teaser",
-  "image": "images/iclr/final/iclr2026-0067.jpg",
-  "paper": "https://openreview.net/forum?id=RQm2KQTM5r",
-  "pdf_source": "https://openreview.net/pdf/e2625111ac0503603448f773ff09555ec880422f.pdf",
-  "score": 39.19,
-  "w": 938,
-  "h": 308,
   "tier": "oral"
  },
  {
@@ -34902,49 +34756,6 @@
   "score": 50.32,
   "w": 996,
   "h": 581,
-  "tier": "oral"
- },
- {
-  "id": "iclr2026-0076",
-  "venue": "iclr",
-  "year": 2026,
-  "title": "How Reliable is Language Model Micro-Benchmarking?",
-  "authors": [
-   "Gregory Yauney",
-   "Shahzaib Saqib Warraich",
-   "Swabha Swayamdipta"
-  ],
-  "pattern": "taxonomy",
-  "image": "images/iclr/final/iclr2026-0076.jpg",
-  "paper": "https://openreview.net/forum?id=cReExMQLiK",
-  "pdf_source": "https://openreview.net/pdf/0c927d0dfc6b896f24c67aa4bd3fbd13d7bd94c6.pdf",
-  "score": 37.49,
-  "w": 550,
-  "h": 515,
-  "tier": "oral"
- },
- {
-  "id": "iclr2026-0078",
-  "venue": "iclr",
-  "year": 2026,
-  "title": "Huxley-G\\\"odel Machine: Human-Level Coding Agent Development by an Approximation of the Optimal Self-Improving Machine",
-  "authors": [
-   "Wenyi Wang",
-   "Piotr Piękos",
-   "Li Nanbo",
-   "Firas Laakom",
-   "Yimeng Chen",
-   "Mateusz Ostaszewski",
-   "Mingchen Zhuge",
-   "Jürgen Schmidhuber"
-  ],
-  "pattern": "framework",
-  "image": "images/iclr/final/iclr2026-0078.jpg",
-  "paper": "https://openreview.net/forum?id=T0EiEuhOOL",
-  "pdf_source": "https://openreview.net/pdf/3acf0849444035b86d5c18ebc10e654a5951c9de.pdf",
-  "score": 59.26,
-  "w": 784,
-  "h": 371,
   "tier": "oral"
  },
  {
@@ -35073,28 +34884,6 @@
   "tier": "oral"
  },
  {
-  "id": "iclr2026-0087",
-  "venue": "iclr",
-  "year": 2026,
-  "title": "Intrinsic Entropy of Context Length Scaling in LLMs",
-  "authors": [
-   "Jingzhe Shi",
-   "Qinwei Ma",
-   "Hongyi Liu",
-   "Hang Zhao",
-   "Jenq-Neng Hwang",
-   "Lei Li"
-  ],
-  "pattern": "conceptual",
-  "image": "images/iclr/final/iclr2026-0087.jpg",
-  "paper": "https://openreview.net/forum?id=vnipyA8c9V",
-  "pdf_source": "https://openreview.net/pdf/e0b4314fa5a8d4657bd1f9a0bbf02143b3a3c309.pdf",
-  "score": 44.25,
-  "w": 962,
-  "h": 279,
-  "tier": "oral"
- },
- {
   "id": "iclr2026-0088",
   "venue": "iclr",
   "year": 2026,
@@ -35112,27 +34901,6 @@
   "score": 14.38,
   "w": 1010,
   "h": 428,
-  "tier": "oral"
- },
- {
-  "id": "iclr2026-0089",
-  "venue": "iclr",
-  "year": 2026,
-  "title": "Is it Thinking or Cheating? Detecting Implicit Reward Hacking by Measuring Reasoning Effort",
-  "authors": [
-   "Xinpeng Wang",
-   "Nitish Joshi",
-   "Barbara Plank",
-   "Rico Angell",
-   "He He"
-  ],
-  "pattern": "teaser",
-  "image": "images/iclr/final/iclr2026-0089.jpg",
-  "paper": "https://openreview.net/forum?id=Gk7gLAtVDO",
-  "pdf_source": "https://openreview.net/pdf/b247aaee550b9df9c740bbd85ea933a55c977ca8.pdf",
-  "score": 68.5,
-  "w": 862,
-  "h": 264,
   "tier": "oral"
  },
  {
@@ -35157,33 +34925,6 @@
   "score": 31.11,
   "w": 962,
   "h": 796,
-  "tier": "oral"
- },
- {
-  "id": "iclr2026-0093",
-  "venue": "iclr",
-  "year": 2026,
-  "title": "Latent Speech-Text Transformer",
-  "authors": [
-   "Yen-Ju Lu",
-   "Yashesh Gaur",
-   "Wei Zhou",
-   "Benjamin Muller",
-   "Jesus Villalba",
-   "Najim Dehak",
-   "Luke Zettlemoyer",
-   "Gargi Ghosh",
-   "Mike Lewis",
-   "Srini Iyer",
-   "Duc Le"
-  ],
-  "pattern": "architecture",
-  "image": "images/iclr/final/iclr2026-0093.jpg",
-  "paper": "https://openreview.net/forum?id=krGpQzo8Mz",
-  "pdf_source": "https://openreview.net/pdf/027cf3cefe33188224df2ae4407f6bc9d723a358.pdf",
-  "score": 36.79,
-  "w": 1010,
-  "h": 329,
   "tier": "oral"
  },
  {
@@ -35273,29 +35014,6 @@
   "score": 50.15,
   "w": 953,
   "h": 463,
-  "tier": "oral"
- },
- {
-  "id": "iclr2026-0100",
-  "venue": "iclr",
-  "year": 2026,
-  "title": "Locality-aware Parallel Decoding for Efficient Autoregressive Image Generation",
-  "authors": [
-   "Zhuoyang Zhang",
-   "Luke J. Huang",
-   "Chengyue Wu",
-   "Shang Yang",
-   "Kelly Peng",
-   "Yao Lu",
-   "Song Han"
-  ],
-  "pattern": "pipeline",
-  "image": "images/iclr/final/iclr2026-0100.jpg",
-  "paper": "https://openreview.net/forum?id=h06l9w1clt",
-  "pdf_source": "https://openreview.net/pdf/2936c6ed68addcb585cabaa79f6d6d6929d5dac3.pdf",
-  "score": 39.78,
-  "w": 550,
-  "h": 375,
   "tier": "oral"
  },
  {
@@ -35426,33 +35144,6 @@
   "score": 60.39,
   "w": 986,
   "h": 435,
-  "tier": "oral"
- },
- {
-  "id": "iclr2026-0109",
-  "venue": "iclr",
-  "year": 2026,
-  "title": "MemAgent: Reshaping Long-Context LLM with Multi-Conv RL-based Memory Agent",
-  "authors": [
-   "Hongli Yu",
-   "Tinghong Chen",
-   "Jiangtao Feng",
-   "Jiangjie Chen",
-   "Weinan Dai",
-   "Qiying Yu",
-   "Ya-Qin Zhang",
-   "Wei-Ying Ma",
-   "Jingjing Liu",
-   "Mingxuan Wang",
-   "Hao Zhou"
-  ],
-  "pattern": "framework",
-  "image": "images/iclr/final/iclr2026-0109.jpg",
-  "paper": "https://openreview.net/forum?id=k5nIOvYGCL",
-  "pdf_source": "https://openreview.net/pdf/ab03c506ec1c904b39c9bdcf89578ce2ad49d3d2.pdf",
-  "score": 36.04,
-  "w": 714,
-  "h": 296,
   "tier": "oral"
  },
  {
@@ -35826,73 +35517,6 @@
   "tier": "oral"
  },
  {
-  "id": "iclr2026-0133",
-  "venue": "iclr",
-  "year": 2026,
-  "title": "OpenThoughts: Data Recipes for Reasoning Models",
-  "authors": [
-   "Etash Kumar Guha",
-   "Ryan Marten",
-   "Sedrick Keh",
-   "Negin Raoof",
-   "Georgios Smyrnis",
-   "Hritik Bansal",
-   "Marianna Nezhurina",
-   "Jean Mercat",
-   "Trung Vu",
-   "Zayne Rea Sprague",
-   "Ashima Suvarna",
-   "Benjamin Feuer",
-   "Leon Liangyu Chen",
-   "Zaid Khan",
-   "Eric Frankel",
-   "Sachin Grover",
-   "Caroline Choi",
-   "Niklas Muennighoff",
-   "Shiye Su",
-   "Wanjia Zhao",
-   "John Yang",
-   "Shreyas Pimpalgaonkar",
-   "Kartik sharma",
-   "Charlie Cheng-Jie Ji",
-   "Yichuan Deng",
-   "Sarah M Pratt",
-   "Vivek Ramanujan",
-   "Jon Saad-Falcon",
-   "Stutee Acharya",
-   "Jeffrey Li",
-   "Achal Dave",
-   "Alon Albalak",
-   "Kushal Arora",
-   "Blake Wulfe",
-   "Chinmay Hegde",
-   "Greg Durrett",
-   "Sewoong Oh",
-   "Mohit Bansal",
-   "Saadia Gabriel",
-   "Aditya Grover",
-   "Kai-Wei Chang",
-   "Vaishaal Shankar",
-   "Aaron Gokaslan",
-   "Mike A Merrill",
-   "Tatsunori Hashimoto",
-   "Yejin Choi",
-   "Jenia Jitsev",
-   "Reinhard Heckel",
-   "Maheswaran Sathiamoorthy",
-   "Alex Dimakis",
-   "Ludwig Schmidt"
-  ],
-  "pattern": "teaser",
-  "image": "images/iclr/final/iclr2026-0133.jpg",
-  "paper": "https://openreview.net/forum?id=7xjoTuaNmN",
-  "pdf_source": "https://openreview.net/pdf/968ae4b700f3ec12372a803e39d5510d0ab3cfd7.pdf",
-  "score": 43.43,
-  "w": 830,
-  "h": 361,
-  "tier": "oral"
- },
- {
   "id": "iclr2026-0135",
   "venue": "iclr",
   "year": 2026,
@@ -36116,26 +35740,6 @@
   "tier": "oral"
  },
  {
-  "id": "iclr2026-0149",
-  "venue": "iclr",
-  "year": 2026,
-  "title": "Pre-training under infinite compute",
-  "authors": [
-   "Konwoo Kim",
-   "Suhas Kotha",
-   "Percy Liang",
-   "Tatsunori Hashimoto"
-  ],
-  "pattern": "teaser",
-  "image": "images/iclr/final/iclr2026-0149.jpg",
-  "paper": "https://openreview.net/forum?id=ck0aZTAnwK",
-  "pdf_source": "https://openreview.net/pdf/c14d07d20e337d67cc07afc95a56004030403f11.pdf",
-  "score": 11.39,
-  "w": 616,
-  "h": 487,
-  "tier": "oral"
- },
- {
   "id": "iclr2026-0152",
   "venue": "iclr",
   "year": 2026,
@@ -36256,24 +35860,6 @@
   "score": 49.91,
   "w": 1090,
   "h": 354,
-  "tier": "oral"
- },
- {
-  "id": "iclr2026-0159",
-  "venue": "iclr",
-  "year": 2026,
-  "title": "Reasoning with Sampling: Your Base Model is Smarter Than You Think",
-  "authors": [
-   "Aayush Karan",
-   "Yilun Du"
-  ],
-  "pattern": "teaser",
-  "image": "images/iclr/final/iclr2026-0159.jpg",
-  "paper": "https://openreview.net/forum?id=Vsgq2ldr4K",
-  "pdf_source": "https://openreview.net/pdf/777608f2969d5ddafb9a37918f42d2eae852e0e8.pdf",
-  "score": 58.4,
-  "w": 1011,
-  "h": 556,
   "tier": "oral"
  },
  {
@@ -36570,25 +36156,6 @@
   "tier": "oral"
  },
  {
-  "id": "iclr2026-0174",
-  "venue": "iclr",
-  "year": 2026,
-  "title": "Sequences of Logits Reveal the Low Rank Structure of Language Models",
-  "authors": [
-   "Noah Golowich",
-   "Allen Liu",
-   "Abhishek Shetty"
-  ],
-  "pattern": "teaser",
-  "image": "images/iclr/final/iclr2026-0174.jpg",
-  "paper": "https://openreview.net/forum?id=gdZ6J5hZzF",
-  "pdf_source": "https://openreview.net/pdf/fa1e355018dab5e35a9d7203f87eacb56d004314.pdf",
-  "score": 46.09,
-  "w": 820,
-  "h": 316,
-  "tier": "oral"
- },
- {
   "id": "iclr2026-0175",
   "venue": "iclr",
   "year": 2026,
@@ -36787,31 +36354,6 @@
   "tier": "oral"
  },
  {
-  "id": "iclr2026-0191",
-  "venue": "iclr",
-  "year": 2026,
-  "title": "The Art of Scaling Reinforcement Learning Compute for LLMs",
-  "authors": [
-   "Fnu Devvrit",
-   "Lovish Madaan",
-   "Rishabh Tiwari",
-   "Rachit Bansal",
-   "Sai Surya Duvvuri",
-   "Manzil Zaheer",
-   "Inderjit S Dhillon",
-   "David Brandfonbrener",
-   "Rishabh Agarwal"
-  ],
-  "pattern": "teaser",
-  "image": "images/iclr/final/iclr2026-0191.jpg",
-  "paper": "https://openreview.net/forum?id=FMjeC9Msws",
-  "pdf_source": "https://openreview.net/pdf/c8cd1de9eac796cc9307b68a53ccfc3978f74f3f.pdf",
-  "score": 11.83,
-  "w": 1008,
-  "h": 383,
-  "tier": "oral"
- },
- {
   "id": "iclr2026-0192",
   "venue": "iclr",
   "year": 2026,
@@ -36834,27 +36376,6 @@
   "w": 1010,
   "h": 282,
   "tier": "oral"
- },
- {
-  "id": "iclr2026-0193",
-  "venue": "iclr",
-  "year": 2026,
-  "title": "The Polar Express: Optimal Matrix Sign Methods and their Application to the Muon Algorithm",
-  "authors": [
-   "Noah Amsel",
-   "David Persson",
-   "Christopher Musco",
-   "Robert M. Gower"
-  ],
-  "pattern": "teaser",
-  "image": "images/iclr/final/iclr2026-0193.jpg",
-  "paper": "https://openreview.net/forum?id=yRtgZ1K8hO",
-  "pdf_source": "https://openreview.net/pdf/8d86cd45a9a80361f3f379cb84cdf9e11d312043.pdf",
-  "score": 36.68,
-  "w": 1011,
-  "h": 389,
-  "tier": "oral",
-  "award": "honorable"
  },
  {
   "id": "iclr2026-0194",
@@ -36921,34 +36442,6 @@
   "score": 44.84,
   "w": 1001,
   "h": 563,
-  "tier": "oral"
- },
- {
-  "id": "iclr2026-0198",
-  "venue": "iclr",
-  "year": 2026,
-  "title": "TileLang: Bridge Programmability and Performance in Modern Neural Kernels",
-  "authors": [
-   "Lei Wang",
-   "Yu Cheng",
-   "Yining Shi",
-   "Zhiwen Mo",
-   "Zhengju Tang",
-   "Wenhao Xie",
-   "Tong Wu",
-   "Lingxiao Ma",
-   "Yuqing Xia",
-   "Jilong Xue",
-   "Fan Yang",
-   "Zhi Yang"
-  ],
-  "pattern": "teaser",
-  "image": "images/iclr/final/iclr2026-0198.jpg",
-  "paper": "https://openreview.net/forum?id=Jb1WkNSfUB",
-  "pdf_source": "https://openreview.net/pdf/e851ad3eaca44bc18d67d753b03b3664ca2b9e9c.pdf",
-  "score": 25.33,
-  "w": 546,
-  "h": 361,
   "tier": "oral"
  },
  {
@@ -37348,32 +36841,6 @@
   "score": 48.32,
   "w": 1083,
   "h": 609,
-  "tier": "oral"
- },
- {
-  "id": "iclr2026-0224",
-  "venue": "iclr",
-  "year": 2026,
-  "title": "WSM: Decay-Free Learning Rate Schedule via Checkpoint Merging for LLM Pre-training",
-  "authors": [
-   "Changxin Tian",
-   "jiapeng wang",
-   "Qian Zhao",
-   "Kunlong Chen",
-   "Jia Liu",
-   "Ziqi Liu",
-   "Jiaxin Mao",
-   "Xin Zhao",
-   "Zhiqiang Zhang",
-   "JUN ZHOU"
-  ],
-  "pattern": "teaser",
-  "image": "images/iclr/final/iclr2026-0224.jpg",
-  "paper": "https://openreview.net/forum?id=HhThhjKyfw",
-  "pdf_source": "https://openreview.net/pdf/20ee41e7c71ac64c55a13b6def1ff7cac85eb31a.pdf",
-  "score": 45.93,
-  "w": 1010,
-  "h": 305,
   "tier": "oral"
  },
  {
@@ -43921,24 +43388,6 @@
   "tier": "oral"
  },
  {
-  "id": "icml2025-0346",
-  "venue": "icml",
-  "year": 2025,
-  "title": "Demystifying Singular Defects in Large Language Models",
-  "authors": [
-   "Haoqi Wang",
-   "Tong Zhang",
-   "Mathieu Salzmann"
-  ],
-  "pattern": "teaser",
-  "image": "images/icml/final/icml2025-0346.jpg",
-  "paper": "https://proceedings.mlr.press/v267/wang25es.html",
-  "pdf_source": "https://raw.githubusercontent.com/mlresearch/v267/main/assets/wang25es/wang25es.pdf",
-  "score": 52.82,
-  "w": 1275,
-  "h": 644
- },
- {
   "id": "icml2025-0384",
   "venue": "icml",
   "year": 2025,
@@ -47788,26 +47237,6 @@
   "tier": "oral"
  },
  {
-  "id": "icml2026-0013",
-  "venue": "icml",
-  "year": 2026,
-  "title": "Asymmetric Perturbation in Solving Bilinear Saddle-Point Optimization",
-  "authors": [
-   "Kenshi Abe",
-   "Mitsuki Sakamoto",
-   "Kaito Ariu",
-   "Atsushi Iwasaki"
-  ],
-  "pattern": "conceptual",
-  "image": "images/icml/final/icml2026-0013.jpg",
-  "paper": "https://openreview.net/forum?id=fyae4jQ9Lw",
-  "pdf_source": "https://openreview.net/pdf/131c204ab9f4bd9a645974e84c025d32745d1827.pdf",
-  "score": 48.59,
-  "w": 1066,
-  "h": 380,
-  "tier": "oral"
- },
- {
   "id": "icml2026-0014",
   "venue": "icml",
   "year": 2026,
@@ -48034,31 +47463,6 @@
   "tier": "oral"
  },
  {
-  "id": "icml2026-0028",
-  "venue": "icml",
-  "year": 2026,
-  "title": "Diffract: Spectral View of LLM Domain Adaptation",
-  "authors": [
-   "Nikita Borodin",
-   "Maria Krylova",
-   "Artem Zabolotnyi",
-   "Dmitry Aspisov",
-   "Egor Shikov",
-   "Nikita Tyuplyaev",
-   "Oleg Travkin",
-   "Roman Alferov",
-   "Dmitry Vinichenko"
-  ],
-  "pattern": "teaser",
-  "image": "images/icml/final/icml2026-0028.jpg",
-  "paper": "https://openreview.net/forum?id=XBUHoiAGDE",
-  "pdf_source": "https://openreview.net/pdf/2d99e499ddfb0cf04c8c98fc67980dee92f2723e.pdf",
-  "score": 34.54,
-  "w": 1069,
-  "h": 503,
-  "tier": "oral"
- },
- {
   "id": "icml2026-0030",
   "venue": "icml",
   "year": 2026,
@@ -48167,43 +47571,6 @@
   "tier": "oral"
  },
  {
-  "id": "icml2026-0038",
-  "venue": "icml",
-  "year": 2026,
-  "title": "DR Tulu: Reinforcement Learning with Evolving Rubrics for Deep Research",
-  "authors": [
-   "Rulin Shao",
-   "Akari Asai",
-   "Shannon Zejiang Shen",
-   "Hamish Ivison",
-   "Varsha Kishore",
-   "Jingming Zhuo",
-   "Xinran Zhao",
-   "Molly Park",
-   "Samuel G. Finlayson",
-   "David Sontag",
-   "Tyler Murray",
-   "Sewon Min",
-   "Pradeep Dasigi",
-   "Luca Soldaini",
-   "Faeze Brahman",
-   "Wen-tau Yih",
-   "Tongshuang Wu",
-   "Luke Zettlemoyer",
-   "Yoon Kim",
-   "Hannaneh Hajishirzi",
-   "Pang Wei Koh"
-  ],
-  "pattern": "teaser",
-  "image": "images/icml/final/icml2026-0038.jpg",
-  "paper": "https://openreview.net/forum?id=97NEP1pyS3",
-  "pdf_source": "https://openreview.net/pdf/53b58e975316bbb67536270c12995c1c2c2d3784.pdf",
-  "score": 1.59,
-  "w": 637,
-  "h": 359,
-  "tier": "oral"
- },
- {
   "id": "icml2026-0043",
   "venue": "icml",
   "year": 2026,
@@ -48268,25 +47635,6 @@
   "tier": "oral"
  },
  {
-  "id": "icml2026-0047",
-  "venue": "icml",
-  "year": 2026,
-  "title": "Faster Activation Functions at the Edge for Post-Training Speedups",
-  "authors": [
-   "Anton Lydike",
-   "Jun Bi",
-   "Jackson Woodruff"
-  ],
-  "pattern": "teaser",
-  "image": "images/icml/final/icml2026-0047.jpg",
-  "paper": "https://openreview.net/forum?id=u2o6hPE8ik",
-  "pdf_source": "https://openreview.net/pdf/c6e7359c8ec05ad034329553bc37bb6b26299da4.pdf",
-  "score": 38.54,
-  "w": 637,
-  "h": 337,
-  "tier": "oral"
- },
- {
   "id": "icml2026-0048",
   "venue": "icml",
   "year": 2026,
@@ -48306,48 +47654,6 @@
   "score": 25.47,
   "w": 1236,
   "h": 474,
-  "tier": "oral"
- },
- {
-  "id": "icml2026-0049",
-  "venue": "icml",
-  "year": 2026,
-  "title": "FlashSketch: Sketch-Kernel Co-Design for Fast Sparse Sketching on GPUs",
-  "authors": [
-   "Rajat Vadiraj Dwaraknath",
-   "Sungyoon Kim",
-   "Mert Pilanci"
-  ],
-  "pattern": "teaser",
-  "image": "images/icml/final/icml2026-0049.jpg",
-  "paper": "https://openreview.net/forum?id=cCwxV6rSXF",
-  "pdf_source": "https://openreview.net/pdf/f159e147f48644dfbda015338363e0cc32ebe13f.pdf",
-  "score": 32.9,
-  "w": 637,
-  "h": 368,
-  "tier": "oral"
- },
- {
-  "id": "icml2026-0050",
-  "venue": "icml",
-  "year": 2026,
-  "title": "FlatLand: Personalized Graph Federated Learning via Tailored Lorentz Space",
-  "authors": [
-   "Jiahong Liu",
-   "Ram Samarth B B",
-   "Xinyu Fu",
-   "Menglin Yang",
-   "Weixi Zhang",
-   "Rex Ying",
-   "Irwin King"
-  ],
-  "pattern": "teaser",
-  "image": "images/icml/final/icml2026-0050.jpg",
-  "paper": "https://openreview.net/forum?id=H6PagZKyil",
-  "pdf_source": "https://openreview.net/pdf/e71eb02be4efc99aefa171a96191c53ac953eee2.pdf",
-  "score": 17.94,
-  "w": 637,
-  "h": 346,
   "tier": "oral"
  },
  {
@@ -48604,31 +47910,6 @@
   "tier": "oral"
  },
  {
-  "id": "icml2026-0064",
-  "venue": "icml",
-  "year": 2026,
-  "title": "How much can language models memorize?",
-  "authors": [
-   "John Xavier Morris",
-   "Chawin Sitawarin",
-   "Chuan Guo",
-   "Narine Kokhlikyan",
-   "G. Edward Suh",
-   "Alexander M Rush",
-   "Kamalika Chaudhuri",
-   "Saeed Mahloujifar"
-  ],
-  "pattern": "teaser",
-  "image": "images/icml/final/icml2026-0064.jpg",
-  "paper": "https://openreview.net/forum?id=bA6BgSbaUi",
-  "pdf_source": "https://openreview.net/pdf/e3b24017f3045dfcfff2ed3e8d73bf680b2b8397.pdf",
-  "score": 37.63,
-  "w": 623,
-  "h": 467,
-  "tier": "oral",
-  "award": "honorable"
- },
- {
   "id": "icml2026-0066",
   "venue": "icml",
   "year": 2026,
@@ -48749,27 +48030,6 @@
   "score": 23.48,
   "w": 1176,
   "h": 326,
-  "tier": "oral"
- },
- {
-  "id": "icml2026-0075",
-  "venue": "icml",
-  "year": 2026,
-  "title": "Less is Enough: Synthesizing Diverse Data in LLM Feature Space with Sparse Autoencoders",
-  "authors": [
-   "Zhongzhi Li",
-   "Xuansheng Wu",
-   "Yijiang Li",
-   "Lijie Hu",
-   "Ninghao Liu"
-  ],
-  "pattern": "architecture",
-  "image": "images/icml/final/icml2026-0075.jpg",
-  "paper": "https://openreview.net/forum?id=GVupwQ0578",
-  "pdf_source": "https://openreview.net/pdf/86ff7c351d38561cba12ca24940a02abe6b03c1c.pdf",
-  "score": 35.31,
-  "w": 637,
-  "h": 598,
   "tier": "oral"
  },
  {
@@ -49619,25 +48879,6 @@
   "award": "honorable"
  },
  {
-  "id": "icml2026-0142",
-  "venue": "icml",
-  "year": 2026,
-  "title": "The Signal is in the Steps: Local Scoring for Reasoning Data Selection",
-  "authors": [
-   "Hoang Anh Just",
-   "Myeongseob Ko",
-   "Ruoxi Jia"
-  ],
-  "pattern": "teaser",
-  "image": "images/icml/final/icml2026-0142.jpg",
-  "paper": "https://openreview.net/forum?id=GcB3a6IonG",
-  "pdf_source": "https://openreview.net/pdf/b98964c49f580e2883bb826820dc815ebab29d87.pdf",
-  "score": 1.39,
-  "w": 637,
-  "h": 428,
-  "tier": "oral"
- },
- {
   "id": "icml2026-0143",
   "venue": "icml",
   "year": 2026,
@@ -50009,26 +49250,6 @@
   "tier": "spotlight"
  },
  {
-  "id": "icml2026-0171",
-  "venue": "icml",
-  "year": 2026,
-  "title": "Accelerating Q-learning through Efficient Value-Sharing across Actions",
-  "authors": [
-   "Prabhat Nagarajan",
-   "Brett Daley",
-   "Martha White",
-   "Marlos C. Machado"
-  ],
-  "pattern": "teaser",
-  "image": "images/icml/final/icml2026-0171.jpg",
-  "paper": "https://openreview.net/forum?id=bQXQa5NDpH",
-  "pdf_source": "https://openreview.net/pdf/7056464de5125eeea02207c580159fb36cc3e6fe.pdf",
-  "score": 19.89,
-  "w": 666,
-  "h": 880,
-  "tier": "spotlight"
- },
- {
   "id": "icml2026-0172",
   "venue": "icml",
   "year": 2026,
@@ -50224,25 +49445,6 @@
   "tier": "spotlight"
  },
  {
-  "id": "icml2026-0183",
-  "venue": "icml",
-  "year": 2026,
-  "title": "Asymptotic Optimality of the High-Dimensional Gaussian Mechanism and Improved Low-Dimensional Mechanisms for Differential Privacy",
-  "authors": [
-   "Yu Wei",
-   "Alexander Bienstock",
-   "Antigoni Polychroniadou"
-  ],
-  "pattern": "conceptual",
-  "image": "images/icml/final/icml2026-0183.jpg",
-  "paper": "https://openreview.net/forum?id=82Wosp2Iu1",
-  "pdf_source": "https://openreview.net/pdf/c72aecbdfffdeb6cd48600c076df1e2267ee2c7e.pdf",
-  "score": 41.12,
-  "w": 1145,
-  "h": 385,
-  "tier": "spotlight"
- },
- {
   "id": "icml2026-0185",
   "venue": "icml",
   "year": 2026,
@@ -50264,27 +49466,6 @@
   "score": 52.6,
   "w": 1319,
   "h": 437,
-  "tier": "spotlight"
- },
- {
-  "id": "icml2026-0186",
-  "venue": "icml",
-  "year": 2026,
-  "title": "Autoregressive Boltzmann Generators",
-  "authors": [
-   "Danyal Rehman",
-   "Charlie B. Tan",
-   "Yoshua Bengio",
-   "Joey Bose",
-   "Alexander Tong"
-  ],
-  "pattern": "teaser",
-  "image": "images/icml/final/icml2026-0186.jpg",
-  "paper": "https://openreview.net/forum?id=75AYDsndHP",
-  "pdf_source": "https://openreview.net/pdf/1e84b2847bc0607ee39a974ea16724fde61c6e0b.pdf",
-  "score": 51.55,
-  "w": 1236,
-  "h": 297,
   "tier": "spotlight"
  },
  {
@@ -50836,26 +50017,6 @@
   "tier": "spotlight"
  },
  {
-  "id": "icml2026-0233",
-  "venue": "icml",
-  "year": 2026,
-  "title": "Distribution Transformers: Fast Approximate Bayesian Inference With On-The-Fly Prior Adaptation",
-  "authors": [
-   "George Whittle",
-   "Juliusz Ziomek",
-   "Jacob Henry Rawling",
-   "Michael A Osborne"
-  ],
-  "pattern": "architecture",
-  "image": "images/icml/final/icml2026-0233.jpg",
-  "paper": "https://openreview.net/forum?id=bMHwh8qAGc",
-  "pdf_source": "https://openreview.net/pdf/b6f44d01319ced5f9780de4e0950674323d2a8f9.pdf",
-  "score": 31.81,
-  "w": 641,
-  "h": 421,
-  "tier": "spotlight"
- },
- {
   "id": "icml2026-0234",
   "venue": "icml",
   "year": 2026,
@@ -50893,50 +50054,6 @@
   "score": 76.26,
   "w": 1236,
   "h": 653,
-  "tier": "spotlight"
- },
- {
-  "id": "icml2026-0236",
-  "venue": "icml",
-  "year": 2026,
-  "title": "Do LLMs Signal When They’re Right? Evidence from Neuron Agreement",
-  "authors": [
-   "Kang Chen",
-   "Yaoning Wang",
-   "Kai Xiong",
-   "Zhuoka Feng",
-   "Yu Minshen",
-   "Wenhe Sun",
-   "Haotian Chen",
-   "Yixin Cao"
-  ],
-  "pattern": "teaser",
-  "image": "images/icml/final/icml2026-0236.jpg",
-  "paper": "https://openreview.net/forum?id=ZVRgcQq4D2",
-  "pdf_source": "https://openreview.net/pdf/3c31b30dd87f4d6b00f89437ec2cccb85f0149c7.pdf",
-  "score": 36.03,
-  "w": 1135,
-  "h": 338,
-  "tier": "spotlight"
- },
- {
-  "id": "icml2026-0238",
-  "venue": "icml",
-  "year": 2026,
-  "title": "(Doubly) Exponential Lower Bounds for Follow the Regularized Leader in Potential Games",
-  "authors": [
-   "Ioannis Anagnostides",
-   "Ioannis Panageas",
-   "Nikolas Patris",
-   "Tuomas Sandholm"
-  ],
-  "pattern": "teaser",
-  "image": "images/icml/final/icml2026-0238.jpg",
-  "paper": "https://openreview.net/forum?id=l6KZJO7w48",
-  "pdf_source": "https://openreview.net/pdf/69756f7c9ae64a7e6feb79decc49d230438e08bb.pdf",
-  "score": 44.96,
-  "w": 1046,
-  "h": 377,
   "tier": "spotlight"
  },
  {
@@ -51172,25 +50289,6 @@
   "tier": "spotlight"
  },
  {
-  "id": "icml2026-0254",
-  "venue": "icml",
-  "year": 2026,
-  "title": "Eigenvectors of Experts are Training-free Non-collapsing Routers",
-  "authors": [
-   "Giang Do",
-   "Hung Le",
-   "Truyen Tran"
-  ],
-  "pattern": "teaser",
-  "image": "images/icml/final/icml2026-0254.jpg",
-  "paper": "https://openreview.net/forum?id=H1mxs9qGQX",
-  "pdf_source": "https://openreview.net/pdf/64078adaa0240b40583e1e15905249782ae9e173.pdf",
-  "score": 32.1,
-  "w": 641,
-  "h": 404,
-  "tier": "spotlight"
- },
- {
   "id": "icml2026-0255",
   "venue": "icml",
   "year": 2026,
@@ -51257,51 +50355,6 @@
   "tier": "spotlight"
  },
  {
-  "id": "icml2026-0258",
-  "venue": "icml",
-  "year": 2026,
-  "title": "Enhancing Reasoning for Diffusion LLMs via Distribution Matching Policy Optimization",
-  "authors": [
-   "Yuchen Zhu",
-   "Wei Guo",
-   "Jaemoo Choi",
-   "Petr Molodyk",
-   "Bo Yuan",
-   "Molei Tao",
-   "Yongxin Chen"
-  ],
-  "pattern": "teaser",
-  "image": "images/icml/final/icml2026-0258.jpg",
-  "paper": "https://openreview.net/forum?id=09CSjVeDug",
-  "pdf_source": "https://openreview.net/pdf/fff44ab78f016dffe9f4c379f43d656b3cc1fd3d.pdf",
-  "score": 61.24,
-  "w": 1262,
-  "h": 341,
-  "tier": "spotlight"
- },
- {
-  "id": "icml2026-0259",
-  "venue": "icml",
-  "year": 2026,
-  "title": "EntroKV: Entropy-Guided Dynamic Budget Allocation for KV-Cache Compression",
-  "authors": [
-   "Wenhao Gao",
-   "Haoran Cao",
-   "Yueyan Li",
-   "YongGao Xiao",
-   "Caixia Yuan",
-   "Xiaojie Wang"
-  ],
-  "pattern": "conceptual",
-  "image": "images/icml/final/icml2026-0259.jpg",
-  "paper": "https://openreview.net/forum?id=xhAMjsnWUe",
-  "pdf_source": "https://openreview.net/pdf/dce2e5348f0b6ad44c9c7fbeab5989ce0e1a69e1.pdf",
-  "score": 33.35,
-  "w": 637,
-  "h": 373,
-  "tier": "spotlight"
- },
- {
   "id": "icml2026-0260",
   "venue": "icml",
   "year": 2026,
@@ -51322,26 +50375,6 @@
   "score": 30.9,
   "w": 636,
   "h": 530,
-  "tier": "spotlight"
- },
- {
-  "id": "icml2026-0263",
-  "venue": "icml",
-  "year": 2026,
-  "title": "Excited Pfaffians: Generalized Neural Wave Functions Across Structure and State",
-  "authors": [
-   "Nicholas Gao",
-   "Till Grutschus",
-   "Frank Noe",
-   "Stephan Günnemann"
-  ],
-  "pattern": "teaser",
-  "image": "images/icml/final/icml2026-0263.jpg",
-  "paper": "https://openreview.net/forum?id=meEsugjXjv",
-  "pdf_source": "https://openreview.net/pdf/c12bca29f6d8b008109d838e433100752c7a3a7a.pdf",
-  "score": 35.61,
-  "w": 637,
-  "h": 340,
   "tier": "spotlight"
  },
  {
@@ -51501,28 +50534,6 @@
   "score": 41.14,
   "w": 641,
   "h": 339,
-  "tier": "spotlight"
- },
- {
-  "id": "icml2026-0274",
-  "venue": "icml",
-  "year": 2026,
-  "title": "Flex-Forcing: Towards a Unified Autoregressive and Bidirectional Video Diffusion Model",
-  "authors": [
-   "Xinyin Ma",
-   "Julius Berner",
-   "Chao Liu",
-   "Arash Vahdat",
-   "Weili Nie",
-   "Xinchao Wang"
-  ],
-  "pattern": "architecture",
-  "image": "images/icml/final/icml2026-0274.jpg",
-  "paper": "https://openreview.net/forum?id=COGc3MSR7n",
-  "pdf_source": "https://openreview.net/pdf/fb09bc662aa5fe48966115b38afe6de5901f4cc7.pdf",
-  "score": 32.43,
-  "w": 637,
-  "h": 376,
   "tier": "spotlight"
  },
  {
@@ -52125,30 +51136,6 @@
   "tier": "spotlight"
  },
  {
-  "id": "icml2026-0319",
-  "venue": "icml",
-  "year": 2026,
-  "title": "Know More, Know Clearer: A Meta-Cognitive Framework for Knowledge Augmentation in Large Language Models",
-  "authors": [
-   "Hao Chen",
-   "Ye He",
-   "Yuchun Fan",
-   "Yukun Yan",
-   "Zhenghao Liu",
-   "Qingfu Zhu",
-   "Maosong Sun",
-   "Wanxiang Che"
-  ],
-  "pattern": "framework",
-  "image": "images/icml/final/icml2026-0319.jpg",
-  "paper": "https://openreview.net/forum?id=ENuMNYCiV6",
-  "pdf_source": "https://openreview.net/pdf/18894831e73b98dff70e7312781b1a9c8325cdd8.pdf",
-  "score": -1.27,
-  "w": 641,
-  "h": 335,
-  "tier": "spotlight"
- },
- {
   "id": "icml2026-0322",
   "venue": "icml",
   "year": 2026,
@@ -52394,29 +51381,6 @@
   "tier": "spotlight"
  },
  {
-  "id": "icml2026-0333",
-  "venue": "icml",
-  "year": 2026,
-  "title": "Learning Randomized Reductions",
-  "authors": [
-   "Ferhat Erata",
-   "Orr Paradise",
-   "Thanos Typaldos",
-   "Timos Antonopoulos",
-   "ThanhVu Nguyen",
-   "Shafi Goldwasser",
-   "Ruzica Piskac"
-  ],
-  "pattern": "teaser",
-  "image": "images/icml/final/icml2026-0333.jpg",
-  "paper": "https://openreview.net/forum?id=hCAEcqig2C",
-  "pdf_source": "https://openreview.net/pdf/347cf5cad260da0034ae2a9c92c2465df2f41fa4.pdf",
-  "score": 46.72,
-  "w": 1394,
-  "h": 394,
-  "tier": "spotlight"
- },
- {
   "id": "icml2026-0334",
   "venue": "icml",
   "year": 2026,
@@ -52644,23 +51608,6 @@
   "tier": "spotlight"
  },
  {
-  "id": "icml2026-0348",
-  "venue": "icml",
-  "year": 2026,
-  "title": "Local Redundancy: An Information-Theoretic Measure of Plasticity from Synthetic Memorization",
-  "authors": [
-   "Jiaxuan Cheng"
-  ],
-  "pattern": "teaser",
-  "image": "images/icml/final/icml2026-0348.jpg",
-  "paper": "https://openreview.net/forum?id=ucbH88BgIk",
-  "pdf_source": "https://openreview.net/pdf/de3a6127835485613ca1d40583fa2f8671536cc5.pdf",
-  "score": 49.35,
-  "w": 1236,
-  "h": 490,
-  "tier": "spotlight"
- },
- {
   "id": "icml2026-0349",
   "venue": "icml",
   "year": 2026,
@@ -52882,28 +51829,6 @@
   "score": 55.66,
   "w": 640,
   "h": 417,
-  "tier": "spotlight"
- },
- {
-  "id": "icml2026-0364",
-  "venue": "icml",
-  "year": 2026,
-  "title": "MIRA: A Score for Conditional Distribution Accuracy and Model Comparison",
-  "authors": [
-   "Sammy Nasser Sharief",
-   "Justine Zeghal",
-   "Gabriel Missael Barco",
-   "Pablo Lemos",
-   "Yashar Hezaveh",
-   "Laurence Perreault-Levasseur"
-  ],
-  "pattern": "comparison",
-  "image": "images/icml/final/icml2026-0364.jpg",
-  "paper": "https://openreview.net/forum?id=ra2t1V4nml",
-  "pdf_source": "https://openreview.net/pdf/98d6ca6a569ab1d33312eef3d353bcb71fccbb53.pdf",
-  "score": 61.49,
-  "w": 1236,
-  "h": 327,
   "tier": "spotlight"
  },
  {
@@ -53258,24 +52183,6 @@
   "tier": "spotlight"
  },
  {
-  "id": "icml2026-0404",
-  "venue": "icml",
-  "year": 2026,
-  "title": "Post-Training with Policy Gradients: Optimality and the Base Model Barrier",
-  "authors": [
-   "Alireza Mousavi-Hosseini",
-   "Murat A Erdogdu"
-  ],
-  "pattern": "teaser",
-  "image": "images/icml/final/icml2026-0404.jpg",
-  "paper": "https://openreview.net/forum?id=nnWlTi7A7a",
-  "pdf_source": "https://openreview.net/pdf/c40b2cc6b2a1c7fae8cf58e6ccf332e287713342.pdf",
-  "score": 50.07,
-  "w": 1191,
-  "h": 295,
-  "tier": "spotlight"
- },
- {
   "id": "icml2026-0408",
   "venue": "icml",
   "year": 2026,
@@ -53354,27 +52261,6 @@
   "score": 14.93,
   "w": 1236,
   "h": 459,
-  "tier": "spotlight"
- },
- {
-  "id": "icml2026-0416",
-  "venue": "icml",
-  "year": 2026,
-  "title": "Rate or Fate? RLV$^{\\varepsilon}$R: Reinforcement Learning with Verifiable Noisy Rewards",
-  "authors": [
-   "Ali Rad",
-   "Khashayar Filom",
-   "Darioush Keivan",
-   "Peyman Mohajerin Esfahani",
-   "Ehsan Kamalinejad"
-  ],
-  "pattern": "teaser",
-  "image": "images/icml/final/icml2026-0416.jpg",
-  "paper": "https://openreview.net/forum?id=LwB2EacVT6",
-  "pdf_source": "https://openreview.net/pdf/276aa0e257a6f1bace13ea3a1bde4ec4eebd9cbe.pdf",
-  "score": 32.31,
-  "w": 1338,
-  "h": 537,
   "tier": "spotlight"
  },
  {
@@ -53539,31 +52425,6 @@
   "tier": "spotlight"
  },
  {
-  "id": "icml2026-0429",
-  "venue": "icml",
-  "year": 2026,
-  "title": "Reward and Guidance through Rubrics: Promoting Exploration to Improve Multi-Domain Reasoning",
-  "authors": [
-   "Baolong Bi",
-   "Shenghua Liu",
-   "Yiwei Wang",
-   "Siqian Tong",
-   "Lingrui Mei",
-   "Yuyao Ge",
-   "Yilong Xu",
-   "Jiafeng Guo",
-   "Xueqi Cheng"
-  ],
-  "pattern": "teaser",
-  "image": "images/icml/final/icml2026-0429.jpg",
-  "paper": "https://openreview.net/forum?id=AfqsNFzJcs",
-  "pdf_source": "https://openreview.net/pdf/7782de99d65efec2cbfb75982b8447479e782ff7.pdf",
-  "score": 38.77,
-  "w": 637,
-  "h": 362,
-  "tier": "spotlight"
- },
- {
   "id": "icml2026-0430",
   "venue": "icml",
   "year": 2026,
@@ -53604,52 +52465,6 @@
   "score": 39.82,
   "w": 641,
   "h": 977,
-  "tier": "spotlight"
- },
- {
-  "id": "icml2026-0435",
-  "venue": "icml",
-  "year": 2026,
-  "title": "S$^3$GNN: Efficient Global Mixing and Local Message Passing for Long-Range Graph Learning",
-  "authors": [
-   "Dai Shi",
-   "Luke Thompson",
-   "Linhan Luo",
-   "Lequan Lin",
-   "Andi Han",
-   "Junbin Gao",
-   "José Miguel Hernández-Lobato"
-  ],
-  "pattern": "teaser",
-  "image": "images/icml/final/icml2026-0435.jpg",
-  "paper": "https://openreview.net/forum?id=9SCVnAxoKK",
-  "pdf_source": "https://openreview.net/pdf/26958f1f2caf297b115e30e620dd43d4681b358a.pdf",
-  "score": -0.05,
-  "w": 640,
-  "h": 359,
-  "tier": "spotlight"
- },
- {
-  "id": "icml2026-0436",
-  "venue": "icml",
-  "year": 2026,
-  "title": "Safety Alignment of LMs via Non-cooperative Games",
-  "authors": [
-   "Anselm Paulus",
-   "Ilia Kulikov",
-   "Brandon Amos",
-   "Rémi Munos",
-   "Ivan Evtimov",
-   "Kamalika Chaudhuri",
-   "Arman Zharmagambetov"
-  ],
-  "pattern": "teaser",
-  "image": "images/icml/final/icml2026-0436.jpg",
-  "paper": "https://openreview.net/forum?id=Bve790HQrA",
-  "pdf_source": "https://openreview.net/pdf/dbd033062c8a277c2ffe991e01b1c093c1602136.pdf",
-  "score": 41.89,
-  "w": 637,
-  "h": 293,
   "tier": "spotlight"
  },
  {
@@ -54046,28 +52861,6 @@
   "tier": "spotlight"
  },
  {
-  "id": "icml2026-0463",
-  "venue": "icml",
-  "year": 2026,
-  "title": "STAR-KV: Low-Rank KV Cache Compression via Soft Thresholding for Adaptive Rank Control",
-  "authors": [
-   "Priyansh Bhatnagar",
-   "Ashkan Moradifirouzabadi",
-   "Se-Hyun Yang",
-   "SeungJae Lee",
-   "Jungwook Choi",
-   "Mingu Kang"
-  ],
-  "pattern": "teaser",
-  "image": "images/icml/final/icml2026-0463.jpg",
-  "paper": "https://openreview.net/forum?id=lJjH1q6RwY",
-  "pdf_source": "https://openreview.net/pdf/f951d9969059ed988453672843baed8bf43cb3a8.pdf",
-  "score": 35.18,
-  "w": 637,
-  "h": 299,
-  "tier": "spotlight"
- },
- {
   "id": "icml2026-0464",
   "venue": "icml",
   "year": 2026,
@@ -54302,30 +53095,6 @@
   "tier": "spotlight"
  },
  {
-  "id": "icml2026-0479",
-  "venue": "icml",
-  "year": 2026,
-  "title": "TetraJet-v2: Accurate NVFP4 Training for Large Language Models with Oscillation Suppression and Outlier Control",
-  "authors": [
-   "Yuxiang Chen",
-   "Yifan Liu",
-   "Xiaoming Xu",
-   "Pengle Zhang",
-   "Michael Beyer",
-   "Martin Rapp",
-   "Jun Zhu",
-   "Jianfei Chen"
-  ],
-  "pattern": "teaser",
-  "image": "images/icml/final/icml2026-0479.jpg",
-  "paper": "https://openreview.net/forum?id=7ZQhm5HnOA",
-  "pdf_source": "https://openreview.net/pdf/0b352b3a22f21925998908fd99e54b31011914c9.pdf",
-  "score": 36.13,
-  "w": 599,
-  "h": 586,
-  "tier": "spotlight"
- },
- {
   "id": "icml2026-0480",
   "venue": "icml",
   "year": 2026,
@@ -54364,25 +53133,6 @@
   "score": 51.88,
   "w": 1067,
   "h": 595,
-  "tier": "spotlight"
- },
- {
-  "id": "icml2026-0484",
-  "venue": "icml",
-  "year": 2026,
-  "title": "The Relative Instability of Model Comparison with Cross-validation",
-  "authors": [
-   "Alexandre Bayle",
-   "Lucas Janson",
-   "Lester Mackey"
-  ],
-  "pattern": "comparison",
-  "image": "images/icml/final/icml2026-0484.jpg",
-  "paper": "https://openreview.net/forum?id=kpdyQ1GDRt",
-  "pdf_source": "https://openreview.net/pdf/02b9cf649d92713666811d17750358c30aa60293.pdf",
-  "score": 30.64,
-  "w": 640,
-  "h": 583,
   "tier": "spotlight"
  },
  {
@@ -54449,32 +53199,6 @@
   "score": 44.88,
   "w": 637,
   "h": 457,
-  "tier": "spotlight"
- },
- {
-  "id": "icml2026-0489",
-  "venue": "icml",
-  "year": 2026,
-  "title": "ThunderAgent: A Fast, Simple, and Program-Aware Agentic Inference System",
-  "authors": [
-   "Hao Kang",
-   "Ziyang li",
-   "Weili Xu",
-   "Xinyu Yang",
-   "Yinfang Chen",
-   "Junxiong Wang",
-   "Beidi Chen",
-   "Tushar Krishna",
-   "Chenfeng Xu",
-   "Simran Arora"
-  ],
-  "pattern": "framework",
-  "image": "images/icml/final/icml2026-0489.jpg",
-  "paper": "https://openreview.net/forum?id=kR4iOTaAOJ",
-  "pdf_source": "https://openreview.net/pdf/bc17cb3f24279d089e18d6aaa40d44db26cc29ba.pdf",
-  "score": 53.35,
-  "w": 1201,
-  "h": 339,
   "tier": "spotlight"
  },
  {
@@ -54949,28 +53673,6 @@
   "score": 53.3,
   "w": 657,
   "h": 855,
-  "tier": "spotlight"
- },
- {
-  "id": "icml2026-0522",
-  "venue": "icml",
-  "year": 2026,
-  "title": "Wait, Wait, Wait... Why Do Reasoning Models Loop?",
-  "authors": [
-   "Charilaos Pipis",
-   "Shivam Garg",
-   "Vasilis Kontonis",
-   "Vaishnavi Shrivastava",
-   "Akshay Krishnamurthy",
-   "Dimitris Papailiopoulos"
-  ],
-  "pattern": "teaser",
-  "image": "images/icml/final/icml2026-0522.jpg",
-  "paper": "https://openreview.net/forum?id=oZWE7mSqlk",
-  "pdf_source": "https://openreview.net/pdf/2aa480f3f57003437b6d5a8634930d88ac1d4aa7.pdf",
-  "score": 36.23,
-  "w": 1010,
-  "h": 276,
   "tier": "spotlight"
  },
  {
@@ -60360,29 +59062,6 @@
   "tier": "spotlight"
  },
  {
-  "id": "neurips2023-2897",
-  "venue": "neurips",
-  "year": 2023,
-  "title": "Should I Stop or Should I Go: Early Stopping with Heterogeneous Populations",
-  "authors": [
-   "Adam, Hammaad",
-   "Yin, Fan",
-   "Hu, Huibin",
-   "Tenenholtz, Neil",
-   "Crawford, Lorin",
-   "Mackey, Lester",
-   "Koenecke, Allison"
-  ],
-  "pattern": "teaser",
-  "image": "images/neurips/final/neurips2023-2897.jpg",
-  "paper": "https://proceedings.neurips.cc/paper_files/paper/2023/hash/3322a9a72a1707de14badd5e552ff466-Abstract-Conference.html",
-  "pdf_source": "https://proceedings.neurips.cc/paper_files/paper/2023/file/3322a9a72a1707de14badd5e552ff466-Paper-Conference.pdf",
-  "score": 31.54,
-  "w": 516,
-  "h": 291,
-  "tier": "spotlight"
- },
- {
   "id": "neurips2023-2899",
   "venue": "neurips",
   "year": 2023,
@@ -64402,25 +63081,6 @@
   "score": 67.43,
   "w": 1010,
   "h": 377
- },
- {
-  "id": "neurips2024-1925",
-  "venue": "neurips",
-  "year": 2024,
-  "title": "Score-Optimal Diffusion Schedules",
-  "authors": [
-   "Williams, Christopher",
-   "Campbell, Andrew",
-   "Doucet, Arnaud",
-   "Syed, Saifuddin"
-  ],
-  "pattern": "teaser",
-  "image": "images/neurips/final/neurips2024-1925.jpg",
-  "paper": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/c34057f0cfb685eadf7d8d7cc99f734a-Abstract-Conference.html",
-  "pdf_source": "https://proceedings.neurips.cc/paper_files/paper/2024/file/c34057f0cfb685eadf7d8d7cc99f734a-Paper-Conference.pdf",
-  "score": 33.15,
-  "w": 1010,
-  "h": 295
  },
  {
   "id": "neurips2024-1967",
@@ -70975,37 +69635,6 @@
   "h": 337
  },
  {
-  "id": "neurips2025-1110",
-  "venue": "neurips",
-  "year": 2025,
-  "title": "ParetoQ: Improving Scaling Laws in Extremely Low-bit LLM Quantization",
-  "authors": [
-   "Zechun Liu",
-   "Changsheng Zhao",
-   "Hanxian Huang",
-   "Sijia Chen",
-   "Jing Zhang",
-   "Jiawei Zhao",
-   "Scott Roy",
-   "Lisa Jin",
-   "Yunyang Xiong",
-   "Yangyang Shi",
-   "Lin Xiao",
-   "Yuandong Tian",
-   "Bilge Soran",
-   "Raghuraman Krishnamoorthi",
-   "Tijmen Blankevoort",
-   "Vikas Chandra"
-  ],
-  "pattern": "architecture",
-  "image": "images/neurips/final/neurips2025-1110.jpg",
-  "paper": "https://arxiv.org/abs/2502.02631",
-  "pdf_source": "https://arxiv.org/pdf/2502.02631",
-  "score": 32.64,
-  "w": 504,
-  "h": 320
- },
- {
   "id": "neurips2025-1112",
   "venue": "neurips",
   "year": 2025,
@@ -71443,30 +70072,6 @@
   "score": 75.32,
   "w": 1011,
   "h": 401
- },
- {
-  "id": "neurips2025-1265",
-  "venue": "neurips",
-  "year": 2025,
-  "title": "Restoring Pruned Large Language Models via Lost Component Compensation",
-  "authors": [
-   "Zijian Feng",
-   "Hanzhang Zhou",
-   "Zixiao Zhu",
-   "Tianjiao Li",
-   "Jia Jim Deryl Chua",
-   "Lee Onn Mak",
-   "Gee Wah Ng",
-   "Kezhi Mao"
-  ],
-  "pattern": "teaser",
-  "image": "images/neurips/final/neurips2025-1265.jpg",
-  "paper": "https://arxiv.org/abs/2510.21834",
-  "pdf_source": "https://arxiv.org/pdf/2510.21834",
-  "score": 40.25,
-  "w": 726,
-  "h": 290,
-  "tier": "spotlight"
  },
  {
   "id": "neurips2025-1279",
@@ -72715,43 +71320,6 @@
   "h": 376
  },
  {
-  "id": "neurips2025-1742",
-  "venue": "neurips",
-  "year": 2025,
-  "title": "Web-Shepherd: Advancing PRMs for Reinforcing Web Agents",
-  "authors": [
-   "Hyungjoo Chae",
-   "Sunghwan Kim",
-   "Junhee Cho",
-   "Seungone Kim",
-   "Seungjun Moon",
-   "Gyeom Hwangbo",
-   "Dongha Lim",
-   "Minjin Kim",
-   "Yeonjun Hwang",
-   "Minju Gwak",
-   "Dongwook Choi",
-   "Minseok Kang",
-   "Gwanhoon Im",
-   "ByeongUng Cho",
-   "Hyojun Kim",
-   "Jun Hee Han",
-   "Taeyoon Kwon",
-   "Minju Kim",
-   "Beong-woo Kwak",
-   "Dongjin Kang",
-   "Jinyoung Yeo"
-  ],
-  "pattern": "framework",
-  "image": "images/neurips/final/neurips2025-1742.jpg",
-  "paper": "https://arxiv.org/abs/2505.15277",
-  "pdf_source": "https://arxiv.org/pdf/2505.15277",
-  "score": 27.74,
-  "w": 992,
-  "h": 335,
-  "tier": "spotlight"
- },
- {
   "id": "neurips2025-1757",
   "venue": "neurips",
   "year": 2025,
@@ -72990,28 +71558,6 @@
   "score": 73.93,
   "w": 1011,
   "h": 1448
- },
- {
-  "id": "neurips2025-1901",
-  "venue": "neurips",
-  "year": 2025,
-  "title": "Beyond Random: Automatic Inner-loop Optimization in Dataset Distillation",
-  "authors": [
-   "Muquan Li",
-   "Hang Gou",
-   "Dongyang Zhang",
-   "Shuang Liang",
-   "Xiurui Xie",
-   "Deqiang Ouyang",
-   "Ke Qin"
-  ],
-  "pattern": "pipeline",
-  "image": "images/neurips/final/neurips2025-1901.jpg",
-  "paper": "https://arxiv.org/abs/2510.04838",
-  "pdf_source": "https://arxiv.org/pdf/2510.04838",
-  "score": 34.26,
-  "w": 1147,
-  "h": 489
  },
  {
   "id": "neurips2025-1922",
@@ -75244,29 +73790,6 @@
   "tier": "spotlight"
  },
  {
-  "id": "neurips2025-3099",
-  "venue": "neurips",
-  "year": 2025,
-  "title": "Transformers for Mixed-type Event Sequences",
-  "authors": [
-   "Felix Draxler",
-   "Yang Meng",
-   "Kai Nelson",
-   "Lukas Laskowski",
-   "Yibo Yang",
-   "Theofanis Karaletsos",
-   "Stephan Mandt"
-  ],
-  "pattern": "architecture",
-  "image": "images/neurips/final/neurips2025-3099.jpg",
-  "paper": "https://openreview.net/forum?id=MtwsRjPZhf",
-  "pdf_source": "https://openreview.net/pdf?id=MtwsRjPZhf",
-  "score": 56.5,
-  "w": 1007,
-  "h": 337,
-  "tier": "spotlight"
- },
- {
   "id": "neurips2025-3113",
   "venue": "neurips",
   "year": 2025,
@@ -75938,27 +74461,6 @@
   "w": 1010,
   "h": 615,
   "tier": "oral"
- },
- {
-  "id": "neurips2025-3249",
-  "venue": "neurips",
-  "year": 2025,
-  "title": "Adaptive Defense against Harmful Fine-Tuning for Large Language Models via Bayesian Data Scheduler",
-  "authors": [
-   "Zixuan Hu",
-   "Li Shen",
-   "Zhenyi Wang",
-   "Yongxian Wei",
-   "Dacheng Tao"
-  ],
-  "pattern": "conceptual",
-  "image": "images/neurips/final/neurips2025-3249.jpg",
-  "paper": "https://openreview.net/forum?id=sm2e1SnMK4",
-  "pdf_source": "https://openreview.net/pdf?id=sm2e1SnMK4",
-  "score": 21.6,
-  "w": 986,
-  "h": 235,
-  "tier": "spotlight"
  },
  {
   "id": "neurips2025-3252",

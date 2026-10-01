@@ -204,7 +204,7 @@
 
   /* ===== steps 2 & 3 share the step-1 box language ===== */
   /* The picker scrolls inside its own box: the page itself stays short, so
-     Step 3 is one flick away while all 3,516 figures remain browsable. */
+     Step 3 is one flick away while every figure remains browsable. */
   #gridBox{padding:13px;max-height:min(70vh,760px);overflow-y:auto;overscroll-behavior:contain;
     scrollbar-gutter:stable;scroll-behavior:auto}
   #gridBox .empty-note{padding:26px 0}
@@ -496,7 +496,7 @@
       <div class="step" style="margin-bottom:8px;font-size:13px" data-i18n="tut1"></div>
       <img src="tutorial/02_pick_refs.png?v=20261001c" data-i18n-aria="tut1" style="width:100%;border:1px solid var(--line);border-radius:11px">
       <div class="step" style="margin:16px 0 8px;font-size:13px" data-i18n="tut2"></div>
-      <img src="tutorial/compare.png?v=20261001" data-i18n-aria="tut2" style="width:100%;border:1px solid var(--line);border-radius:11px">
+      <img src="tutorial/compare.png?v=20261002" data-i18n-aria="tut2" style="width:100%;border:1px solid var(--line);border-radius:11px">
     </section>
   </div>
 </div>
@@ -514,7 +514,7 @@
 </div>
 
 <script src="./i18n.js"></script>
-<script src="./i18n_forge.js?v=20261001f"></script>
+<script src="./i18n_forge.js?v=20261001g"></script>
 <script type="module">
 import * as T from './vendor/transformers.min.js';
 
@@ -549,6 +549,12 @@ function contentModeText(mode){
 function refreshStepOneText(){
   if($('#contentModeHint').dataset.state!=='loading') $('#contentModeHint').textContent = contentModeText($('#contentMode').value);
   setExtractMeta(tt(lastMeta.k, lastMeta.v||{}), lastMeta.warn);
+  syncSubCount();
+}
+/* The header line quotes the gallery size, so take it from the loaded index. */
+function syncSubCount(){
+  const el=document.querySelector('[data-i18n="sub"]');
+  if(el && data.N) el.textContent = tt('sub',{n: data.N.toLocaleString()});
 }
 /* Step-1 helper: the endpoint line only matters for a relay / custom base URL. */
 function syncBaseHint(){
@@ -1767,6 +1773,7 @@ syncContentMode();
 /* ---------------- go ---------------- */
 await boot();
 initProviders();
+syncSubCount();
 await Promise.all([populateModels(), populateParserModels()]);
 $('#manifestHint').textContent = tt('manifest.hint',{d:MAN.updated});
 </script>
