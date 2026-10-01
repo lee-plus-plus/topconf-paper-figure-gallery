@@ -56,6 +56,8 @@
   .status-line[data-state="error"]::before{background:#dc2626}
   .meta-line{margin:7px 1px 0;font-size:11.5px;color:#64748b;overflow-wrap:anywhere}
   .meta-line.warn{color:#dc2626;font-weight:800}
+  .bnote.err{color:#b91c1c;background:#fef2f2;border:1px solid #fecaca;border-radius:9px;
+    padding:7px 10px;margin-top:8px;font-weight:600;font-size:11.5px}
   .pdf-upload-btn{display:inline-flex;align-items:center;gap:11px;padding:11px 19px 11px 12px;max-width:100%;
     border:1px solid #c4b5fd;border-radius:22px;background:linear-gradient(145deg,#8b5cf6,#4f46e5);color:#fff;
     box-shadow:0 6px 0 #3730a3,0 10px 22px #6366f133,inset 0 2px 0 #ffffff66;
@@ -332,6 +334,7 @@
           </div>
           <div class="status-line" id="contentModeHint" data-state="idle" data-i18n-title="hint.label" role="status" aria-live="polite"></div>
           <div class="meta-line warn" id="pdfExtractionMeta" data-i18n="meta.nopdf"></div>
+          <p class="bnote err" id="parseErr" hidden></p>
         </section>
       </div>
 
@@ -508,7 +511,7 @@
 </div>
 
 <script src="./i18n.js"></script>
-<script src="./i18n_forge.js?v=20261001c"></script>
+<script src="./i18n_forge.js?v=20261001d"></script>
 <script type="module">
 import * as T from './vendor/transformers.min.js';
 
@@ -932,18 +935,77 @@ function parseResponseText(d){
   return d?.choices?.[0]?.message?.content||'';
 }
 function pdfDataPart(){ return dataURIToParts(pdfContext.dataUri); }
+/* ---- local PDF text extraction (transport only: the model still picks and
+   summarises the sections; used when a provider refuses a document part) ---- */
+const MAX_PDF_CHARS = 60000;
+let pdfjsPromise = null;
+function loadPdfjs(){
+  if(window.pdfjsLib) return Promise.resolve(window.pdfjsLib);
+  if(pdfjsPromise) return pdfjsPromise;
+  pdfjsPromise = new Promise((resolve,reject)=>{
+    const s=document.createElement('script');
+    s.src='./vendor/pdf.min.js';
+    s.onload=()=>{
+      if(!window.pdfjsLib) return reject(new Error('pdf.js 加载失败'));
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc = new URL('./vendor/pdf.worker.min.js', document.baseURI).href;
+      resolve(window.pdfjsLib);
+    };
+    s.onerror=()=>reject(new Error('pdf.js 加载失败'));
+    document.head.appendChild(s);
+  });
+  return pdfjsPromise;
+}
+let pdfText = null;
+async function extractPdfText(){
+  if(pdfText && pdfText.name===pdfContext.fileName) return pdfText;
+  const lib = await loadPdfjs();
+  let bytes;
+  if(pdfContext.buf) bytes = new Uint8Array(pdfContext.buf);
+  else{
+    const part = pdfDataPart(); if(!part) throw new Error(tt('ps.nodata'));
+    const bin = atob(part.data); bytes = new Uint8Array(bin.length);
+    for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+  }
+  const doc = await lib.getDocument({data: bytes, isEvalSupported:false}).promise;
+  const pages = [];
+  for(let p=1;p<=doc.numPages;p++){
+    const page = await doc.getPage(p);
+    const tc = await page.getTextContent();
+    pages.push('【第 '+p+' 页】\n'+tc.items.map(i=>i.str).join(' '));
+  }
+  const text = pages.join('\n\n').replace(/[ \t]{2,}/g,' ').trim();
+  pdfText = {name:pdfContext.fileName, text, chars:text.length, pages:doc.numPages};
+  return pdfText;
+}
+function showParseErr(msg){ const el=$('#parseErr'); if(!el) return; el.innerHTML=esc(tt('ps.errline',{m:msg})); el.hidden=false; }
+function clearParseErr(){ const el=$('#parseErr'); if(el) el.hidden=true; }
 function extractJsonObject(txt){
   const clean=(txt||'').replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'').trim();
   const m=clean.match(/\{[\s\S]*\}/); if(!m) throw new Error('解析模型未返回 JSON');
   try{return JSON.parse(m[0]);}catch(e){throw new Error('解析模型返回的 JSON 无法读取');}
 }
-async function callPdfParser(){
+/* asText=true -> send locally extracted text as a normal chat message, which
+   every chat model accepts (Ark / Kimi / Qwen / GLM / DeepSeek / relays). */
+async function callPdfParser(asText, extracted){
   const c=cfg(), base=baseURL(), key=cleanKey($('#key').value), model=parserModel();
-  if(!base||!key||!model) throw new Error('请先在步骤一配置服务商、API Key 和论文解析模型');
-  const part=pdfDataPart(), instruction=parserInstruction($('#target').value,$('#contentQuery').value.trim());
-  if(!part) throw new Error('PDF 数据读取失败');
+  if(!base||!key||!model) throw new Error(tt('ps.nocfg'));
+  const instruction=parserInstruction($('#target').value,$('#contentQuery').value.trim());
+  const part=pdfDataPart();
+  if(!asText && !part) throw new Error(tt('ps.nodata'));
+  const textBody = ()=> instruction+'\n\n'+tt('ps.texthdr',{f:pdfContext.fileName,p:extracted.pages})+'\n'+
+    extracted.text.slice(0, MAX_PDF_CHARS);
   let r, body;
-  if(c.proto==='anthropic'){
+  if(asText && c.proto==='anthropic'){
+    body={model,max_tokens:5000,system:'只输出严格 JSON。',messages:[{role:'user',content:[{type:'text',text:textBody()}]}]};
+    r=await fetchWithTimeout(base+'/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01'},body:JSON.stringify(body)},120000);
+  }else if(asText && /openai\.com/i.test(base)){
+    body={model,input:[{role:'user',content:[{type:'input_text',text:textBody()}]}],max_output_tokens:5000};
+    r=await fetchWithTimeout(base+'/responses',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+key},body:JSON.stringify(body)},120000);
+  }else if(asText){
+    body={model,temperature:0.1,max_tokens:5000,messages:[{role:'system',content:'只输出严格 JSON。'},{role:'user',content:textBody()}]};
+    if($('#provider').value==='ark') body.thinking={type:'disabled'};
+    r=await postJSON(base,'/chat/completions',body,key);
+  }else if(c.proto==='anthropic'){
     body={model,max_tokens:5000,system:'只输出严格 JSON。',messages:[{role:'user',content:[{type:'document',source:{type:'base64',media_type:part.media||'application/pdf',data:part.data}},{type:'text',text:instruction}]}]};
     r=await fetchWithTimeout(base+'/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01'},body:JSON.stringify(body)},120000);
   }else if(c.proto==='oai' && /openai\.com/i.test(base)){
@@ -969,21 +1031,45 @@ function setParseStatus(state){
 }
 async function selectPdfContext(){
   if(!pdfContext || $('#contentMode').value==='free') return;
-  const seq=++pdfIntentSeq, mode=$('#contentMode').value;
+  const seq=++pdfIntentSeq;
   setParseStatus('loading');
+  clearParseErr();
   $('#contentModeHint').textContent=tt('ps.sending');
   setExtractMetaKey('ps.meta1', {m:parserModel()||'–'}, false);
   try{
-    const result=await callPdfParser(); if(seq!==pdfIntentSeq) return;
+    let result, mode='file';
+    try{
+      result = await callPdfParser(false);
+    }catch(eDoc){
+      if(seq!==pdfIntentSeq) return;
+      // Most providers other than OpenAI/Anthropic/relay gateways reject a
+      // document content part. Transport the text instead and let the very
+      // same model do the section picking.
+      setParseStatus('loading');
+      $('#contentModeHint').textContent=tt('ps.extracting');
+      setExtractMetaKey('ps.meta1b', {m:parserModel()||'–'}, false);
+      let ex;
+      try{ ex = await extractPdfText(); }
+      catch(eTxt){ throw new Error(tt('ps.nofallback',{a:eDoc.message,b:eTxt.message})); }
+      if(ex.chars < 200) throw new Error(tt('ps.scanned',{m:eDoc.message}));
+      result = await callPdfParser(true, ex);
+      mode='text';
+    }
+    if(seq!==pdfIntentSeq) return;
     renderPdfSummary(result);
     setParseStatus('success');
     $('#contentModeHint').textContent=tt('ps.done');
-    setExtractMetaKey('ps.meta2', {f:pdfContext.fileName,m:parserModel(),n:result.selectedSections.length}, false);
+    if(mode==='text'){
+      setExtractMetaKey('ps.meta2t', {f:pdfContext.fileName,m:parserModel(),n:result.selectedSections.length,c:(pdfText?pdfText.chars:0).toLocaleString()}, false);
+    }else{
+      setExtractMetaKey('ps.meta2', {f:pdfContext.fileName,m:parserModel(),n:result.selectedSections.length}, false);
+    }
   }catch(err){
     if(seq!==pdfIntentSeq) return;
     setParseStatus('error');
     $('#contentModeHint').textContent=tt('ps.fail');
     setExtractMetaKey('ps.meta3', null, true);
+    showParseErr(err.message);
     showErr(tt('err.pdfparse',{m:err.message}));
   }
 }
@@ -1004,10 +1090,12 @@ $('#pdfFile').onchange=async e=>{
   try{
     if(file.size>25*1024*1024) throw new Error(tt('up.size'));
     const dataUri=await fileToDataURI(file);
-    pdfContext={fileName:file.name,mime:file.type||'application/pdf',dataUri,size:file.size};
+    const buf=await file.arrayBuffer();
+    pdfContext={fileName:file.name,mime:file.type||'application/pdf',dataUri,buf,size:file.size};
+    pdfText=null;
     setExtractMetaKey('up.meta', {f:file.name,s:Math.round(file.size/1024)}, false);
     if($('#contentMode').value!=='free') await selectPdfContext();
-  }catch(err){ showErr(tt('up.fail',{m:err.message})); }
+  }catch(err){ showErr(tt('up.fail',{m:err.message})); showParseErr(tt('up.fail',{m:err.message})); }
   finally{ btn.disabled=false; btn.removeAttribute('aria-busy'); $('#uploadLabel').textContent=tt('upload'); e.target.value=''; }
 };
 
