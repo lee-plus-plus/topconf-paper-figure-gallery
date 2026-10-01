@@ -1010,12 +1010,16 @@ function extractJsonObject(txt){
   try{return JSON.parse(m[0]);}catch(e){throw new Error('解析模型返回的 JSON 无法读取');}
 }
 /* Which document channel does the selected provider/base URL really accept?
-   Only these three shapes are documented; everything else goes text/images. */
+   Providers with an OpenAI-compatible /responses route (verified to exist on
+   OpenAI, Ark, GLM and Qwen) may take the PDF natively through `input_file`;
+   Anthropic takes a `document` block; a relay/custom base takes the file part.
+   Everything else goes through locally extracted text or page images. */
+const RESPONSES_DOC = new Set(['oai','ark','glm','qwen']);
 function docMode(){
-  const c=cfg(), base=baseURL();
-  if($('#baseOverride').value.trim() || $('#provider').value==='custom') return 'oai_file';
-  if(c.proto==='anthropic') return 'anthropic';
-  if(c.proto==='oai' && /openai\.com/i.test(base)) return 'openai_responses';
+  const c=cfg(), base=baseURL(), p=$('#provider').value;
+  if($('#baseOverride').value.trim() || p==='custom') return 'oai_file';
+  if(c.proto==='anthropic') return modelSeesImages() ? 'anthropic' : 'none';
+  if((/openai\.com/i.test(base) || RESPONSES_DOC.has(p)) && modelSeesImages()) return 'openai_responses';
   return 'none';
 }
 /* Conservative capability check: the manifest lists text-only models in chat,
@@ -1072,13 +1076,15 @@ async function callPdfParser(mode, payload){
       r=await postJSON(base,'/chat/completions',body,key);
     }
   }else{
+    // Native document part — shape depends on what the endpoint accepts.
+    const dm=docMode();
     const part=pdfDataPart(); if(!part) throw new Error(tt('ps.nodata'));
-    if(c.proto==='anthropic'){
+    if(dm==='anthropic'){
       const blocks=[{type:'document',source:{type:'base64',media_type:part.media||'application/pdf',data:part.data}},
                     {type:'text',text:instruction}];
       body={model,max_tokens:5000,system:'只输出严格 JSON。',messages:[{role:'user',content:blocks}]};
       r=await fetchWithTimeout(base+'/v1/messages',{method:'POST',headers:anthropicHeaders(key),body:JSON.stringify(body)},180000);
-    }else if(/openai\.com/i.test(base)){
+    }else if(dm==='openai_responses'){
       body={model,input:[{role:'user',content:[{type:'input_file',filename:pdfContext.fileName,file_data:pdfContext.dataUri},{type:'input_text',text:instruction}]}],max_output_tokens:5000};
       r=await fetchWithTimeout(base+'/responses',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+key},body:JSON.stringify(body)},180000);
     }else{

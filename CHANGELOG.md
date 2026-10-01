@@ -4,6 +4,7 @@
 
 ## [Unreleased]
 
+- **方舟 / 智谱 / 通义走原生 PDF 直传**：实测这几家都提供 OpenAI 兼容的 `/responses` 端点（预检与鉴权行为已确认），因此视觉模型现在优先尝试把 PDF 作为 `input_file` 直传（和 OpenAI 同一通道），由服务商自己解析；接口不支持时自动退回本地文本 / 页面图像。纯文本模型不发起这次尝试。
 - **FigureForge 10 家服务商都能解析 PDF**：PDF 现在按三条通道依次尝试——① 服务商原生文档直传（OpenAI Responses `input_file` / Anthropic `document` / OpenAI 兼容中转的 `file`）；② 本地 PDF.js 提取正文后作为普通文本发送；③ 本地把 PDF 渲染成页面图像（视觉模型专用，扫描版也能读）。通道按服务商能力自动决定：火山方舟 / 硅基流动 / 智谱 / Kimi / 通义 / 混元 / DeepSeek 直接走文本通道，纯文本模型（如 DeepSeek）不会再浪费一次图像请求；定位章节与归纳始终由所选模型完成。三条通道都失败时，步骤一会逐条列出真实报错。
 - **Anthropic / 混元支持浏览器直连**：Anthropic 请求现在携带 `anthropic-dangerous-direct-browser-access` 头（实测 401 可读），混元的 CORS 预检与响应头实测同样正常，两家不再强制要求中转；清单里对应的 `cors` 标记已更正。
 - **修复 PDF.js 缓冲区被接管导致的二次提取失败**：pdf.js 会把传入的 ArrayBuffer 转移给 worker，文本提取之后再渲染页面会报 detached ArrayBuffer；现在每次提取都传入独立副本。
