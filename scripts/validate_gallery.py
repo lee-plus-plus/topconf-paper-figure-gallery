@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Validate the published gallery metadata and generated JavaScript index."""
+"""Validate the published gallery metadata and generated JavaScript index.
+
+Originally contributed by @TansyZenix (PR #8, "Validate gallery data in CI"); adopted
+into main by hand together with PR #5–#7, so this file carries that authorship record.
+"""
 
 import argparse
 import json
