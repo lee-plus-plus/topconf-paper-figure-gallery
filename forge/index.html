@@ -514,7 +514,7 @@
 </div>
 
 <script src="./i18n.js"></script>
-<script src="./i18n_forge.js?v=20261001g"></script>
+<script src="./i18n_forge.js?v=20261002"></script>
 <script type="module">
 import * as T from './vendor/transformers.min.js';
 
@@ -1480,16 +1480,30 @@ const SVG_SYS = 'You are a world-class scientific figure designer. Based on the 
 function showErr(msg){
   const box=$('#genErr'); box.hidden=false; box.innerHTML='<div>'+esc(msg)+'</div>';
 }
+/* Append the provider + endpoint so an error report identifies the account and API. */
+function apiContext(){
+  try{
+    const c = cfg();
+    return tt('err.ctx',{p:(c&&c.label)||$('#provider').value||'–', b:baseURL()||'–'});
+  }catch(e){ return ''; }
+}
 function friendlyHttp(status, txt){
-  let code='';
-  try{ code=JSON.parse(txt).error?.code||''; }catch{}
-  if(code==='AccountOverdueError') return tt('err.overdue');
-  if(status===401) return tt('err.401');
-  if(status===404) return tt('err.404');
-  if(status===429) return tt('err.429');
-  if(status===403) return tt('err.403',{t:txt.slice(0,200)});
-  if(status===400) return tt('err.400',{t:txt.slice(0,200)});
-  return tt('err.http',{s:status,t:txt.slice(0,200)});
+  let code='', body='';
+  try{ const d=JSON.parse(txt); code=d.error?.code||d.code||''; body=(d.error?.message||d.message||''); }catch{}
+  if(code==='AccountOverdueError' || /overdue|欠费|余额不足/i.test(txt)) return tt('err.overdue')+apiContext();
+  if(status===401) return tt('err.401')+apiContext();
+  if(status===404) return tt('err.404')+apiContext();
+  if(status===429) return tt('err.429')+apiContext();
+  if(status===403){
+    // SiliconFlow answers 403 {"code":30003,"message":"Model disabled."} when a model
+    // needs real-name verification or is switched off for the account; other providers
+    // say "no access to model" / "not enabled". Give the actionable wording.
+    if(String(code)==='30003' || /model disabled|not enabled|does not have access|no access to model|未开通|无权限/i.test(body||txt))
+      return tt('err.forbidden',{t:txt.slice(0,200)})+apiContext();
+    return tt('err.403',{t:txt.slice(0,200)})+apiContext();
+  }
+  if(status===400) return tt('err.400',{t:txt.slice(0,200)})+apiContext();
+  return tt('err.http',{s:status,t:txt.slice(0,200)})+apiContext();
 }
 function postJSON(base, path, body, key, extraHeaders, timeoutMs=300000){
   return fetchWithTimeout(base+path,{method:'POST',
