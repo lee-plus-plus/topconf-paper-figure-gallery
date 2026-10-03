@@ -58,6 +58,8 @@
   .meta-line.warn{color:#dc2626;font-weight:800}
   .bnote.err{color:#b91c1c;background:#fef2f2;border:1px solid #fecaca;border-radius:9px;
     padding:7px 10px;margin-top:8px;font-weight:600;font-size:11.5px}
+  .bnote.warn-inline{color:#92400e;background:#fffbeb;border:1px solid #fde68a;border-radius:9px;
+    padding:7px 10px;margin-top:8px;font-size:11.5px}
   .pdf-upload-btn{display:inline-flex;align-items:center;gap:11px;padding:11px 19px 11px 12px;max-width:100%;
     border:1px solid #c4b5fd;border-radius:22px;background:linear-gradient(145deg,#8b5cf6,#4f46e5);color:#fff;
     box-shadow:0 6px 0 #3730a3,0 10px 22px #6366f133,inset 0 2px 0 #ffffff66;
@@ -357,6 +359,7 @@
             <span class="blab" data-i18n="parsemodel"></span>
             <select id="parseModel"></select>
           </div>
+          <p class="bnote warn-inline" id="parseModelWarn" hidden></p>
           <div class="bfield" id="parseCustomModelRow" hidden>
             <span class="blab" data-i18n="parseid"></span>
             <input type="text" id="parseCustomModel" data-i18n-ph="parseidPh">
@@ -471,6 +474,7 @@
       <h4><span class="bi" aria-hidden="true">🎨</span><span data-i18n="box.model"></span><small data-i18n="settings.badge"></small></h4>
       <div class="srow" style="margin-top:0"><div class="tabs" id="modeTabs"><button data-mode="svg" class="on" data-i18n="mode.svg"></button><button data-mode="image" data-i18n="mode.image"></button></div></div>
       <div class="bfield" id="modelRow" style="margin-top:11px"><span class="blab" id="modelLabel" data-i18n="modelLabel"></span><select id="model"></select></div>
+      <p class="bnote warn-inline" id="modelWarn" hidden></p>
       <p class="bnote" id="pdfModelHint" data-i18n="hint.model"></p>
       <div class="bfield" id="analyzeModelRow" hidden style="margin-top:9px"><span class="blab" data-i18n="analyzemodel"></span><select id="analyzeModel"></select></div>
     </section>
@@ -514,7 +518,7 @@
 </div>
 
 <script src="./i18n.js"></script>
-<script src="./i18n_forge.js?v=20261002"></script>
+<script src="./i18n_forge.js?v=20261003"></script>
 <script type="module">
 import * as T from './vendor/transformers.min.js';
 
@@ -1250,11 +1254,25 @@ function baseURL(){
 const key_present = ()=>!!cleanKey($('#key').value);
 function fetchOnlineModels(){
   const key = cleanKey($('#key').value), base = baseURL(), c = cfg();
-  if(!key || !base || c.proto!=='oai') return Promise.resolve({ok:false,list:[]});
-  return fetch(base+'/models',{headers:{Authorization:'Bearer '+key}})
+  if(!key || !base) return Promise.resolve({ok:false,list:[]});
+  // Anthropic exposes GET /v1/models too (verified readable from the browser once the
+  // direct-browser header is present), so Claude users get a live list as well.
+  const url = c.proto==='anthropic' ? base+'/v1/models' : base+'/models';
+  const headers = c.proto==='anthropic' ? anthropicHeaders(key) : {'Authorization':'Bearer '+key};
+  return fetch(url,{headers})
     .then(r=>r.ok ? r.json() : Promise.reject(new Error('http '+r.status)))
     .then(d=>({ok:true,list:(d.data||d.models||[]).map(x=>x.id||x.model||x.name).filter(Boolean)}))
     .catch(()=>({ok:false,list:[]}));
+}
+/* Warn when the picked model is missing from the account's live list: on Ark / Hunyuan
+   the browser cannot query /models at all, so those providers skip this check. */
+const liveModels = { model:null, parser:null };
+function checkModelEnabled(selId, warnId, list){
+  const sel = $(selId), warn = $(warnId);
+  if(!sel || !warn) return;
+  const on = !!(list && list.length) && !!sel.value && !list.includes(sel.value);
+  warn.hidden = !on;
+  if(on) warn.textContent = tt('warn.notenabled',{m:sel.value});
 }
 function optgroup(label){
   const g=document.createElement('optgroup'); g.label=label; return g;
@@ -1286,6 +1304,8 @@ async function populateModels(){
   }
   const saved = localStorage.getItem('ff_model_'+p);
   if(saved && [...s.options].some(o=>o.value===saved)) s.value=saved;
+  liveModels.model = res.ok ? online : null;
+  checkModelEnabled('#model','#modelWarn',liveModels.model);
   if(mode==='image' && passMode==='two') populateAnalyzeModels();
 }
 async function populateParserModels(){
@@ -1303,6 +1323,8 @@ async function populateParserModels(){
   if(online.length){ const g=optgroup(tt('og.live')); [...new Set(online)].forEach(m=>g.appendChild(option(m))); s.appendChild(g); }
   const saved=localStorage.getItem('ff_parse_model_'+p);
   if(saved && [...s.options].some(o=>o.value===saved)) s.value=saved;
+  liveModels.parser = res.ok ? res.list : null;
+  checkModelEnabled('#parseModel','#parseModelWarn',liveModels.parser);
 }
 async function populateAnalyzeModels(){
   const c=cfg(), s=$('#analyzeModel'); s.innerHTML='';
@@ -1492,7 +1514,16 @@ function friendlyHttp(status, txt){
   try{ const d=JSON.parse(txt); code=d.error?.code||d.code||''; body=(d.error?.message||d.message||''); }catch{}
   if(code==='AccountOverdueError' || /overdue|欠费|余额不足/i.test(txt)) return tt('err.overdue')+apiContext();
   if(status===401) return tt('err.401')+apiContext();
-  if(status===404) return tt('err.404')+apiContext();
+  if(status===404){
+    // Ark (and Hunyuan) cannot be listed from the browser, so a wrong pick can only be
+    // discovered here: Ark answers 404 ModelNotOpen until the model is activated in the
+    // console — spell that out instead of a bare "not found".
+    if($('#provider').value==='ark' || /ModelNotOpen/i.test(txt))
+      return tt('err.notopen',{t:txt.slice(0,160)})+apiContext();
+    if(/not activated|is not open|未开通|not enabled/i.test(txt))
+      return tt('err.notenabled',{t:txt.slice(0,160)})+apiContext();
+    return tt('err.404')+apiContext();
+  }
   if(status===429) return tt('err.429')+apiContext();
   if(status===403){
     // SiliconFlow answers 403 {"code":30003,"message":"Model disabled."} when a model
