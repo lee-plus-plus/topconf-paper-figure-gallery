@@ -27,32 +27,36 @@
   /* ---------- i18n: dynamic labels ---------- */
   GAL_I18N.register({
     en: {
+      "layout.columns": "Columns",
+      "brand.description": "Figure inspiration from top conferences",
+      "layout.display": "Display", "layout.full": "Images and text", "layout.images": "Images only",
+      "count.base": "<b>{n}</b> / {m} figures",
       "chip.all": "All",
       "pat.teaser": "Teaser", "pat.conceptual": "Conceptual", "pat.framework": "Framework",
       "pat.pipeline": "Pipeline", "pat.architecture": "Architecture",
       "pat.taxonomy": "Taxonomy / Benchmark", "pat.results": "Results", "pat.comparison": "Comparison",
       "tier.best": "Best Paper", "tier.oral": "Oral", "tier.spotlight": "Spotlight",
       "rib.best": "★ Best Paper", "rib.honor": "Honorable Mention",
-      "rib.oral": "● Oral", "rib.spot": "● Spotlight",
-      "card.viewImage": "View image", "card.paper": "paper ↗",
+      "rib.oral": "Oral", "rib.spot": "Spotlight",
+      "card.viewImage": "Details", "card.openImage": "Image ↗", "card.paper": "paper ↗",
       "card.aria": "View {t}",
       "end": "— End · {n} figures —",
-      "count.full": "<b>{n}</b> figures · {active}",
-      "count.base": "<b>{n}</b> / {m} figures",
     },
     zh: {
+      "layout.columns": "列数",
+      "brand.description": "顶会论文主图灵感画廊",
+      "layout.display": "展示信息", "layout.full": "图片和文字", "layout.images": "仅图片",
+      "count.base": "<b>{n}</b> / {m} 张",
       "chip.all": "全部",
       "pat.teaser": "主视觉", "pat.conceptual": "概念图", "pat.framework": "框架总览",
       "pat.pipeline": "流程图", "pat.architecture": "架构图",
       "pat.taxonomy": "全景 / 基准", "pat.results": "结果", "pat.comparison": "对比",
       "tier.best": "最佳论文", "tier.oral": "口头报告", "tier.spotlight": "焦点论文",
       "rib.best": "★ 最佳论文", "rib.honor": "荣誉提名",
-      "rib.oral": "● 口头报告", "rib.spot": "● 焦点论文",
-      "card.viewImage": "查看图片", "card.paper": "论文 ↗",
+      "rib.oral": "口头报告", "rib.spot": "焦点论文",
+      "card.viewImage": "详情", "card.openImage": "图片 ↗", "card.paper": "论文 ↗",
       "card.aria": "查看 {t}",
       "end": "— 已加载全部 · 共 {n} 张 —",
-      "count.full": "<b>{n}</b> 张 · {active}",
-      "count.base": "<b>{n}</b> / {m} 张",
     },
   });
   const patLabel = (p) => GAL_I18N.t("pat." + p);
@@ -65,50 +69,37 @@
 
   const $ = (s) => document.querySelector(s);
   const gallery = $("#gallery");
+  const countEl = $("#result-count");
+  $("#display-mode").addEventListener("change", (e) => {
+    gallery.classList.toggle("images-only", e.target.value === "images");
+  });
   const empty = $("#empty");
+  $("#column-count").addEventListener("change", (e) => {
+    const columns = Number(e.target.value);
+    if ([2, 3, 4, 5].includes(columns)) gallery.style.setProperty("--gallery-columns", columns);
+  });
   const sentinel = $("#sentinel");
   const endHint = $("#end-hint");
-  const countEl = $("#result-count");
-  $("#total-figures").textContent = figures.length.toLocaleString();
   const nBest = figures.filter((f) => f.award).length;
   const nOral = figures.filter((f) => (f.award ? false : f.tier === "oral")).length;
   const nSpot = figures.filter((f) => (!f.award && f.tier === "spotlight")).length;
-  $("#total-best").textContent = nBest.toLocaleString();
-  $("#total-oral").textContent = nOral.toLocaleString();
-  $("#total-spotlight").textContent = nSpot.toLocaleString();
 
-  /* ---------- filter chips ---------- */
-  const chipBoxes = [];
-  function chipText(btn, counts) {
-    const label = btn.dataset.lk ? GAL_I18N.t(btn.dataset.lk) : btn.dataset.static;
-    // No count on the “All” chip: counts["all"] is undefined and used to render
-    // a bogus “0” next to it.
-    const n = counts ? counts[btn.dataset.val] : null;
-    return label + (n ? ` <span class="n">${n}</span>` : "");
-  }
-  function makeChips(containerId, key, values, labelKeyFor, counts) {
+  /* ---------- filter dropdowns ---------- */
+  const filterBoxes = [];
+  function makeFilter(containerId, key, values, labelKeyFor, counts) {
     const box = $(containerId);
-    const all = document.createElement("button");
-    all.className = "chip active";
-    all.dataset.lk = "chip.all";
-    all.dataset.val = "all";
-    box.appendChild(all);
-    values.forEach((v) => {
-      const c = document.createElement("button");
-      c.className = "chip";
-      c.dataset.val = v;
-      const lk = labelKeyFor(v);
-      if (lk && lk.startsWith("static:")) c.dataset.static = lk.slice(7);
-      else if (lk) c.dataset.lk = lk;
-      else c.dataset.static = String(v);
-      box.appendChild(c);
+    ["all", ...values].forEach((v) => {
+      const option = document.createElement("option");
+      option.value = String(v);
+      const lk = v === "all" ? "chip.all" : labelKeyFor(v);
+      if (lk && lk.startsWith("static:")) option.dataset.static = lk.slice(7);
+      else if (lk) option.dataset.lk = lk;
+      else option.dataset.static = String(v);
+      box.appendChild(option);
     });
-    chipBoxes.push({ box, counts });
-    box.addEventListener("click", (e) => {
-      const btn = e.target.closest(".chip");
-      if (!btn) return;
-      state[key] = btn.dataset.val;
-      box.querySelectorAll(".chip").forEach((x) => x.classList.toggle("active", x === btn));
+    filterBoxes.push({ box, key, counts });
+    box.addEventListener("change", () => {
+      state[key] = box.value;
       render();
     });
   }
@@ -116,21 +107,23 @@
   const years = [...new Set(figures.map((f) => f.year))].sort();
   const usedPatterns = PATTERN_ORDER.filter((p) => figures.some((f) => f.pattern === p));
 
-  makeChips("#venue-chips", "venue", Object.keys(VENUES), (v) => "static:" + VENUES[v].name,
+  makeFilter("#venue-filter", "venue", Object.keys(VENUES), (v) => "static:" + VENUES[v].name,
     Object.fromEntries(Object.keys(VENUES).map((v) => [v, figures.filter((f) => f.venue === v).length])));
-  makeChips("#year-chips", "year", years, () => null);
-  makeChips("#tier-chips", "tier", ["best", "oral", "spotlight"], (v) => "tier." + v,
+  makeFilter("#year-filter", "year", years, () => null);
+  makeFilter("#tier-filter", "tier", ["best", "oral", "spotlight"], (v) => "tier." + v,
     { best: nBest, oral: nOral, spotlight: nSpot });
-  makeChips("#pattern-chips", "pattern", usedPatterns, (v) => "pat." + v);
+  makeFilter("#pattern-filter", "pattern", usedPatterns, (v) => "pat." + v);
 
-  function relabelChips() {
-    chipBoxes.forEach(({ box, counts }) => {
-      box.querySelectorAll(".chip").forEach((btn) => { btn.innerHTML = chipText(btn, counts); });
+  function relabelFilters() {
+    filterBoxes.forEach(({ box, counts }) => {
+      [...box.options].forEach((option) => {
+        const label = option.dataset.lk ? GAL_I18N.t(option.dataset.lk) : option.dataset.static;
+        const n = counts?.[option.value];
+        option.textContent = label + (n ? ` (${n})` : "");
+      });
     });
   }
-  // Chips are built empty above; without this first pass they stay blank until
-  // the visitor happens to switch language (langchange calls relabelChips).
-  relabelChips();
+  relabelFilters();
 
   /* ---------- search ---------- */
   const searchInput = $("#search");
@@ -151,9 +144,7 @@
   $("#reset-all").addEventListener("click", () => {
     state.venue = state.year = state.tier = state.pattern = "all"; state.q = "";
     searchInput.value = ""; clearBtn.hidden = true;
-    document.querySelectorAll(".chips").forEach((b) => {
-      b.querySelectorAll(".chip").forEach((c) => c.classList.toggle("active", c.dataset.val === "all"));
-    });
+    filterBoxes.forEach(({ box }) => { box.value = "all"; });
     render();
   });
 
@@ -204,28 +195,27 @@
   }
   function ribbonHtml(f) {
     const info = ribbonInfo(f);
-    return info ? `<span class="ribbon ${info.className}">${GAL_I18N.t(info.key)}</span>` : "";
+    return info ? `<span class="badge tier-badge ${info.className}">${GAL_I18N.t(info.key)}</span>` : "";
   }
   function cardHtml(f, idx) {
     const ratio = (f.w && f.h) ? `aspect-ratio:${f.w} / ${f.h};` : "min-height:170px;";
     const eager = idx < 24;
     const imgAttrs = eager ? `src="${f.image}"` : `data-src="${f.image}"`;
     return `
-    <article class="card${f.award ? " is-award" : f.tier ? " is-" + f.tier : ""}" data-id="${f.id}" tabindex="0" role="button" aria-label="${GAL_I18N.t("card.aria", { t: escapeHtml(f.title) })}">
-      <span class="card-close-target" aria-hidden="true"></span>
-      <div class="img-slot" style="${ratio}">
-        ${ribbonHtml(f)}
+    <article class="card${f.award ? " is-award" : f.tier ? " is-" + f.tier : ""}" data-id="${f.id}">
+      <button type="button" class="img-slot" style="${ratio}" aria-label="${GAL_I18N.t("card.aria", { t: escapeHtml(f.title) })}">
         <img class="card-img${eager ? " loaded" : ""}" ${imgAttrs} alt="${escapeHtml(f.title)} Figure 1" decoding="async">
-      </div>
+      </button>
       <div class="card-body">
         <div class="card-badges">
-          <span class="badge ${f.venue}">${VENUES[f.venue].name}</span>
-          <span class="badge year">${f.year}</span>
-          <span class="badge pattern">${patLabel(f.pattern)}</span>
+          <span class="card-meta-text">${VENUES[f.venue].name}</span>
+          <span class="card-meta-text">${f.year}</span>
+          <span class="card-meta-text">${patLabel(f.pattern)}</span>
+          ${ribbonHtml(f)}
         </div>
         <h3 class="card-title">${escapeHtml(f.title)}</h3>
         <p class="card-authors">${escapeHtml(authorsText(f))}</p>
-        <span class="card-link"><span class="card-link-image">${GAL_I18N.t("card.viewImage")}</span><span class="card-link-separator">/</span><span class="card-link-paper">${GAL_I18N.t("card.paper")}</span></span>
+        <span class="card-link"><button class="card-link-image" type="button" aria-label="${GAL_I18N.t("card.aria", { t: escapeHtml(f.title) })}">${GAL_I18N.t("card.viewImage")}</button><span class="card-link-separator">/</span><a class="card-link-open" href="${escapeHtml(f.image)}" target="_blank" rel="noopener noreferrer">${GAL_I18N.t("card.openImage")}</a>${f.paper ? `<span class="card-link-separator">/</span><a class="card-link-paper" href="${escapeHtml(f.paper)}" target="_blank" rel="noopener noreferrer">${GAL_I18N.t("card.paper")}</a>` : ""}</span>
       </div>
     </article>`;
   }
@@ -302,15 +292,10 @@
     shown = 0;
     empty.hidden = filtered.length > 0;
     appendChunk();
-    const active = [
-      state.venue !== "all" ? VENUES[state.venue].name : null,
-      state.year !== "all" ? state.year : null,
-      state.tier !== "all" ? tierLabel(state.tier) : null,
-      state.pattern !== "all" ? patLabel(state.pattern) : null,
-    ].filter(Boolean);
-    countEl.innerHTML = active.length
-      ? GAL_I18N.t("count.full", { n: filtered.length.toLocaleString(), active: active.map(escapeHtml).join(" · ") })
-      : GAL_I18N.t("count.base", { n: filtered.length.toLocaleString(), m: figures.length.toLocaleString() });
+    countEl.innerHTML = GAL_I18N.t("count.base", {
+      n: filtered.length.toLocaleString(), m: figures.length.toLocaleString(),
+    });
+
   }
 
   if ("IntersectionObserver" in window) {
@@ -446,10 +431,6 @@
     $("#lb-year").textContent = f.year;
     const pBadge = $("#lb-pattern");
     pBadge.textContent = patLabel(f.pattern);
-    const ribbonTarget = $("#lb-ribbon-target");
-    const ribbon = ribbonInfo(f);
-    ribbonTarget.textContent = ribbon ? GAL_I18N.t(ribbon.key) : "";
-    ribbonTarget.className = `ribbon ribbon-target${ribbon ? " " + ribbon.className : ""}`;
     $("#lb-title").textContent = f.title;
     $("#lb-authors").textContent = (f.authors || []).join(", ");
     $("#lb-paper").href = f.paper || "#";
@@ -599,7 +580,7 @@
     if (lightboxBusy || lb.hidden) return;
     lightboxBusy = true;
     const targetCard = cardFor(currentId);
-    const returnFocus = targetCard || opener;
+    const returnFocus = targetCard?.querySelector(gallery.classList.contains("images-only") ? ".img-slot" : ".card-link-image") || opener;
 
     try {
       await transitionLightbox(() => {
@@ -622,14 +603,7 @@
 
   /* ---------- URL -> UI ---------- */
   function syncUiFromState() {
-    const keyByBox = { "venue-chips": "venue", "year-chips": "year", "tier-chips": "tier", "pattern-chips": "pattern" };
-    document.querySelectorAll(".chips").forEach((box) => {
-      const key = keyByBox[box.id];
-      if (!key) return;
-      box.querySelectorAll(".chip").forEach((chip) => {
-        chip.classList.toggle("active", chip.dataset.val === state[key]);
-      });
-    });
+    filterBoxes.forEach(({ box, key }) => { box.value = state[key]; });
     searchInput.value = state.q;
     clearBtn.hidden = !state.q;
     $("#sort").value = state.sort;
@@ -720,16 +694,12 @@
   window.addEventListener("hashchange", handleUrlChange);
 
   gallery.addEventListener("click", (e) => {
+    if (!e.target.closest(".img-slot, .card-link-image")) return;
     const card = e.target.closest(".card");
     if (card) {
       const f = figures.find((x) => x.id === card.dataset.id);
       if (f) openFigure(f, card);
     }
-  });
-  gallery.addEventListener("keydown", (e) => {
-    if (e.key !== "Enter" && e.key !== " ") return;
-    const card = e.target.closest(".card");
-    if (card) { e.preventDefault(); const f = figures.find((x) => x.id === card.dataset.id); if (f) openFigure(f, card); }
   });
   lbClose.addEventListener("click", closeLb);
   lbImg.addEventListener("load", () => {
@@ -764,7 +734,7 @@
   });
   document.addEventListener("langchange", () => {
     syncToggle();
-    relabelChips();
+    relabelFilters();
     if (!lb.hidden && currentId) {
       const f = figures.find((x) => x.id === currentId);
       if (f) setFigureContent(f);
