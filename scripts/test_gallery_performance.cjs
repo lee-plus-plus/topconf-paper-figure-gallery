@@ -38,21 +38,39 @@ const server = http.createServer((req, res) => {
         return add.call(this, type, ...args);
       };
       window.transitionTimings = [];
+      window.viewTransitionCalls = 0;
       if (document.startViewTransition) {
         const start = document.startViewTransition.bind(document);
-        document.startViewTransition = update => start(async () => {
+        document.startViewTransition = update => {
+          window.viewTransitionCalls++;
+          return start(async () => {
           const t = performance.now();
           await update();
           window.transitionTimings.push(performance.now() - t);
-        });
+          });
+        };
       }
     });
     const url = `http://127.0.0.1:${server.address().port}`;
     await page.goto(url);
     await page.waitForFunction(() => document.querySelector('.card-img').naturalWidth > 0);
-    await page.locator('.card').first().click();
+    const opening = await page.evaluate(() => {
+      document.querySelector('.card').click();
+      return {
+        visible: !document.querySelector('#lightbox').hidden,
+        effects: document.querySelector('#lightbox').getAnimations({ subtree: true })
+          .map(animation => animation.effect.getKeyframes().map(frame => Object.keys(frame))),
+      };
+    });
+    if (!baseline) {
+      assert.equal(opening.visible, true, 'Opening must show the preview synchronously, without decode waits');
+      assert.equal(opening.effects.length, 2, 'Only the dialog and backdrop should animate');
+      const allowed = new Set(['offset', 'computedOffset', 'easing', 'composite', 'transform', 'opacity']);
+      assert.ok(opening.effects.flat(2).every(key => allowed.has(key)), 'Opening must not animate layout or paint properties');
+    }
     await page.waitForFunction(() => !document.querySelector('#lightbox').hidden && !document.documentElement.dataset.figureTransition);
     assert.equal(await page.evaluate(() => document.activeElement.id), 'lb-close');
+    if (!baseline) assert.equal(await page.evaluate(() => document.querySelector('#lightbox').getAnimations({ subtree: true }).length), 0);
 
     // Simulate a slow decoder independently of network/cache speed.
     await page.evaluate(() => {
@@ -119,6 +137,18 @@ const server = http.createServer((req, res) => {
     assert.equal(await page.evaluate(() => document.documentElement.dataset.figureTransition), undefined);
     await page.keyboard.press('Escape');
     await page.waitForFunction(() => document.querySelector('#lightbox').hidden);
+    if (!baseline) {
+      await page.emulateMedia({ reducedMotion: 'no-preference' });
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.locator('.card').first().click();
+      await page.waitForFunction(() => !document.documentElement.dataset.figureTransition);
+      const rect = await page.locator('.lightbox-dialog').boundingBox();
+      assert.ok(rect.x >= 0 && rect.x + rect.width <= 391, 'Mobile dialog must fit the screen');
+      assert.equal(await page.evaluate(() => document.querySelector('#lightbox').getAnimations({ subtree: true }).length), 0);
+      await page.keyboard.press('Escape');
+      await page.waitForFunction(() => document.querySelector('#lightbox').hidden && !document.documentElement.dataset.figureTransition);
+      assert.equal(await page.evaluate(() => window.viewTransitionCalls), 0, 'Lightbox must not capture document snapshots');
+    }
     assert.deepEqual(errors, []);
     console.log('PASS: open, next/prev, slow/hung decode, close, infinite scroll, shared URL, Back, reduced motion');
   } finally {
