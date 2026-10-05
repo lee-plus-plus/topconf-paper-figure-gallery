@@ -1,7 +1,7 @@
-/* ===== Shared i18n core for gallery & FigureForge =====
+/* ===== Gallery i18n core =====
  * Usage: GAL_I18N.register({en:{...},zh:{...}}) once per page;
  * tag static nodes with data-i18n / data-i18n-html / data-i18n-ph / data-i18n-aria.
- * Preference is shared across gallery and forge via localStorage key "figgal.lang".
+ * Preference is saved via localStorage key "figgal.lang".
  */
 (function () {
   "use strict";

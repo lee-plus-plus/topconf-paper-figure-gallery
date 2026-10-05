@@ -9,7 +9,7 @@ value, so those entries get flagged here and removed from every index.
 How it decides
 --------------
 1. Semantic signal (primary): every published figure already has a CLIP ViT-B/32 image
-   embedding (``forge/data/image_emb.bin``). ``scripts/chart_prompts.json`` freezes the
+   embedding (``data/chart_filter/image_emb.bin``). ``scripts/chart_prompts.json`` freezes the
    text vectors for five "plain plot" prompts and four "hand-drawn paper figure" prompts,
    so the margin ``max(sim_chart) - max(sim_figure)`` can be computed without a browser.
 2. Visual signal (secondary, needs Pillow): plots are mostly white, are drawn with thin
@@ -40,8 +40,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PROMPTS = ROOT / "scripts" / "chart_prompts.json"
-IDS = ROOT / "forge" / "data" / "ids.json"
-EMB = ROOT / "forge" / "data" / "image_emb.bin"
+IDS = ROOT / "data" / "chart_filter" / "ids.json"
+EMB = ROOT / "data" / "chart_filter" / "image_emb.bin"
 FIGURES = ROOT / "data" / "figures.json"
 DIM = 512
 FLAG = 0.045

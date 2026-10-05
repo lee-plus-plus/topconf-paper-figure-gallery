@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+- **移除 FigureForge**：删除绘图工具、首页入口、专用模型与演示资源；离线图表筛查所需的 ID 和图像向量迁移到 `data/chart_filter/`，画廊浏览与数据维护流程保留。以下旧版本条目仅记录历史功能。
+
 - **模型「未开通 / 未找到」故障排查与提示修复（10 家逐一实测）**：
   - **Claude 现在会实时拉取可用模型**：Anthropic 同样提供 `GET /v1/models`（实测带 `anthropic-dangerous-direct-browser-access` 头后浏览器 401 可读），但旧代码对非 OpenAI 协议的 provider 直接跳过，Claude 用户只能看到托管清单、选到未开通的模型也无从判断。现已支持。
   - **方舟 404 给出专门指引**：方舟对"账号未开通该模型"返回 `404 ModelNotOpen`（[错误示例](https://bbs.pyvideotrans.com/show/3982)），此前只显示通用的"未找到该模型"。现在明确提示到方舟控制台「开通」该模型、或从「你的账号已开通」分组重选，并说明方舟模型列表接口不支持浏览器查询。
