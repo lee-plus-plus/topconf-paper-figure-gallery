@@ -196,17 +196,13 @@ h1 { margin: 0; font-size: 20px; letter-spacing: .2px; font-weight: 800; }
   opacity: 0; pointer-events: none;
 }
 
-/* image slot: reserved aspect ratio + shimmer while loading */
+/* Static placeholders avoid repainting every unloaded card on every frame. */
 .img-slot {
   position: relative; width: 100%;
-  background:
-    linear-gradient(100deg, #eef1f7 30%, #f7f9fc 45%, #eef1f7 60%);
-  background-size: 220% 100%;
-  animation: tc-shimmer 1.5s linear infinite;
+  background: #eef1f7;
   border-bottom: 1px solid var(--line);
   overflow: hidden;
 }
-@keyframes tc-shimmer { to { background-position: -120% 0; } }
 .card-img {
   width: 100%; display: block; position: absolute; inset: 0;
   opacity: 0; transition: opacity .35s ease;
@@ -347,6 +343,7 @@ h1 { margin: 0; font-size: 20px; letter-spacing: .2px; font-weight: 800; }
 .lightbox-nav.next { right: 18px; }
 
 /* ---------- Shared-element lightbox transition ---------- */
+/* Keep snapshot shadows/radii static: interpolating them repaints large surfaces. */
 html[data-figure-transition="opening"] .lightbox-backdrop,
 html[data-figure-transition="closing"] .lightbox-backdrop {
   view-transition-name: gallery-lightbox-backdrop;
@@ -377,16 +374,12 @@ html[data-figure-transition] #lb-next {
 }
 html[data-figure-transition="opening"]::view-transition-group(gallery-card-shell) {
   animation-name:
-    -ua-view-transition-group-anim-gallery-card-shell,
-    gallery-shell-shadow-opening,
-    gallery-shell-radius-opening;
+    -ua-view-transition-group-anim-gallery-card-shell;
 }
 html[data-figure-transition="closing"]::view-transition-group(gallery-card-shell) {
   border-radius: var(--radius);
   animation-name:
-    -ua-view-transition-group-anim-gallery-card-shell,
-    gallery-shell-shadow-closing,
-    gallery-shell-radius-closing;
+    -ua-view-transition-group-anim-gallery-card-shell;
 }
 ::view-transition-image-pair(gallery-card-shell) {
   isolation: isolate;
@@ -426,14 +419,12 @@ html[data-figure-transition="closing"]::view-transition-group(gallery-card-shell
 }
 html[data-figure-transition="opening"]::view-transition-group(gallery-card-image) {
   animation-name:
-    -ua-view-transition-group-anim-gallery-card-image,
-    gallery-image-radius-opening;
+    -ua-view-transition-group-anim-gallery-card-image;
 }
 html[data-figure-transition="closing"]::view-transition-group(gallery-card-image) {
   border-radius: var(--radius) var(--radius) 0 0;
   animation-name:
-    -ua-view-transition-group-anim-gallery-card-image,
-    gallery-image-radius-closing;
+    -ua-view-transition-group-anim-gallery-card-image;
 }
 ::view-transition-old(gallery-card-image),
 ::view-transition-new(gallery-card-image) {
@@ -635,30 +626,6 @@ html[data-figure-transition^="switch-"]::view-transition-new(gallery-lightbox-ne
 @keyframes gallery-shell-new {
   0%, 38% { opacity: 0; }
   68%, 100% { opacity: 1; }
-}
-@keyframes gallery-shell-shadow-opening {
-  from { box-shadow: var(--shadow-hover); }
-  to { box-shadow: 0 40px 90px -20px rgba(0, 0, 0, .5); }
-}
-@keyframes gallery-shell-shadow-closing {
-  from { box-shadow: 0 40px 90px -20px rgba(0, 0, 0, .5); }
-  to { box-shadow: var(--shadow); }
-}
-@keyframes gallery-shell-radius-opening {
-  from { border-radius: var(--radius); }
-  to { border-radius: 18px; }
-}
-@keyframes gallery-shell-radius-closing {
-  from { border-radius: 18px; }
-  to { border-radius: var(--radius); }
-}
-@keyframes gallery-image-radius-opening {
-  from { border-radius: var(--radius) var(--radius) 0 0; }
-  to { border-radius: 8px; }
-}
-@keyframes gallery-image-radius-closing {
-  from { border-radius: 8px; }
-  to { border-radius: var(--radius) var(--radius) 0 0; }
 }
 @keyframes gallery-part-old {
   0%, 24% { opacity: 1; }

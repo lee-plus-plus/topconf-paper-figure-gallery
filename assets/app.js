@@ -232,7 +232,10 @@
 
   /* ---------- custom lazy loading (preloads ~2 screens ahead) ---------- */
   let lazyIO = null;
+  const wiredImages = new WeakSet();
   function wireImg(img) {
+    if (wiredImages.has(img)) return;
+    wiredImages.add(img);
     const slot = img.parentElement;
     function markLoaded() { img.classList.add("loaded"); slot.classList.add("loaded"); }
     if (img.complete && img.naturalWidth > 0) { markLoaded(); return; }
@@ -269,21 +272,15 @@
       img.src = img.dataset.src;
     }
   }
-  function wireNewCards() {
-    gallery.querySelectorAll(".card-img").forEach(wireImg);
-  }
-
   function appendChunk() {
     const slice = filtered.slice(shown, shown + PAGE);
-    gallery.insertAdjacentHTML("beforeend", slice.map((f, i) => cardHtml(f, shown + i)).join(""));
-    wireNewCards();
-    // CSS masonry can place newly appended cards ABOVE the current viewport
-    // (columns fill top-down); start those requests immediately instead of
-    // waiting for an intersection that will never happen.
-    gallery.querySelectorAll(".card-img[data-src]").forEach((im) => {
-      const r = im.getBoundingClientRect();
-      if (r.top < window.innerHeight + 1800) im.src = im.dataset.src;
-    });
+    const template = document.createElement("template");
+    template.innerHTML = slice.map((f, i) => cardHtml(f, shown + i)).join("");
+    const newImages = template.content.querySelectorAll(".card-img");
+    gallery.appendChild(template.content);
+    newImages.forEach(wireImg);
+    // IntersectionObserver also detects cards moved into view by column reflow.
+    // Do not rescan old cards or alternate geometry reads with src writes here.
     shown += slice.length;
     if (shown >= filtered.length) {
       sentinel.hidden = true;
@@ -300,6 +297,7 @@
     // Filter/sort/search changes rewrite the query only; the figure hash, if the
     // lightbox happens to be open, is carried through untouched.
     writeUrl("replaceState", location.hash);
+    if (lazyIO) lazyIO.disconnect();
     gallery.innerHTML = "";
     shown = 0;
     empty.hidden = filtered.length > 0;
@@ -491,9 +489,21 @@
     return typeof document.startViewTransition === "function" && !reducedMotion.matches;
   }
 
-  async function decodeLightboxImage() {
-    if (typeof lbImg.decode !== "function") return;
-    try { await lbImg.decode(); } catch (_) { /* Keep the existing image error behavior. */ }
+  async function prepareLightboxImage(f) {
+    // Decode before snapshot capture, without changing the currently visible image.
+    // A slow/failed request must never freeze rendering or lock navigation.
+    const image = new Image();
+    image.src = f.image;
+    if (typeof image.decode !== "function") return false;
+    let timer;
+    try {
+      return await Promise.race([
+        image.decode().then(() => true, () => false),
+        new Promise((resolve) => { timer = setTimeout(() => resolve(false), 200); }),
+      ]);
+    } finally {
+      clearTimeout(timer);
+    }
   }
 
   function componentPairs(card, direction) {
@@ -548,9 +558,9 @@
   }
 
   async function transitionLightbox(update, options) {
-    const { pairs = [], direction } = options;
-    if (!canTransition()) {
-      await update();
+    const { pairs = [], direction, animate = true } = options;
+    if (!animate || !canTransition()) {
+      update();
       return;
     }
 
@@ -590,12 +600,12 @@
     });
 
     try {
-      transition = document.startViewTransition(async () => {
+      transition = document.startViewTransition(() => {
         activePairs.forEach(({ source }) => {
           if (source) source.style.viewTransitionName = "";
         });
         updated = true;
-        await update();
+        update();
         activePairs.forEach(({ destination, name }) => {
           if (destination) destination.style.viewTransitionName = name;
         });
@@ -625,7 +635,7 @@
       });
       await transition.finished;
     } catch (_) {
-      if (!updated) await update();
+      if (!updated) update();
     } finally {
       activePairs.forEach(({ source, destination }) => {
         if (source) source.style.viewTransitionName = "";
@@ -654,10 +664,9 @@
     lightboxBusy = true;
     opener = card || document.activeElement;
     lbDialog.style.height = "";
-    setFigureContent(f);
-    await decodeLightboxImage();
-
     try {
+      const imageReady = await prepareLightboxImage(f);
+      setFigureContent(f);
       await transitionLightbox(() => {
         lb.hidden = false;
         document.body.style.overflow = "hidden";
@@ -666,6 +675,7 @@
       }, {
         pairs: componentPairs(card, "opening"),
         direction: "opening",
+        animate: imageReady,
       });
       lbClose.focus({ preventScroll: true });
     } finally {
@@ -687,12 +697,15 @@
       lbDialog.style.height = `${lbDialog.getBoundingClientRect().height}px`;
     }
     try {
-      await transitionLightbox(async () => {
+      const imageReady = await prepareLightboxImage(filtered[j]);
+      await transitionLightbox(() => {
         setFigureContent(filtered[j]);
-        await decodeLightboxImage();
+        positionLightboxNav();
+        positionLightboxSeparator();
       }, {
         pairs: [{ source: lbContent, destination: lbContent, name: transitionParts.swap }],
         direction: d > 0 ? "switch-next" : "switch-prev",
+        animate: imageReady,
       });
     } finally {
       lightboxBusy = false;
@@ -767,7 +780,8 @@
       const openF = filtered.find((x) => x.id === id);
       if (openF) {
         setFigureContent(openF);
-        await decodeLightboxImage();
+        positionLightboxNav();
+        positionLightboxSeparator();
       }
       return;
     }
@@ -836,6 +850,12 @@
     if (card) { e.preventDefault(); const f = figures.find((x) => x.id === card.dataset.id); if (f) openFigure(f, card); }
   });
   lbClose.addEventListener("click", closeLb);
+  lbImg.addEventListener("load", () => {
+    if (!lb.hidden && !lightboxBusy) {
+      positionLightboxNav();
+      positionLightboxSeparator();
+    }
+  });
   $("#lb-prev").addEventListener("click", () => step(-1));
   $("#lb-next").addEventListener("click", () => step(1));
   lb.querySelector(".lightbox-backdrop").addEventListener("click", closeLb);
