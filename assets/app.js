@@ -381,20 +381,6 @@
   const lbDialog = lb.querySelector(".lightbox-dialog");
   const lbContent = lb.querySelector(".lightbox-content");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const transitionParts = {
-    shell: "gallery-card-shell",
-    image: "gallery-card-image",
-    badges: "gallery-card-badges",
-    title: "gallery-card-title",
-    authorsOut: "gallery-card-authors-out",
-    authorsIn: "gallery-card-authors-in",
-    imageAction: "gallery-card-image-action",
-    paperAction: "gallery-card-paper-action",
-    separator: "gallery-card-link-separator",
-    ribbon: "gallery-card-ribbon",
-    close: "gallery-lightbox-close",
-    swap: "gallery-dialog-swap",
-  };
   let currentId = null;
   let lightboxBusy = false;
   let opener = null;
@@ -441,6 +427,14 @@
 
   function setFigureContent(f) {
     currentId = f.id;
+    // Reserve the final aspect ratio even when the full image has not decoded.
+    if (f.w && f.h) {
+      lbImg.width = f.w;
+      lbImg.height = f.h;
+    } else {
+      lbImg.removeAttribute("width");
+      lbImg.removeAttribute("height");
+    }
     lbImg.src = f.image;
     lbImg.alt = f.title;
     const aBadge = $("#lb-award");
@@ -486,11 +480,11 @@
   }
 
   function canTransition() {
-    return typeof document.startViewTransition === "function" && !reducedMotion.matches;
+    return typeof lbDialog.animate === "function" && !reducedMotion.matches;
   }
 
   async function prepareLightboxImage(f) {
-    // Decode before snapshot capture, without changing the currently visible image.
+    // Prepare the next image without changing the currently visible image.
     // A slow/failed request must never freeze rendering or lock navigation.
     const image = new Image();
     image.src = f.image;
@@ -506,151 +500,50 @@
     }
   }
 
-  function componentPairs(card, direction) {
-    const cardAuthors = card && card.querySelector(".card-authors");
-    const dialogAuthors = $("#lb-authors");
-    const cardParts = card ? {
-      shell: card,
-      image: card.querySelector(".card-img"),
-      badges: card.querySelector(".card-badges"),
-      title: card.querySelector(".card-title"),
-      imageAction: card.querySelector(".card-link-image"),
-      paperAction: card.querySelector(".card-link-paper"),
-      separator: card.querySelector(".card-link-separator"),
-      close: card.querySelector(".card-close-target"),
-    } : {};
-    const dialogParts = {
-      shell: lbDialog,
-      image: lbImg,
-      badges: lbDialog.querySelector(".lb-badges"),
-      title: $("#lb-title"),
-      imageAction: $("#lb-image"),
-      paperAction: $("#lb-paper"),
-      separator: $("#lb-separator-target"),
-      close: lbClose,
-    };
-    const pairs = Object.keys(dialogParts).map((key) => ({
-      source: direction === "closing" ? dialogParts[key] : cardParts[key],
-      destination: direction === "closing" ? cardParts[key] : dialogParts[key],
-      name: transitionParts[key],
-    }));
-    const ribbon = card && card.querySelector(".ribbon");
-    if (ribbon) {
-      pairs.push({
-        source: direction === "opening" ? ribbon : $("#lb-ribbon-target"),
-        destination: direction === "closing" ? ribbon : $("#lb-ribbon-target"),
-        name: transitionParts.ribbon,
-      });
-    }
-    // Single-line card text and wrapping dialog text need separate snapshots.
-    // Neither snapshot should be resized between those two layouts.
-    if (cardAuthors && isInViewport(cardAuthors)) {
-      pairs.push(
-        { source: direction === "closing" ? dialogAuthors : cardAuthors,
-          destination: null, name: transitionParts.authorsOut },
-        { source: null,
-          destination: direction === "closing" ? cardAuthors : dialogAuthors,
-          travelFrom: direction === "closing" ? dialogAuthors : cardAuthors,
-          name: transitionParts.authorsIn },
-      );
-    }
-    return pairs;
-  }
-
   async function transitionLightbox(update, options) {
-    const { pairs = [], direction, animate = true } = options;
+    const { direction, card, animate = true } = options;
     if (!animate || !canTransition()) {
       update();
       return;
     }
 
-    const activePairs = pairs.reduce((result, pair) => {
-      if (pair.source && !isInViewport(pair.source)) return result;
-      const destinationVisible = isInViewport(pair.destination);
-      if (direction !== "opening" && !destinationVisible && pair.name !== transitionParts.shell
-          && pair.name !== transitionParts.authorsOut) {
-        return result;
-      }
-      const destination = direction === "opening" || destinationVisible
-        ? pair.destination
-        : null;
-      if (!pair.source && !destination) return result;
-      result.push({ ...pair, destination });
-      return result;
-    }, []);
-    const authorPair = activePairs.find((pair) => pair.name === transitionParts.authorsIn);
-    const authorStart = authorPair && authorPair.travelFrom
-      ? authorPair.travelFrom.getBoundingClientRect()
-      : null;
-    const actionPairs = activePairs.filter((pair) =>
-      pair.name === transitionParts.imageAction || pair.name === transitionParts.paperAction);
-    // A shared link opens the dialog with no originating card, so `source` can be
-    // undefined. Skipping those pairs keeps the transition working instead of
-    // throwing, which used to abort the open and leave the dialog hidden.
-    const rectOf = (element) => (element ? element.getBoundingClientRect() : null);
-    const actionStarts = new Map(actionPairs
-      .filter((pair) => rectOf(pair.source) && rectOf(pair.destination))
-      .map((pair) => [pair.name, pair.source.getBoundingClientRect()]));
-    let updated = false;
-    let transition;
-
+    // Animate live elements with transform/opacity only. View Transition groups
+    // interpolate width/height and capture the entire gallery plus every part.
+    const closing = direction === "closing";
+    const switching = direction.startsWith("switch-");
+    const cardRect = isInViewport(card) ? card.getBoundingClientRect() : null;
+    if (!closing) update();
+    const animations = [];
     document.documentElement.dataset.figureTransition = direction;
-    activePairs.forEach(({ source, name }) => {
-      if (source) source.style.viewTransitionName = name;
-    });
-
     try {
-      transition = document.startViewTransition(() => {
-        activePairs.forEach(({ source }) => {
-          if (source) source.style.viewTransitionName = "";
-        });
-        updated = true;
-        update();
-        activePairs.forEach(({ destination, name }) => {
-          if (destination) destination.style.viewTransitionName = name;
-        });
-        actionPairs.forEach(({ destination, name }) => {
-          if (!destination) return;
-          const key = name === transitionParts.imageAction ? "image-action" : "paper-action";
-          const startRect = actionStarts.get(name);
-          const endRect = destination.getBoundingClientRect();
-          // No originating card (cold start from a shared link): there is nothing
-          // to morph from, so the destination simply keeps its own layout.
-          if (!startRect) return;
-          for (const [side, rect] of [["from", startRect], ["to", endRect]]) {
-            for (const axis of ["width", "height"]) {
-              document.documentElement.style.setProperty(`--gallery-${key}-${side}-${axis}`, `${rect[axis]}px`);
-            }
-          }
-        });
-        if (authorStart && authorPair.destination) {
-          const authorEnd = authorPair.destination.getBoundingClientRect();
-          for (const [side, rect] of [["from", authorStart], ["to", authorEnd]]) {
-            for (const [axis, value] of [["x", rect.left], ["y", rect.top],
-                                         ["width", rect.width], ["height", rect.height]]) {
-              document.documentElement.style.setProperty(`--gallery-author-${side}-${axis}`, `${value}px`);
-            }
-          }
-        }
-      });
-      await transition.finished;
-    } catch (_) {
-      if (!updated) update();
-    } finally {
-      activePairs.forEach(({ source, destination }) => {
-        if (source) source.style.viewTransitionName = "";
-        if (destination) destination.style.viewTransitionName = "";
-      });
-      for (const side of ["from", "to"]) {
-        for (const axis of ["x", "y", "width", "height"]) {
-          document.documentElement.style.removeProperty(`--gallery-author-${side}-${axis}`);
-        }
-        for (const key of ["image-action", "paper-action"]) {
-          for (const axis of ["width", "height"]) {
-            document.documentElement.style.removeProperty(`--gallery-${key}-${side}-${axis}`);
-          }
-        }
+      if (switching) {
+        const x = direction === "switch-next" ? 24 : -24;
+        animations.push(lbContent.animate([
+          { transform: `translateX(${x}px)`, opacity: 0 },
+          { transform: "translateX(0)", opacity: 1 },
+        ], { duration: 180, easing: "ease-out", fill: "both" }));
+      } else {
+        const rect = lbDialog.getBoundingClientRect();
+        const from = cardRect
+          ? `translate(${cardRect.left - rect.left}px, ${cardRect.top - rect.top}px) scale(${cardRect.width / rect.width}, ${cardRect.height / rect.height})`
+          : "translateY(12px) scale(.96)";
+        const small = { transform: from, opacity: cardRect ? .7 : 0 };
+        const full = { transform: "translate(0, 0) scale(1)", opacity: 1 };
+        animations.push(lbDialog.animate(closing ? [full, small] : [small, full], {
+          duration: closing ? 180 : 240,
+          easing: closing ? "ease-in" : "cubic-bezier(.2,.8,.2,1)",
+          fill: "both",
+        }));
+        animations.push(lb.querySelector(".lightbox-backdrop").animate(
+          closing ? [{ opacity: 1 }, { opacity: 0 }] : [{ opacity: 0 }, { opacity: 1 }],
+          { duration: closing ? 180 : 240, easing: "ease-out", fill: "both" },
+        ));
       }
+      await Promise.allSettled(animations.map(animation => animation.finished));
+    } finally {
+      if (closing) update();
+      // Release temporary compositor layers and inline animation effects.
+      animations.forEach(animation => animation.cancel());
       delete document.documentElement.dataset.figureTransition;
     }
   }
@@ -665,7 +558,8 @@
     opener = card || document.activeElement;
     lbDialog.style.height = "";
     try {
-      const imageReady = await prepareLightboxImage(f);
+      // The clicked card already requested this image. Show the live preview
+      // immediately rather than waiting for another image.decode().
       setFigureContent(f);
       await transitionLightbox(() => {
         lb.hidden = false;
@@ -673,10 +567,11 @@
         positionLightboxNav();
         positionLightboxSeparator();
       }, {
-        pairs: componentPairs(card, "opening"),
+        card,
         direction: "opening",
-        animate: imageReady,
       });
+      positionLightboxNav();
+      positionLightboxSeparator();
       lbClose.focus({ preventScroll: true });
     } finally {
       lightboxBusy = false;
@@ -703,10 +598,11 @@
         positionLightboxNav();
         positionLightboxSeparator();
       }, {
-        pairs: [{ source: lbContent, destination: lbContent, name: transitionParts.swap }],
         direction: d > 0 ? "switch-next" : "switch-prev",
         animate: imageReady,
       });
+      positionLightboxNav();
+      positionLightboxSeparator();
     } finally {
       lightboxBusy = false;
     }
@@ -723,7 +619,7 @@
         lb.hidden = true;
         document.body.style.overflow = "";
       }, {
-        pairs: componentPairs(targetCard, "closing"),
+        card: targetCard,
         direction: "closing",
       });
       if (returnFocus && typeof returnFocus.focus === "function") {
@@ -815,7 +711,7 @@
     if (internalUrlWrite) return;
     routerBusy = true;
     const attempt = (tries) => {
-      // Opening and closing run an image decode plus a View Transition, so
+      // Opening and closing run a short panel animation, so
       // lightboxBusy can still be set when Back arrives. Returning immediately
       // used to drop the navigation entirely: the hash cleared but the dialog
       // stayed open and the page stayed scroll-locked, which reads as "Back does
