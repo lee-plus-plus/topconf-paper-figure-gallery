@@ -27,7 +27,7 @@
 <meta name="twitter:image" content="https://qwdwqfwq.github.io/topconf-paper-figure-gallery/docs/social-preview.png">
 <meta name="twitter:image:alt" content="Top-Conf Figure Gallery — Figure 1 / teaser figures from six top AI conferences, 2023–2026">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%234f46e5'/%3E%3Ccircle cx='36' cy='38' r='10' fill='white'/%3E%3Crect x='28' y='54' width='44' height='7' rx='3.5' fill='%23a5b4fc'/%3E%3Crect x='28' y='67' width='30' height='7' rx='3.5' fill='%23a5b4fc'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="assets/style.css?v=20261005d">
+<link rel="stylesheet" href="assets/style.css?v=20261005x">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -71,28 +71,14 @@
         </div>
         <div class="brand-text">
           <h1>Top-Conf Figure Gallery</h1>
-          <p class="tagline" data-i18n-html="tagline"></p>
+          <span class="brand-description" data-i18n="brand.description">顶会论文主图灵感画廊</span>
         </div>
       </div>
       <div class="hero-right">
+        <a class="forge-nav" href="./forge/" title="打开 FigureForge 画图">FigureForge ↗</a>
         <button id="lang-toggle" class="lang-toggle" type="button" title="Switch language">中/EN</button>
-        <div class="hero-stats" id="hero-stats">
-          <span class="stat-pill"><b id="total-figures">…</b>&nbsp;<span data-i18n="stat.figures">figures</span></span>
-          <span class="stat-pill best"><i class="dot-ic">★</i><b id="total-best">–</b>&nbsp;Best</span>
-          <span class="stat-pill oral"><b id="total-oral">–</b>&nbsp;Oral</span>
-          <span class="stat-pill spotlight"><b id="total-spotlight">–</b>&nbsp;Spotlight</span>
-        </div>
       </div>
     </div>
-    <p class="intro" data-i18n-html="intro"></p>
-    <a class="forge-cta" href="./forge/">
-      <span class="fc-ic" aria-hidden="true">🛠️</span>
-      <span class="fc-main">
-        <span class="fc-t">FigureForge Beta</span>
-        <span class="fc-s" data-i18n="cta.sub"></span>
-      </span>
-      <span class="fc-go" data-i18n="cta.go"></span>
-    </a>
   </div>
 </header>
 
@@ -104,7 +90,14 @@
         <input id="search" type="search" data-i18n-ph="search.ph" autocomplete="off">
         <button id="clear-search" class="clear-btn" title="清空 / Clear" hidden>×</button>
       </div>
-      <span id="result-count" class="result-count"></span>
+      <span id="result-count" class="result-count" role="status" aria-live="polite"></span>
+    </div>
+    <div class="filter-row">
+      <label class="filter-field"><span data-i18n="fl.venue">venue</span><select id="venue-filter"></select></label>
+      <label class="filter-field"><span data-i18n="fl.year">year</span><select id="year-filter"></select></label>
+      <label class="filter-field"><span data-i18n="fl.tier">tier</span><select id="tier-filter"></select></label>
+      <label class="filter-field"><span data-i18n="fl.pattern">pattern</span><select id="pattern-filter"></select></label>
+      <div class="view-controls">
       <div class="sort-wrap">
         <label for="sort" data-i18n="sort.label">Sort</label>
         <select id="sort">
@@ -113,21 +106,9 @@
           <option value="title" data-i18n="sort.title">Title A–Z</option>
         </select>
       </div>
-      <a class="forge-nav" href="./forge/" title="打开 FigureForge 画图">FigureForge ↗</a>
-    </div>
-    <div class="filter-row">
-      <span class="filter-label fl-venue" data-i18n="fl.venue">Venue</span>
-      <div class="chips" id="venue-chips" role="group" aria-label="venue filter"></div>
-    </div>
-    <div class="filter-row">
-      <span class="filter-label fl-year" data-i18n="fl.year">Year</span>
-      <div class="chips" id="year-chips" role="group" aria-label="year filter"></div>
-      <span class="filter-label fl-tier sep" data-i18n="fl.tier">Tier</span>
-      <div class="chips" id="tier-chips" role="group" aria-label="tier filter"></div>
-    </div>
-    <div class="filter-row">
-      <span class="filter-label fl-pattern" data-i18n="fl.pattern">Pattern</span>
-      <div class="chips" id="pattern-chips" role="group" aria-label="pattern filter"></div>
+      <label class="filter-field column-field"><span data-i18n="layout.columns">列数</span><select id="column-count"><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></label>
+      <label class="filter-field display-field"><span data-i18n="layout.display">展示信息</span><select id="display-mode"><option value="full" data-i18n="layout.full">图片和文字</option><option value="images" data-i18n="layout.images">仅图片</option></select></label>
+      </div>
     </div>
   </div>
 </div>
@@ -171,7 +152,6 @@
   <div class="lightbox-backdrop"></div>
   <div class="lightbox-dialog" role="dialog" aria-modal="true" aria-label="figure details">
     <button class="lightbox-close" id="lb-close" data-i18n-aria="aria.close">×</button>
-    <span id="lb-ribbon-target" class="ribbon ribbon-target" aria-hidden="true"></span>
     <button class="lightbox-nav prev" id="lb-prev" data-i18n-aria="aria.prev">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"></path></svg>
     </button>
@@ -189,7 +169,6 @@
         <div class="lb-actions">
           <a id="lb-image" class="ghost-btn" target="_blank" rel="noopener" data-i18n="lb.viewImage"></a>
           <a id="lb-paper" class="primary-btn" target="_blank" rel="noopener" data-i18n="lb.openPaper"></a>
-          <span id="lb-separator-target" class="lb-separator-target" aria-hidden="true">/</span>
         </div>
       </div>
     </div>
@@ -199,6 +178,6 @@
 <script src="assets/i18n.js"></script>
 <script src="assets/i18n_gallery.js"></script>
 <script src="assets/figures.js"></script>
-<script src="assets/app.js?v=20261005d"></script>
+<script src="assets/app.js?v=20261005u"></script>
 </body>
 </html>
