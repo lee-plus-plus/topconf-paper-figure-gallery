@@ -512,13 +512,15 @@
         ], { duration: 180, easing: "ease-out", fill: "both" }));
       } else {
         const rect = lbDialog.getBoundingClientRect();
-        // Keep text/images proportional throughout the zoom. Fit the panel in
-        // the clicked card and center it there instead of stretching each axis.
-        const scale = cardRect ? Math.min(cardRect.width / rect.width, cardRect.height / rect.height, 1) : .96;
-        const x = cardRect ? cardRect.left + (cardRect.width - rect.width * scale) / 2 - rect.left : 0;
-        const y = cardRect ? cardRect.top + (cardRect.height - rect.height * scale) / 2 - rect.top : 12;
-        const from = `translate(${x}px, ${y}px) scale(${scale})`;
-        const small = { transform: from, opacity: cardRect ? 1 : 0 };
+        // Keep the panel close to its final raster size. A full card-to-dialog
+        // zoom moves hundreds of pixels in a few frames, making uneven frame
+        // delivery more noticeable. Hint at the card direction with
+        // bounded movement, while keeping the image/text at nearly full size.
+        const clamp = (value, limit) => Math.max(-limit, Math.min(limit, value));
+        const x = cardRect ? clamp(cardRect.left + cardRect.width / 2 - rect.left - rect.width / 2, 16) : 0;
+        const y = cardRect ? clamp(cardRect.top + cardRect.height / 2 - rect.top - rect.height / 2, 12) : 12;
+        const from = `translate(${x}px, ${y}px) scale(.97)`;
+        const small = { transform: from, opacity: 0 };
         const full = { transform: "translate(0, 0) scale(1)", opacity: 1 };
         animations.push(lbDialog.animate(closing ? [full, small] : [small, full], {
           duration: closing ? 160 : 200,
