@@ -416,15 +416,6 @@
     $("#lb-next").style.top = center;
   }
 
-  function positionLightboxSeparator() {
-    const image = $("#lb-image").getBoundingClientRect();
-    const paper = $("#lb-paper").getBoundingClientRect();
-    const actions = lbDialog.querySelector(".lb-actions").getBoundingClientRect();
-    const target = $("#lb-separator-target");
-    target.style.left = `${(image.right + paper.left) / 2 - actions.left}px`;
-    target.style.top = `${(image.top + image.bottom + paper.top + paper.bottom) / 4 - actions.top}px`;
-  }
-
   function setFigureContent(f) {
     currentId = f.id;
     // Reserve the final aspect ratio even when the full image has not decoded.
@@ -472,13 +463,6 @@
     return Array.from(gallery.querySelectorAll(".card")).find((card) => card.dataset.id === id) || null;
   }
 
-  function isInViewport(element) {
-    if (!element) return false;
-    const rect = element.getBoundingClientRect();
-    return rect.width > 0 && rect.height > 0 && rect.bottom > 0 && rect.right > 0
-      && rect.top < window.innerHeight && rect.left < window.innerWidth;
-  }
-
   function canTransition() {
     return typeof lbDialog.animate === "function" && !reducedMotion.matches;
   }
@@ -511,11 +495,15 @@
     // interpolate width/height and capture the entire gallery plus every part.
     const closing = direction === "closing";
     const switching = direction.startsWith("switch-");
-    const cardRect = isInViewport(card) ? card.getBoundingClientRect() : null;
-    if (!closing) update();
-    const animations = [];
+    const candidate = card && card.getBoundingClientRect();
+    const cardRect = candidate && candidate.width > 0 && candidate.height > 0
+      && candidate.bottom > 0 && candidate.right > 0
+      && candidate.top < window.innerHeight && candidate.left < window.innerWidth
+      ? candidate : null;
     document.documentElement.dataset.figureTransition = direction;
+    const animations = [];
     try {
+      if (!closing) update();
       if (switching) {
         const x = direction === "switch-next" ? 24 : -24;
         animations.push(lbContent.animate([
@@ -524,19 +512,22 @@
         ], { duration: 180, easing: "ease-out", fill: "both" }));
       } else {
         const rect = lbDialog.getBoundingClientRect();
-        const from = cardRect
-          ? `translate(${cardRect.left - rect.left}px, ${cardRect.top - rect.top}px) scale(${cardRect.width / rect.width}, ${cardRect.height / rect.height})`
-          : "translateY(12px) scale(.96)";
-        const small = { transform: from, opacity: cardRect ? .7 : 0 };
+        // Keep text/images proportional throughout the zoom. Fit the panel in
+        // the clicked card and center it there instead of stretching each axis.
+        const scale = cardRect ? Math.min(cardRect.width / rect.width, cardRect.height / rect.height, 1) : .96;
+        const x = cardRect ? cardRect.left + (cardRect.width - rect.width * scale) / 2 - rect.left : 0;
+        const y = cardRect ? cardRect.top + (cardRect.height - rect.height * scale) / 2 - rect.top : 12;
+        const from = `translate(${x}px, ${y}px) scale(${scale})`;
+        const small = { transform: from, opacity: cardRect ? 1 : 0 };
         const full = { transform: "translate(0, 0) scale(1)", opacity: 1 };
         animations.push(lbDialog.animate(closing ? [full, small] : [small, full], {
-          duration: closing ? 180 : 240,
-          easing: closing ? "ease-in" : "cubic-bezier(.2,.8,.2,1)",
+          duration: closing ? 160 : 200,
+          easing: closing ? "ease-in" : "cubic-bezier(.22,.61,.36,1)",
           fill: "both",
         }));
         animations.push(lb.querySelector(".lightbox-backdrop").animate(
           closing ? [{ opacity: 1 }, { opacity: 0 }] : [{ opacity: 0 }, { opacity: 1 }],
-          { duration: closing ? 180 : 240, easing: "ease-out", fill: "both" },
+          { duration: closing ? 160 : 200, easing: "ease-out", fill: "both" },
         ));
       }
       await Promise.allSettled(animations.map(animation => animation.finished));
@@ -564,14 +555,11 @@
       await transitionLightbox(() => {
         lb.hidden = false;
         document.body.style.overflow = "hidden";
-        positionLightboxNav();
-        positionLightboxSeparator();
       }, {
         card,
         direction: "opening",
       });
       positionLightboxNav();
-      positionLightboxSeparator();
       lbClose.focus({ preventScroll: true });
     } finally {
       lightboxBusy = false;
@@ -595,14 +583,11 @@
       const imageReady = await prepareLightboxImage(filtered[j]);
       await transitionLightbox(() => {
         setFigureContent(filtered[j]);
-        positionLightboxNav();
-        positionLightboxSeparator();
       }, {
         direction: d > 0 ? "switch-next" : "switch-prev",
         animate: imageReady,
       });
       positionLightboxNav();
-      positionLightboxSeparator();
     } finally {
       lightboxBusy = false;
     }
@@ -677,7 +662,6 @@
       if (openF) {
         setFigureContent(openF);
         positionLightboxNav();
-        positionLightboxSeparator();
       }
       return;
     }
@@ -749,7 +733,6 @@
   lbImg.addEventListener("load", () => {
     if (!lb.hidden && !lightboxBusy) {
       positionLightboxNav();
-      positionLightboxSeparator();
     }
   });
   $("#lb-prev").addEventListener("click", () => step(-1));
@@ -765,7 +748,6 @@
   window.addEventListener("resize", () => {
     if (!lb.hidden && !lightboxBusy) {
       positionLightboxNav();
-      positionLightboxSeparator();
     }
   });
 
