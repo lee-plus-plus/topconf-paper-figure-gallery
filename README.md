@@ -27,7 +27,7 @@ A searchable, filterable gallery of Figure 1 / teaser figures. Static HTML/CSS/J
 画论文主图前，先看顶会论文怎么排版。
 一个可搜索、可筛选的 Figure 1 / Teaser 画廊。纯静态、零构建、可离线打开。
 
-[🌐 Live gallery 在线画廊](https://qwdwqfwq.github.io/topconf-paper-figure-gallery/) · [🛠️ FigureForge 画图](https://qwdwqfwq.github.io/topconf-paper-figure-gallery/forge) · [🎬 Demo video 演示视频](https://qwdwqfwq.github.io/topconf-paper-figure-gallery/docs/demo.html) · [📚 Methodology 数据与方法](docs/METHODOLOGY.md) ·
+[🌐 Live gallery 在线画廊](https://qwdwqfwq.github.io/topconf-paper-figure-gallery/) · [📚 Methodology 数据与方法](docs/METHODOLOGY.md) ·
 [⚖️ Image policy 版权 / 下架](IMAGES_POLICY.md) · [🤝 Contributing 贡献指南](CONTRIBUTING.md)
 
 </div>
@@ -44,40 +44,6 @@ A searchable, filterable gallery of Figure 1 / teaser figures. Static HTML/CSS/J
 - Every figure is hand-reviewed. Over 25 heuristic rules first remove default matplotlib charts, plain tables, GUI screenshots and unlabeled photo sets; a person then checks the rest page by page. See [METHODOLOGY.md](docs/METHODOLOGY.md).
 - Pure static site, no backend or build; clone and double-click.
 - Open, reproducible pipeline: proceedings index → PDF download → Figure 1 crop → quality scoring → dHash de-duplication → manual review.
-
-### 🛠️ FigureForge Beta
-
-FigureForge drafts your Figure 1 from the gallery: describe your paper, and 3,452 top-conference figures provide the layout reference. No sign-up, no server; it runs in your browser. **[Try FigureForge →](forge/index.html)**
-
-<p align="center">
-  <img src="forge/demo-forge.gif?v=20261002" alt="FigureForge walkthrough: describe paper, retrieve references, generate bitmap draft" width="560">
-</p>
-
-**[▶ Full demo video, 1:58 with audio](https://qwdwqfwq.github.io/topconf-paper-figure-gallery/docs/demo.html)**
-
-[![▶ FigureForge demo video](assets/figureforge-demo-poster.jpg)](https://qwdwqfwq.github.io/topconf-paper-figure-gallery/docs/demo.html)
-
-1. **Describe the paper.** Paste the title and abstract, upload the PDF (the Step 1 model reads it and summarizes the sections matching overview / architecture / pipeline / results), or type one sentence giving the "input → method → output" story.
-2. **Pick a pattern.** `framework` for system or multi-agent overviews, `pipeline` for end-to-end flows, `architecture` for internal model structure, `conceptual` for visual metaphors; also `teaser` and `taxonomy`.
-3. **Tick references.** A CLIP + BM25 hybrid search ranks all 3,452 figures; the score is shown on each card. Tick 8–10 same-pattern cards for two-stage mode, or 2–3 for direct mode.
-
-   ![Pick references](forge/tutorial/02_pick_refs.png)
-
-4. **Two stages: summarize, then generate.** A vision model reads the picks, distils their common layout, elements, palette and hierarchy, selects 2–3 representative figures, and only then generates.
-
-   ![Two-stage analysis](forge/tutorial/03_analyze.png?v=20261002)
-
-5. **Choose a mode, add your key, download.** SVG mode gives accurate, editable text (Figma / draw.io / Illustrator); bitmap mode gives a publication-style layout to check in PPT / Figma. The key is stored only in your browser.
-
-> A bare prompt in a general chatbot returns a generic flowchart. FigureForge grounds the draft in top-conference figures, so it keeps the panel grid, comparative narrative and restrained palette of a paper figure.
-
-> ![Comparison](forge/tutorial/compare.png?v=20261002)
-
-- Runs entirely in your browser: the CLIP model and gallery index are bundled locally; paper content and keys stay on your device and the key goes only to the provider you choose.
-- Bring your own key. Presets: Volcengine Ark, SiliconFlow, Zhipu, DeepSeek, OpenAI, Moonshot, Qwen, Tencent Hunyuan, Anthropic, and any OpenAI-compatible relay.
-- The model list updates itself: the bundled manifest refreshes on load and the provider's live `/models` list is fetched once a key is entered. Anthropic has no list endpoint; Hunyuan and Anthropic block browser CORS, so use a relay for those.
-- Scope: a high-quality first draft for the Figure 1 genre. Check text and numbers before submission.
-- Open source forever, no paid version. MIT-licensed; the key pays the model provider directly. PRs are welcome for new papers, venues and label fixes, and the gallery is refreshed yearly with new proceedings.
 
 ### Add a paper or figure
 
@@ -97,40 +63,6 @@ Images belong to their authors and publishers; see [IMAGES_POLICY.md](IMAGES_POL
 - 每张图人工复核：25 条以上规则先剔除默认 matplotlib 图、纯表格、GUI 截图和无标签照片墙，再逐页人工检查。见 [METHODOLOGY.md](docs/METHODOLOGY.md)。
 - 纯静态站点，无后端、无构建，克隆后双击即开。
 - 管线全开源：会议索引 → PDF 下载 → Figure 1 裁剪 → 质量打分 → dHash 去重 → 人工复核。
-
-### 🛠️ FigureForge Beta
-
-FigureForge 基于画廊生成你的 Figure 1 初稿：描述论文，3,452 张顶会主图作为版式参考。免注册、无服务器，全部在浏览器本地运行。**[立即试用 →](forge/index.html)**
-
-<p align="center">
-  <img src="forge/demo-forge.gif?v=20261002" alt="FigureForge 流程演示：输入论文、检索参考图、生成位图初稿" width="560">
-</p>
-
-**[▶ 完整演示视频，1 分 58 秒，有声音](https://qwdwqfwq.github.io/topconf-paper-figure-gallery/docs/demo.html)**
-
-[![▶ FigureForge 演示视频](assets/figureforge-demo-poster.jpg)](https://qwdwqfwq.github.io/topconf-paper-figure-gallery/docs/demo.html)
-
-1. **输入论文**：粘贴标题和摘要、上传 PDF（步骤一的模型直接阅读，按概览、架构、流程、结果总结相关章节），或写一句话讲清「输入 → 方法 → 输出」。
-2. **选模式**：系统或多智能体总览选 `framework`，端到端流程选 `pipeline`，模型内部结构选 `architecture`，视觉隐喻选 `conceptual`；另有 `teaser`、`taxonomy`。
-3. **勾选参考图**：CLIP + BM25 混合检索全量 3,452 张图，卡片上显示相关度评分。两阶段模式勾 8–10 张同类型图，直接模式勾 2–3 张。
-
-   ![挑选参考图](forge/tutorial/02_pick_refs.png)
-
-4. **两阶段：先归纳，再生成**：视觉模型先读参考图，归纳共同的布局、元素、配色和层级，挑出 2–3 张代表图，再生成。
-
-   ![两阶段归纳](forge/tutorial/03_analyze.png?v=20261002)
-
-5. **选模式、填 Key、下载**：SVG 模式文字准确、可用 Figma / draw.io / Illustrator 编辑；位图模式版式地道，在 PPT / Figma 核对即可。Key 只存在本机浏览器。
-
-> 直接在通用对话框写 prompt，得到的是通用流程图。FigureForge 以顶会图为版式参考，初稿保留论文图的面板网格、对比叙事和克制配色。
-
-> ![效果对比](forge/tutorial/compare.png?v=20261002)
-
-- 全流程浏览器本地运行：CLIP 模型和画廊索引随仓库打包；论文内容和 Key 不离开设备，Key 只发往所选服务商。
-- 自带 Key：预置火山方舟、硅基流动、智谱、DeepSeek、OpenAI、月之暗面、通义千问、腾讯混元、Anthropic，以及任意 OpenAI 兼容中转。
-- 模型列表自动更新：打开时刷新内置清单，填入 Key 后拉取服务商实时 `/models`。Anthropic 无列表接口；混元、Anthropic 不支持浏览器跨域，这两家用中转。
-- 能力边界：Figure 1 场景的高质量初稿，文字和数字提交前需人工核对。
-- 纯开源、永不收费：MIT 许可，Key 费用直接付给模型厂商。欢迎提 PR 补论文、补会议、修标签，画廊每年随新论文集持续更新。
 
 ### 补充论文或图片
 
@@ -206,10 +138,10 @@ Or double-click `index.html`; data is inlined in `assets/figures.js`.
 ├── images/<venue>/final/    # 画廊图片 ≤1500px JPEG
 ├── data/
 │   ├── figures.json         # 画廊唯一权威清单 single source of truth
+│   ├── chart_filter/        # 离线纯图表筛查向量与 ID
 │   └── pool/                # 全量候选论文池
 ├── scripts/                 # 数据管线，见 docs/METHODOLOGY.md
 ├── docs/                    # 方法文档、banner、演示
-├── forge/                   # FigureForge：浏览器端检索与初稿生成
 └── .github/workflows/       # GitHub Pages 自动部署
 ```
 
@@ -239,7 +171,6 @@ python scripts/sheet_qa.py 31         # 随机抽样复核
 - [x] CVPR / ACL / AAAI（2023–2025）同管线扩展（v0.3）
 - [x] Oral · Spotlight · Best Paper 等级索引与角标（v0.4）
 - [x] 2026 已公开会议主图与等级角标（v0.5）
-- [x] FigureForge：浏览器端 CLIP+BM25 检索、自有 API 生成初稿（v0.6）
 - [ ] CVPR / ACL / AAAI 的 Oral / Highlight 等级索引
 - [ ] NeurIPS 2026 录用公布后补全（预计 2026 年 12 月）
 - [ ] 持续人工复核，开放社区 PR 补图

@@ -122,18 +122,17 @@ python scripts/filter_charts.py --sheet 40 s.png   # 生成联系表人工复核
 python scripts/filter_charts.py --band 0.030 0.045 # 列出需要人工确认的区间
 ```
 
-1. **语义信号（主）**：每张已收录图都有 CLIP ViT-B/32 图像嵌入（`forge/data/image_emb.bin`），
+1. **语义信号（主）**：每张已收录图都有 CLIP ViT-B/32 图像嵌入（`data/chart_filter/image_emb.bin`），
    `scripts/chart_prompts.json` 固化了 5 条「纯图表」与 4 条「手绘主图」提示词的文本向量，
    计算 `margin = max(sim_chart) − max(sim_figure)`，全程本地、无需浏览器。
 2. **视觉信号（辅）**：图表通常大留白、细笔画，且存在一条贯穿画布的长直轴线；手绘主图由
    实心方块、箭头、照片与图标组成，长直线比例明显更低。
 3. **判定分带**：`margin ≥ 0.045` 进复核队列，`0.030–0.045` 逐张看联系表，以下保留。
    **带内不等于自动删除**——「流程图 / 示意图里嵌一张小图」的主图会落在这个带里，必须人眼确认。
-4. 确认删除的 id 从 `data/figures.json` 移除后，需重建全部派生索引：
-   `assets/figures.js`（必须与 `data/figures.json` 完全一致）、`forge/data/figures.json`、
-   `ids.json`、`bm25.json`（按新语料重算 idf / avgdl）、`image_emb.bin`、`text_emb.bin`
-   （两者行序与 `ids.json` 对齐），提升 `forge/data/manifest.json` 的 `dataVersion`，
-   删除对应图片文件，最后跑 `python scripts/validate_gallery.py` 验证。
+4. 确认删除的 id 从 `data/figures.json` 移除后，重新生成 `assets/figures.js`
+   （必须与 `data/figures.json` 完全一致）。同步筛选 `data/chart_filter/ids.json` 与
+   `data/chart_filter/image_emb.bin` 中对应的向量行，确保二者顺序一致；删除对应图片文件，
+   最后跑 `python scripts/validate_gallery.py` 验证。
 
 ## 5b. v0.4：高等级论文索引 / Oral · Spotlight · Best tier index
 
@@ -199,78 +198,10 @@ v0.6 复核发现 v1 人工底（60 张，旧短编号如 `icml2023-12`）与后
 1. **检出**：按 `(venue, year, paper URL)` 分组，组内 id 数 > 1 即判重复。
 2. **取舍**：保留管线版本（4 位编号、带 `score` 与完整 `tier/award` 字段、命名与全库一致）；
    旧版图片移入 `_local/trash_dups/` 备份，不直接删除。
-3. **重建**：去重后重新生成 `data/figures.json`、`assets/figures.js` 与 FigureForge 的
-   全套检索索引（向量按新顺序重排，不重跑 CLIP）。
+3. **重建**：去重后重新生成 `data/figures.json`、`assets/figures.js`，并同步离线筛查数据
+   `data/chart_filter/ids.json` 与 `image_emb.bin`（向量按新顺序重排，不重跑 CLIP）。
 
 v0.6 后画廊共 **3,516 张**（ICLR 765、ICML 783、NeurIPS 974、CVPR 308、ACL 385、AAAI 301）。
-
-## 5e. FigureForge 内部机制 / How FigureForge works
-
-FigureForge 是画廊之上的**检索增强出图**工具，纯静态、浏览器本地运行。其内部机制说明如下，
-特别澄清"参考图如何输入"与"图型如何区分"两个常见疑问：
-
-**1. 两阶段生成（v0.6 核心）**
-
-为同时满足“多挑参考图”与“版式不打架”，默认走两阶段：
-
-- **Pass 1 · 共性归纳（视觉 LLM）**：把用户勾选的 8–10 张同类型参考图全部以 base64
-  多模态送入视觉模型（关闭深度思考以提速，约 20 秒），要求从 **Layout 布局 / Elements
-  元素 / Palette 配色 / Hierarchy 层级** 四个维度归纳该类版式的共性，输出
-  `representative`（自动挑出的 2–3 张代表图序号）与 `refinedPrompt`（120–200 英文词）。
-- **Pass 2 · 生成**：
-  - SVG：用同一视觉 LLM，发送 refinedPrompt + 2–3 张代表图，产出极简、可编辑 SVG；
-  - 位图：用 Seedream 等图像模型，发送 refinedPrompt 转写的图像 prompt + 代表图多图参考。
-
-直接生成模式（passMode=direct）跳过归纳，精选 2–3 张直接生成。
-
-**2. 参考图如何作为输入（关键）**
-
-参考图会真正送入模型，而不是只传一个文字名：
-
-- **SVG 路径**：每张参考图读为 base64，作为多模态消息的 `image_url`（OpenAI 兼容协议）
-  或 `image` content block（Anthropic 协议）与文字 prompt 一起发送；模型真正“看到”像素。
-  模型不支持视觉时，自动降级为只发参考图的文字标签（标题 + 会议 + pattern）。
-- **位图路径**：火山方舟 Seedream 用 `image: [uris]` 传多张参考图（5.0 Pro 最多 10 张）；
-  硅基流动用单图参考；不支持参考的模型自动降级为无参考纯 prompt。
-
-**3. 图型（teaser / pipeline / framework …）如何区分**
-
-类型区分不是模型凭空判断，而来自多处人工设计 + pass1 归纳的共同作用：
-
-1. 画廊收录时为每张图预打 `pattern` 标签（teaser / conceptual / framework / pipeline /
-   architecture / taxonomy），并在检索结果与参考条目中显示；
-2. 页面内置版式指令（面板如何切、阅读方向、箭头与标签用法），生成时按用户选择注入；
-3. **Pass 1 让视觉模型对 8–10 张同类图做共性归纳**，显式总结该类版式特征；
-4. Pass 2 多模态输入时，模型对代表图做 few-shot 模仿。
-
-因此模型无需“自己猜 teaser 与 framework 的区别”：版式指令、共性归纳与代表图范例已共同给出。
-
-**4. 相关度评分与 CLIP**
-
-检索时每张参考图的“相关度分”（0–100，卡片右上角）为混合分：
-
-```
-score = 0.55 × CLIP 语义相似度 + 0.45 × 归一化 BM25
-```
-
-- **CLIP**：OpenAI 开源的图文对齐模型（clip-vit-base-patch32），量化为 ONNX（约 63 MB），
-  经 transformers.js + ONNX Runtime WASM 在**用户浏览器本地**运行，不上传内容、无需
-  服务器或 GPU；首次加载约 2 分钟、之后走缓存。主画廊首页的纯前端筛选不需要 CLIP，
-  仅 FigureForge 的语义检索用到。
-- **BM25**：标题 / 作者 / 关键词的词面匹配，与语义分互补。
-- 检索结果按评分降序，便于用户优先勾选高分同类图。
-
-**5. 选同类型参考图为什么更准**
-
-想画 framework 就勾选 8–10 张带 `framework` 标签的高分图，pass 1 能从更多范例稳定归纳
-该类版式共性（中心向外、模块围绕核心、分组配色），比混入不同类型（版式语言冲突）更可靠。
-
-**6. 模型列表如何保持实时更新**
-
-两层数据源：①页面每次打开以 cache-bust 拉取仓库托管的 `forge/data/manifest.json`
-（含各服务商 base、协议、能力标志与推荐模型，维护者更新即对所有用户生效）；
-②填入 Key 后实时 GET 服务商 `/models`，账号已开通模型与新发布模型自动出现，无需改页面。
-数据文件按 `dataVersion` 走浏览器缓存，版本更新才重新下载。
 
 ## 6. 复现 / Reproduce
 

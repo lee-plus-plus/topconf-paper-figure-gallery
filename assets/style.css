@@ -46,14 +46,14 @@ a:hover { text-decoration: underline; }
 .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.92); display: inline-block; margin: 0 1.5px; }
 h1 { margin: 0; font-size: 17px; letter-spacing: .2px; font-weight: 800; }
 .hero-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-.lang-toggle, .forge-nav {
+.lang-toggle {
   display: inline-flex; align-items: center; justify-content: center;
   height: 32px; padding: 0 11px; border: 1px solid #d9d4eb; border-radius: 7px;
   background: #f7f5ff; color: #5141a8;
   font: inherit; font-size: 12px; font-weight: 600; line-height: 1;
   white-space: nowrap; cursor: pointer; text-decoration: none;
 }
-.lang-toggle:hover, .forge-nav:hover {
+.lang-toggle:hover {
   border-color: #b9addd; background: #eee9ff; text-decoration: none;
 }
 
@@ -138,7 +138,7 @@ h1 { margin: 0; font-size: 17px; letter-spacing: .2px; font-weight: 800; }
 .container { max-width: 1320px; margin: 0 auto; padding: 14px 28px 60px; }
 .masonry { column-count: var(--gallery-columns, 3); column-gap: 18px; }
 
-@media (max-width: 540px)  { .masonry { column-count: 1; } .hero-inner { padding: 10px 16px; } .stickbar-inner { padding: 8px 16px 7px; } .container { padding: 14px 16px 40px; } .search-box { flex: 1 1 180px; } .result-count { order: 3; } .forge-nav { order: 0; } }
+@media (max-width: 540px)  { .masonry { column-count: 1; } .hero-inner { padding: 10px 16px; } .stickbar-inner { padding: 8px 16px 7px; } .container { padding: 14px 16px 40px; } .search-box { flex: 1 1 180px; } .result-count { order: 3; } }
 
 .card {
   break-inside: avoid; margin-bottom: 18px;
@@ -296,7 +296,7 @@ html[data-figure-transition="closing"] .lightbox-nav { opacity: 0; pointer-event
 @media (max-width: 540px) {
   h1 { font-size: 15px; }
   .brand-mark { width: 24px; height: 24px; border-radius: 6px; }
-  .lang-toggle, .forge-nav { height: 28px; padding: 0 7px; font-size: 11px; }
+  .lang-toggle { height: 28px; padding: 0 7px; font-size: 11px; }
   .stick-row { gap: 8px; }
   /* Keep the full filter set available without covering the gallery on scroll. */
   .stickbar { position: static; }
